@@ -13,7 +13,7 @@ export function ProjectCard({ project }: { project: Project }) {
     <Link
       to="/projets/$slug"
       params={{ slug: project.slug }}
-      className="group flex flex-col rounded-xl border border-border bg-card p-5 transition-shadow hover:shadow-lg"
+      className="group flex flex-col rounded-lg border border-border bg-card p-5 shadow-sm transition-[border-color,box-shadow,transform] hover:-translate-y-0.5 hover:border-primary/45 hover:shadow-lg"
     >
       <div className="flex items-center gap-2 text-xs text-muted-foreground">
         <MapPin className="size-3.5" />
@@ -21,10 +21,10 @@ export function ProjectCard({ project }: { project: Project }) {
         <span className="text-border">•</span>
         {themeLabel(project.theme)}
       </div>
-      <h3 className="mt-3 font-display text-xl leading-tight group-hover:text-primary">
+      <h3 className="mt-3 font-display text-2xl leading-[1.08] group-hover:text-primary">
         {project.name}
       </h3>
-      <p className="mt-1 text-sm text-muted-foreground">{project.tagline}</p>
+      <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{project.tagline}</p>
 
       <div className="mt-4 flex flex-wrap gap-1.5">
         <Badge variant="secondary">{stageLabel(project.stage)}</Badge>

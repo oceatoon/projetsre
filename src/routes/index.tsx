@@ -53,15 +53,15 @@ function Home() {
 
   return (
     <div>
-      <section className="border-b border-border bg-gradient-to-b from-accent/40 to-background">
-        <div className="mx-auto max-w-6xl px-4 py-20">
+      <section className="border-b border-border bg-linear-to-b from-accent/55 to-background">
+        <div className="mx-auto max-w-6xl px-4 py-16 md:py-24">
           <Badge variant="secondary" className="mb-6">
             Écoute à projet pour le territoire de La Réunion
           </Badge>
-          <h1 className="max-w-3xl text-balance font-display text-4xl leading-[1.05] font-semibold md:text-6xl">
+          <h1 className="max-w-4xl text-balance font-display text-5xl leading-[0.98] md:text-7xl">
             Déposez votre projet une fois. Répondez à tous les appels.
           </h1>
-          <p className="mt-6 max-w-2xl text-lg text-muted-foreground">
+          <p className="mt-7 max-w-2xl text-lg leading-8 text-muted-foreground md:text-xl">
             Une fiche unique par projet, enrichie au fil des questions qu'on vous pose. Les
             institutions publient leurs appels et les projets qu'elles soutiennent. Les habitants
             donnent leur avis, du temps ou de l'argent.
@@ -77,7 +77,7 @@ function Home() {
             </Button>
           </div>
 
-          <dl className="mt-14 grid gap-6 border-t border-border pt-8 sm:grid-cols-4">
+          <dl className="mt-14 grid grid-cols-2 gap-x-6 gap-y-8 border-t-2 border-border pt-8 sm:grid-cols-4">
             {[
               { label: "Projets publiés", value: String(projects.length) },
               { label: "Communes concernées", value: String(communes) },
@@ -85,8 +85,8 @@ function Home() {
               { label: "Financement déjà réuni", value: `${euro(totalSecured)}` },
             ].map((stat) => (
               <div key={stat.label}>
-                <dt className="text-sm text-muted-foreground">{stat.label}</dt>
-                <dd className="font-display text-3xl font-semibold">{stat.value}</dd>
+                <dt className="text-sm font-medium text-muted-foreground">{stat.label}</dt>
+                <dd className="mt-1 font-display text-4xl leading-none">{stat.value}</dd>
               </div>
             ))}
           </dl>
@@ -97,7 +97,7 @@ function Home() {
       </section>
 
       <section className="mx-auto max-w-6xl px-4 py-16">
-        <h2 className="font-display text-3xl font-semibold">Un projet, plusieurs besoins</h2>
+        <h2 className="font-display text-4xl md:text-5xl">Un projet, plusieurs besoins</h2>
         <p className="mt-2 max-w-2xl text-muted-foreground">
           Carrière personnelle, association, produit, innovation, coopérative ou structure déjà en
           fonctionnement : votre besoin réel décide de ce que la plateforme met en avant.
@@ -111,10 +111,10 @@ function Home() {
             { icon: Sparkles, title: "Besoin de visibilité", text: "Racontez l'avancement, les actualités et l'agenda du projet." },
             { icon: Building2, title: "Besoin d'outils collectifs", text: "Jalons, actions, budget ouvert et transparence des dépenses." },
           ].map((item) => (
-            <div key={item.title} className="rounded-xl border border-border bg-card p-6">
+            <div key={item.title} className="rounded-lg border border-border bg-card p-6 shadow-sm">
               <item.icon className="size-5 text-primary" />
-              <h3 className="mt-3 font-display text-lg">{item.title}</h3>
-              <p className="mt-1 text-sm text-muted-foreground">{item.text}</p>
+              <h3 className="mt-3 font-display text-2xl">{item.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{item.text}</p>
             </div>
           ))}
         </div>
@@ -122,7 +122,7 @@ function Home() {
 
       <section className="border-y border-border bg-muted/40">
         <div className="mx-auto max-w-6xl px-4 py-16">
-          <h2 className="font-display text-3xl font-semibold">Comment ça marche</h2>
+          <h2 className="font-display text-4xl md:text-5xl">Comment ça marche</h2>
           <ol className="mt-8 grid gap-6 md:grid-cols-4">
             {[
               { step: "1", title: "Racontez votre projet", text: "Un texte libre suffit : l'assistant propose un nom, un résumé, une thématique et des étapes." },
@@ -130,10 +130,10 @@ function Home() {
               { step: "3", title: "Répondez aux appels", text: "Choisissez un appel, réutilisez votre fiche, exportez le dossier en PDF." },
               { step: "4", title: "Passez à l'action", text: "Jalons, actions, dépenses et avancement visibles par tous." },
             ].map((item) => (
-              <li key={item.step} className="rounded-xl border border-border bg-card p-6">
-                <span className="font-display text-3xl font-semibold text-primary">{item.step}</span>
-                <h3 className="mt-2 font-display text-lg">{item.title}</h3>
-                <p className="mt-1 text-sm text-muted-foreground">{item.text}</p>
+              <li key={item.step} className="rounded-lg border border-border bg-card p-6 shadow-sm">
+                <span className="font-display text-4xl text-primary">{item.step}</span>
+                <h3 className="mt-2 font-display text-2xl">{item.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{item.text}</p>
               </li>
             ))}
           </ol>
@@ -143,7 +143,7 @@ function Home() {
       <section className="mx-auto max-w-6xl px-4 py-16">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <h2 className="font-display text-3xl font-semibold">Projets à la une</h2>
+            <h2 className="font-display text-4xl md:text-5xl">Projets à la une</h2>
             <p className="mt-2 text-muted-foreground">
               Des initiatives d'intérêt général et d'économie sociale et solidaire à La Réunion.
             </p>

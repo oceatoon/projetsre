@@ -13,7 +13,9 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as CitoyensRouteImport } from './routes/citoyens'
 import { Route as PorteursRouteImport } from './routes/porteurs'
 import { Route as AppelsIndexRouteImport } from './routes/appels.index'
+import { Route as AppelsSlugRouteImport } from './routes/appels.$slug'
 import { Route as ProjetsIndexRouteImport } from './routes/projets.index'
+import { Route as ProjetsSlugRouteImport } from './routes/projets.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -35,9 +37,19 @@ const AppelsIndexRoute = AppelsIndexRouteImport.update({
   path: '/appels/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppelsSlugRoute = AppelsSlugRouteImport.update({
+  id: '/appels/$slug',
+  path: '/appels/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProjetsIndexRoute = ProjetsIndexRouteImport.update({
   id: '/projets/',
   path: '/projets/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProjetsSlugRoute = ProjetsSlugRouteImport.update({
+  id: '/projets/$slug',
+  path: '/projets/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -45,6 +57,8 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/citoyens': typeof CitoyensRoute
   '/porteurs': typeof PorteursRoute
+  '/appels/$slug': typeof AppelsSlugRoute
+  '/projets/$slug': typeof ProjetsSlugRoute
   '/appels/': typeof AppelsIndexRoute
   '/projets/': typeof ProjetsIndexRoute
 }
@@ -52,6 +66,8 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/citoyens': typeof CitoyensRoute
   '/porteurs': typeof PorteursRoute
+  '/appels/$slug': typeof AppelsSlugRoute
+  '/projets/$slug': typeof ProjetsSlugRoute
   '/appels': typeof AppelsIndexRoute
   '/projets': typeof ProjetsIndexRoute
 }
@@ -60,21 +76,47 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/citoyens': typeof CitoyensRoute
   '/porteurs': typeof PorteursRoute
+  '/appels/$slug': typeof AppelsSlugRoute
+  '/projets/$slug': typeof ProjetsSlugRoute
   '/appels/': typeof AppelsIndexRoute
   '/projets/': typeof ProjetsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/citoyens' | '/porteurs' | '/appels/' | '/projets/'
+  fullPaths:
+    | '/'
+    | '/citoyens'
+    | '/porteurs'
+    | '/appels/$slug'
+    | '/projets/$slug'
+    | '/appels/'
+    | '/projets/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/citoyens' | '/porteurs' | '/appels' | '/projets'
-  id: '__root__' | '/' | '/citoyens' | '/porteurs' | '/appels/' | '/projets/'
+  to:
+    | '/'
+    | '/citoyens'
+    | '/porteurs'
+    | '/appels/$slug'
+    | '/projets/$slug'
+    | '/appels'
+    | '/projets'
+  id:
+    | '__root__'
+    | '/'
+    | '/citoyens'
+    | '/porteurs'
+    | '/appels/$slug'
+    | '/projets/$slug'
+    | '/appels/'
+    | '/projets/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CitoyensRoute: typeof CitoyensRoute
   PorteursRoute: typeof PorteursRoute
+  AppelsSlugRoute: typeof AppelsSlugRoute
+  ProjetsSlugRoute: typeof ProjetsSlugRoute
   AppelsIndexRoute: typeof AppelsIndexRoute
   ProjetsIndexRoute: typeof ProjetsIndexRoute
 }
@@ -109,11 +151,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppelsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/appels/$slug': {
+      id: '/appels/$slug'
+      path: '/appels/$slug'
+      fullPath: '/appels/$slug'
+      preLoaderRoute: typeof AppelsSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/projets/': {
       id: '/projets/'
       path: '/projets'
       fullPath: '/projets/'
       preLoaderRoute: typeof ProjetsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/projets/$slug': {
+      id: '/projets/$slug'
+      path: '/projets/$slug'
+      fullPath: '/projets/$slug'
+      preLoaderRoute: typeof ProjetsSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -123,6 +179,8 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CitoyensRoute: CitoyensRoute,
   PorteursRoute: PorteursRoute,
+  AppelsSlugRoute: AppelsSlugRoute,
+  ProjetsSlugRoute: ProjetsSlugRoute,
   AppelsIndexRoute: AppelsIndexRoute,
   ProjetsIndexRoute: ProjetsIndexRoute,
 }

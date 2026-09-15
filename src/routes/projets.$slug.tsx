@@ -36,10 +36,11 @@ import {
   supportLabel,
   themeLabel,
 } from "@/lib/domain";
-import { projectQuery } from "@/lib/queries";
+import { callsQuery, projectQuery } from "@/lib/queries";
 
 export const Route = createFileRoute("/projets/$slug")({
   loader: async ({ context, params }) => {
+    void context.queryClient.ensureQueryData(callsQuery);
     const detail = await context.queryClient.ensureQueryData(projectQuery(params.slug));
     if (!detail) throw notFound();
     return detail;
@@ -494,6 +495,7 @@ function MaturationPanel({
 
 function CallMatcher({ slug }: { slug: string }) {
   const match = useServerFn(matchCalls);
+  const { data: calls } = useSuspenseQuery(callsQuery);
   const [busy, setBusy] = useState(false);
   const [matches, setMatches] = useState<
     { slug: string; score: number; why: string; todo: string }[]
@@ -532,7 +534,7 @@ function CallMatcher({ slug }: { slug: string }) {
                 params={{ slug: item.slug }}
                 className="text-sm font-medium hover:underline"
               >
-                {item.slug}
+                {calls.find((call) => call.slug === item.slug)?.title ?? item.slug}
               </Link>
               <Badge variant="secondary">{item.score}/100</Badge>
             </div>

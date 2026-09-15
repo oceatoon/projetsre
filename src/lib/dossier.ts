@@ -118,7 +118,7 @@ export function buildDossier(options: {
   detail: ProjectDetail;
   sections: string[];
   call?: Call | null;
-  answers?: { question: string; answer: string }[];
+  answers?: { question: string; answer: string }[] | undefined;
 }) {
   const { detail, sections, call, answers } = options;
   const { project } = detail;

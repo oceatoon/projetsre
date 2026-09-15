@@ -17,9 +17,9 @@ export function SiteHeader() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="no-print sticky top-0 z-40 border-b border-border/70 bg-background/90 backdrop-blur">
-      <div className="mx-auto flex max-w-6xl items-center gap-4 px-4 py-3">
-        <Link to="/" className="font-display text-xl font-semibold tracking-tight">
+    <header className="no-print sticky top-0 z-40 border-b border-border bg-background/95 shadow-sm backdrop-blur">
+      <div className="mx-auto flex max-w-6xl items-center gap-4 px-4 py-3.5">
+        <Link to="/" className="font-display text-2xl leading-none">
           projets<span className="text-primary">.re</span>
         </Link>
         <nav className="ml-auto hidden items-center gap-1 md:flex">
@@ -27,8 +27,8 @@ export function SiteHeader() {
             <Link
               key={link.to}
               to={link.to}
-              className="rounded-md px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-              activeProps={{ className: "bg-muted text-foreground" }}
+              className="rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+              activeProps={{ className: "bg-secondary text-foreground" }}
             >
               {link.label}
             </Link>
@@ -40,7 +40,7 @@ export function SiteHeader() {
         <Button
           variant="ghost"
           size="icon"
-          className="md:hidden"
+          className="min-h-11 min-w-11 md:hidden"
           aria-label="Ouvrir le menu"
           onClick={() => setOpen((value) => !value)}
         >

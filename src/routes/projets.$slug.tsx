@@ -36,11 +36,13 @@ import {
   supportLabel,
   themeLabel,
 } from "@/lib/domain";
-import { callsQuery, projectQuery } from "@/lib/queries";
+import { callsQuery, projectQuery, projectsQuery } from "@/lib/queries";
+import { Synergies } from "@/components/synergies";
 
 export const Route = createFileRoute("/projets/$slug")({
   loader: async ({ context, params }) => {
     void context.queryClient.ensureQueryData(callsQuery);
+    void context.queryClient.ensureQueryData(projectsQuery);
     const detail = await context.queryClient.ensureQueryData(projectQuery(params.slug));
     if (!detail) throw notFound();
     return detail;
@@ -156,6 +158,7 @@ function ProjectPage() {
             <TabsTrigger value="communaute">Communauté</TabsTrigger>
             <TabsTrigger value="vie">Actus et agenda</TabsTrigger>
             <TabsTrigger value="maturation">Maturation</TabsTrigger>
+            <TabsTrigger value="cooperations">Coopérations</TabsTrigger>
           </TabsList>
 
           <TabsContent value="fiche" className="mt-6 grid gap-8 lg:grid-cols-3">

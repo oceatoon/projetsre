@@ -10,33 +10,73 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CitoyensRouteImport } from './routes/citoyens'
+import { Route as PorteursRouteImport } from './routes/porteurs'
+import { Route as AppelsIndexRouteImport } from './routes/appels.index'
+import { Route as ProjetsIndexRouteImport } from './routes/projets.index'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CitoyensRoute = CitoyensRouteImport.update({
+  id: '/citoyens',
+  path: '/citoyens',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PorteursRoute = PorteursRouteImport.update({
+  id: '/porteurs',
+  path: '/porteurs',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppelsIndexRoute = AppelsIndexRouteImport.update({
+  id: '/appels/',
+  path: '/appels/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProjetsIndexRoute = ProjetsIndexRouteImport.update({
+  id: '/projets/',
+  path: '/projets/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/citoyens': typeof CitoyensRoute
+  '/porteurs': typeof PorteursRoute
+  '/appels/': typeof AppelsIndexRoute
+  '/projets/': typeof ProjetsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/citoyens': typeof CitoyensRoute
+  '/porteurs': typeof PorteursRoute
+  '/appels': typeof AppelsIndexRoute
+  '/projets': typeof ProjetsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/citoyens': typeof CitoyensRoute
+  '/porteurs': typeof PorteursRoute
+  '/appels/': typeof AppelsIndexRoute
+  '/projets/': typeof ProjetsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/citoyens' | '/porteurs' | '/appels/' | '/projets/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/citoyens' | '/porteurs' | '/appels' | '/projets'
+  id: '__root__' | '/' | '/citoyens' | '/porteurs' | '/appels/' | '/projets/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CitoyensRoute: typeof CitoyensRoute
+  PorteursRoute: typeof PorteursRoute
+  AppelsIndexRoute: typeof AppelsIndexRoute
+  ProjetsIndexRoute: typeof ProjetsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +88,43 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/citoyens': {
+      id: '/citoyens'
+      path: '/citoyens'
+      fullPath: '/citoyens'
+      preLoaderRoute: typeof CitoyensRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/porteurs': {
+      id: '/porteurs'
+      path: '/porteurs'
+      fullPath: '/porteurs'
+      preLoaderRoute: typeof PorteursRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/appels/': {
+      id: '/appels/'
+      path: '/appels'
+      fullPath: '/appels/'
+      preLoaderRoute: typeof AppelsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/projets/': {
+      id: '/projets/'
+      path: '/projets'
+      fullPath: '/projets/'
+      preLoaderRoute: typeof ProjetsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CitoyensRoute: CitoyensRoute,
+  PorteursRoute: PorteursRoute,
+  AppelsIndexRoute: AppelsIndexRoute,
+  ProjetsIndexRoute: ProjetsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -161,6 +161,130 @@ export type Database = {
         }
         Relationships: []
       }
+      cooperation_messages: {
+        Row: {
+          author_name: string
+          body: string
+          cooperation_id: string
+          created_at: string
+          id: string
+        }
+        Insert: {
+          author_name?: string
+          body: string
+          cooperation_id: string
+          created_at?: string
+          id?: string
+        }
+        Update: {
+          author_name?: string
+          body?: string
+          cooperation_id?: string
+          created_at?: string
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cooperation_messages_cooperation_id_fkey"
+            columns: ["cooperation_id"]
+            isOneToOne: false
+            referencedRelation: "cooperations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      cooperation_steps: {
+        Row: {
+          cooperation_id: string
+          created_at: string
+          deliverable: string
+          due_date: string | null
+          id: string
+          owner_name: string
+          position: number
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          cooperation_id: string
+          created_at?: string
+          deliverable?: string
+          due_date?: string | null
+          id?: string
+          owner_name?: string
+          position?: number
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          cooperation_id?: string
+          created_at?: string
+          deliverable?: string
+          due_date?: string | null
+          id?: string
+          owner_name?: string
+          position?: number
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cooperation_steps_cooperation_id_fkey"
+            columns: ["cooperation_id"]
+            isOneToOne: false
+            referencedRelation: "cooperations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      cooperations: {
+        Row: {
+          created_at: string
+          id: string
+          kind: string
+          project_a_id: string
+          project_b_id: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          kind?: string
+          project_a_id: string
+          project_b_id: string
+          title?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          kind?: string
+          project_a_id?: string
+          project_b_id?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cooperations_project_a_id_fkey"
+            columns: ["project_a_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cooperations_project_b_id_fkey"
+            columns: ["project_b_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       events: {
         Row: {
           created_at: string

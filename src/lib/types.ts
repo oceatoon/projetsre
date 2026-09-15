@@ -140,3 +140,45 @@ export interface Application {
   project: { slug: string; name: string; commune: string; theme: string } | null;
   call?: { slug: string; title: string; institution: string } | null;
 }
+
+export interface CoopProjectRef {
+  id: string;
+  slug: string;
+  name: string;
+  tagline: string;
+  commune: string;
+  theme: string;
+  stage: string;
+  need_types: string[];
+}
+
+export interface Cooperation {
+  id: string;
+  kind: string;
+  title: string;
+  created_at: string;
+}
+
+export interface CooperationMessage {
+  id: string;
+  author_name: string;
+  body: string;
+  created_at: string;
+}
+
+export interface CooperationStep {
+  id: string;
+  title: string;
+  deliverable: string;
+  owner_name: string;
+  due_date: string | null;
+  status: string;
+  position: number;
+}
+
+export interface CooperationDetail {
+  cooperation: Cooperation | null;
+  projects: [CoopProjectRef, CoopProjectRef];
+  messages: CooperationMessage[];
+  steps: CooperationStep[];
+}

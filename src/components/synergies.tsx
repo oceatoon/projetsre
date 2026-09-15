@@ -74,10 +74,18 @@ export function Synergies({ project }: { project: Project }) {
               ))}
             </div>
 
-            <div className="mt-auto pt-5">
+            <div className="mt-auto flex flex-wrap gap-2 pt-5">
+              <Button asChild size="sm">
+                <Link
+                  to="/cooperations/$slugA/$slugB"
+                  params={{ slugA: project.slug, slugB: other.slug }}
+                >
+                  Ouvrir la coopération <ArrowRight />
+                </Link>
+              </Button>
               <Button asChild variant="outline" size="sm">
                 <Link to="/projets/$slug" params={{ slug: other.slug }}>
-                  Voir ce projet <ArrowRight />
+                  Voir ce projet
                 </Link>
               </Button>
             </div>

@@ -1,6 +1,7 @@
 import { queryOptions } from "@tanstack/react-query";
 
 import { getCall, getProject, listApplications, listCalls, listProjects } from "./data.functions";
+import { getCooperation } from "./coop.functions";
 
 export const projectsQuery = queryOptions({
   queryKey: ["projects"],
@@ -28,3 +29,9 @@ export const applicationsQuery = queryOptions({
   queryKey: ["applications"],
   queryFn: () => listApplications(),
 });
+
+export const cooperationQuery = (slugA: string, slugB: string) =>
+  queryOptions({
+    queryKey: ["cooperation", slugA, slugB],
+    queryFn: () => getCooperation({ data: { slugA, slugB } }),
+  });

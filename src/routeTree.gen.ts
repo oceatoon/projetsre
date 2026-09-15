@@ -19,6 +19,7 @@ import { Route as AppelsIndexRouteImport } from './routes/appels.index'
 import { Route as AppelsSlugRouteImport } from './routes/appels.$slug'
 import { Route as ProjetsIndexRouteImport } from './routes/projets.index'
 import { Route as ProjetsSlugRouteImport } from './routes/projets.$slug'
+import { Route as CooperationsSlugASlugBRouteImport } from './routes/cooperations.$slugA.$slugB'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -70,6 +71,11 @@ const ProjetsSlugRoute = ProjetsSlugRouteImport.update({
   path: '/projets/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CooperationsSlugASlugBRoute = CooperationsSlugASlugBRouteImport.update({
+  id: '/cooperations/$slugA/$slugB',
+  path: '/cooperations/$slugA/$slugB',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -82,6 +88,7 @@ export interface FileRoutesByFullPath {
   '/projets/$slug': typeof ProjetsSlugRoute
   '/appels/': typeof AppelsIndexRoute
   '/projets/': typeof ProjetsIndexRoute
+  '/cooperations/$slugA/$slugB': typeof CooperationsSlugASlugBRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -94,6 +101,7 @@ export interface FileRoutesByTo {
   '/projets/$slug': typeof ProjetsSlugRoute
   '/appels': typeof AppelsIndexRoute
   '/projets': typeof ProjetsIndexRoute
+  '/cooperations/$slugA/$slugB': typeof CooperationsSlugASlugBRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -107,6 +115,7 @@ export interface FileRoutesById {
   '/projets/$slug': typeof ProjetsSlugRoute
   '/appels/': typeof AppelsIndexRoute
   '/projets/': typeof ProjetsIndexRoute
+  '/cooperations/$slugA/$slugB': typeof CooperationsSlugASlugBRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -121,6 +130,7 @@ export interface FileRouteTypes {
     | '/projets/$slug'
     | '/appels/'
     | '/projets/'
+    | '/cooperations/$slugA/$slugB'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -133,6 +143,7 @@ export interface FileRouteTypes {
     | '/projets/$slug'
     | '/appels'
     | '/projets'
+    | '/cooperations/$slugA/$slugB'
   id:
     | '__root__'
     | '/'
@@ -145,6 +156,7 @@ export interface FileRouteTypes {
     | '/projets/$slug'
     | '/appels/'
     | '/projets/'
+    | '/cooperations/$slugA/$slugB'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -158,6 +170,7 @@ export interface RootRouteChildren {
   ProjetsSlugRoute: typeof ProjetsSlugRoute
   AppelsIndexRoute: typeof AppelsIndexRoute
   ProjetsIndexRoute: typeof ProjetsIndexRoute
+  CooperationsSlugASlugBRoute: typeof CooperationsSlugASlugBRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -232,6 +245,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProjetsSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/cooperations/$slugA/$slugB': {
+      id: '/cooperations/$slugA/$slugB'
+      path: '/cooperations/$slugA/$slugB'
+      fullPath: '/cooperations/$slugA/$slugB'
+      preLoaderRoute: typeof CooperationsSlugASlugBRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -246,6 +266,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProjetsSlugRoute: ProjetsSlugRoute,
   AppelsIndexRoute: AppelsIndexRoute,
   ProjetsIndexRoute: ProjetsIndexRoute,
+  CooperationsSlugASlugBRoute: CooperationsSlugASlugBRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

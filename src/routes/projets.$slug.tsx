@@ -364,6 +364,10 @@ function ProjectPage() {
           <TabsContent value="maturation" className="mt-6">
             <MaturationPanel slug={slug} projectId={project.id} questions={detail.questions} />
           </TabsContent>
+
+          <TabsContent value="cooperations" className="mt-6">
+            <Synergies project={project} />
+          </TabsContent>
         </Tabs>
       </div>
     </div>

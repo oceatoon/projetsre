@@ -1,10 +1,9 @@
-import { useRouter } from "@tanstack/react-router";
+import { Link, useRouter } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -14,13 +13,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { addFeedback } from "@/lib/data.functions";
+import { useSession } from "@/hooks/use-session";
 import { FEEDBACK_KINDS } from "@/lib/domain";
+import { addFeedbackAsUser } from "@/lib/participate.functions";
 
 export function FeedbackForm({ projectId }: { projectId: string }) {
-  const send = useServerFn(addFeedback);
+  const send = useServerFn(addFeedbackAsUser);
   const router = useRouter();
-  const [author, setAuthor] = useState("");
+  const { ready, signedIn } = useSession();
   const [kind, setKind] = useState<string>("avis");
   const [body, setBody] = useState("");
   const [rating, setRating] = useState<string>("4");
@@ -37,7 +37,6 @@ export function FeedbackForm({ projectId }: { projectId: string }) {
       await send({
         data: {
           project_id: projectId,
-          author_name: author.trim() || "Anonyme",
           kind: kind as "avis" | "idee" | "critique",
           body: body.trim(),
           rating: Number(rating),
@@ -53,20 +52,25 @@ export function FeedbackForm({ projectId }: { projectId: string }) {
     }
   };
 
+  if (ready && !signedIn) {
+    return (
+      <div className="rounded-xl border border-dashed border-border bg-card p-5">
+        <h3 className="font-display text-lg">Donner mon avis</h3>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Connectez-vous pour publier un avis signé de votre nom : les porteurs savent ainsi à qui
+          répondre.
+        </p>
+        <Button asChild className="mt-4">
+          <Link to="/connexion">Me connecter</Link>
+        </Button>
+      </div>
+    );
+  }
+
   return (
     <form onSubmit={submit} className="rounded-xl border border-border bg-card p-5">
       <h3 className="font-display text-lg">Donner mon avis</h3>
-      <div className="mt-4 grid gap-3 sm:grid-cols-3">
-        <div className="grid gap-1.5">
-          <Label htmlFor="fb-name">Votre nom</Label>
-          <Input
-            id="fb-name"
-            value={author}
-            maxLength={80}
-            onChange={(event) => setAuthor(event.target.value)}
-            placeholder="Anonyme"
-          />
-        </div>
+      <div className="mt-4 grid gap-3 sm:grid-cols-2">
         <div className="grid gap-1.5">
           <Label htmlFor="fb-kind">Type</Label>
           <Select value={kind} onValueChange={setKind}>

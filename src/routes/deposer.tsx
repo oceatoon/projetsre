@@ -19,7 +19,8 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { draftProject, improveText } from "@/lib/ai.functions";
-import { createProject } from "@/lib/data.functions";
+import { useSession } from "@/hooks/use-session";
+import { createProjectAsUser } from "@/lib/participate.functions";
 import { COMMUNES, NEED_TYPES, STAGES, THEMES } from "@/lib/domain";
 
 export const Route = createFileRoute("/deposer")({
@@ -53,7 +54,8 @@ function DepositPage() {
   const navigate = useNavigate();
   const draft = useServerFn(draftProject);
   const improve = useServerFn(improveText);
-  const save = useServerFn(createProject);
+  const save = useServerFn(createProjectAsUser);
+  const { ready, signedIn } = useSession();
 
   const [step, setStep] = useState(0);
   const [busy, setBusy] = useState(false);
@@ -138,6 +140,10 @@ function DepositPage() {
   };
 
   const publish = async () => {
+    if (ready && !signedIn) {
+      toast.error("Connectez-vous pour publier votre fiche projet.");
+      return;
+    }
     if (name.trim().length < 2 || tagline.trim().length < 3) {
       toast.error("Un nom et une phrase de présentation sont nécessaires.");
       setStep(1);

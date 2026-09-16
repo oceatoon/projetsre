@@ -10,14 +10,18 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as CitoyensRouteImport } from './routes/citoyens'
+import { Route as ConnexionRouteImport } from './routes/connexion'
 import { Route as DeposerRouteImport } from './routes/deposer'
 import { Route as InstitutionsRouteImport } from './routes/institutions'
 import { Route as PorteursRouteImport } from './routes/porteurs'
 import { Route as PresentationRouteImport } from './routes/presentation'
 import { Route as SuiviRouteImport } from './routes/suivi'
+import { Route as AuthenticatedMoiRouteImport } from './routes/_authenticated/moi'
 import { Route as AppelsIndexRouteImport } from './routes/appels.index'
 import { Route as AppelsSlugRouteImport } from './routes/appels.$slug'
+import { Route as ProfilHandleRouteImport } from './routes/profil.$handle'
 import { Route as ProjetsIndexRouteImport } from './routes/projets.index'
 import { Route as ProjetsSlugRouteImport } from './routes/projets.$slug'
 import { Route as CooperationsSlugASlugBRouteImport } from './routes/cooperations.$slugA.$slugB'
@@ -27,9 +31,18 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CitoyensRoute = CitoyensRouteImport.update({
   id: '/citoyens',
   path: '/citoyens',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConnexionRoute = ConnexionRouteImport.update({
+  id: '/connexion',
+  path: '/connexion',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DeposerRoute = DeposerRouteImport.update({
@@ -57,6 +70,11 @@ const SuiviRoute = SuiviRouteImport.update({
   path: '/suivi',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedMoiRoute = AuthenticatedMoiRouteImport.update({
+  id: '/moi',
+  path: '/moi',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AppelsIndexRoute = AppelsIndexRouteImport.update({
   id: '/appels/',
   path: '/appels/',
@@ -65,6 +83,11 @@ const AppelsIndexRoute = AppelsIndexRouteImport.update({
 const AppelsSlugRoute = AppelsSlugRouteImport.update({
   id: '/appels/$slug',
   path: '/appels/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfilHandleRoute = ProfilHandleRouteImport.update({
+  id: '/profil/$handle',
+  path: '/profil/$handle',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProjetsIndexRoute = ProjetsIndexRouteImport.update({
@@ -86,12 +109,15 @@ const CooperationsSlugASlugBRoute = CooperationsSlugASlugBRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/citoyens': typeof CitoyensRoute
+  '/connexion': typeof ConnexionRoute
   '/deposer': typeof DeposerRoute
   '/institutions': typeof InstitutionsRoute
   '/porteurs': typeof PorteursRoute
   '/presentation': typeof PresentationRoute
   '/suivi': typeof SuiviRoute
+  '/moi': typeof AuthenticatedMoiRoute
   '/appels/$slug': typeof AppelsSlugRoute
+  '/profil/$handle': typeof ProfilHandleRoute
   '/projets/$slug': typeof ProjetsSlugRoute
   '/appels/': typeof AppelsIndexRoute
   '/projets/': typeof ProjetsIndexRoute
@@ -100,12 +126,15 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/citoyens': typeof CitoyensRoute
+  '/connexion': typeof ConnexionRoute
   '/deposer': typeof DeposerRoute
   '/institutions': typeof InstitutionsRoute
   '/porteurs': typeof PorteursRoute
   '/presentation': typeof PresentationRoute
   '/suivi': typeof SuiviRoute
+  '/moi': typeof AuthenticatedMoiRoute
   '/appels/$slug': typeof AppelsSlugRoute
+  '/profil/$handle': typeof ProfilHandleRoute
   '/projets/$slug': typeof ProjetsSlugRoute
   '/appels': typeof AppelsIndexRoute
   '/projets': typeof ProjetsIndexRoute
@@ -114,13 +143,17 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/citoyens': typeof CitoyensRoute
+  '/connexion': typeof ConnexionRoute
   '/deposer': typeof DeposerRoute
   '/institutions': typeof InstitutionsRoute
   '/porteurs': typeof PorteursRoute
   '/presentation': typeof PresentationRoute
   '/suivi': typeof SuiviRoute
+  '/_authenticated/moi': typeof AuthenticatedMoiRoute
   '/appels/$slug': typeof AppelsSlugRoute
+  '/profil/$handle': typeof ProfilHandleRoute
   '/projets/$slug': typeof ProjetsSlugRoute
   '/appels/': typeof AppelsIndexRoute
   '/projets/': typeof ProjetsIndexRoute
@@ -131,12 +164,15 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/citoyens'
+    | '/connexion'
     | '/deposer'
     | '/institutions'
     | '/porteurs'
     | '/presentation'
     | '/suivi'
+    | '/moi'
     | '/appels/$slug'
+    | '/profil/$handle'
     | '/projets/$slug'
     | '/appels/'
     | '/projets/'
@@ -145,12 +181,15 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/citoyens'
+    | '/connexion'
     | '/deposer'
     | '/institutions'
     | '/porteurs'
     | '/presentation'
     | '/suivi'
+    | '/moi'
     | '/appels/$slug'
+    | '/profil/$handle'
     | '/projets/$slug'
     | '/appels'
     | '/projets'
@@ -158,13 +197,17 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/_authenticated'
     | '/citoyens'
+    | '/connexion'
     | '/deposer'
     | '/institutions'
     | '/porteurs'
     | '/presentation'
     | '/suivi'
+    | '/_authenticated/moi'
     | '/appels/$slug'
+    | '/profil/$handle'
     | '/projets/$slug'
     | '/appels/'
     | '/projets/'
@@ -173,13 +216,16 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   CitoyensRoute: typeof CitoyensRoute
+  ConnexionRoute: typeof ConnexionRoute
   DeposerRoute: typeof DeposerRoute
   InstitutionsRoute: typeof InstitutionsRoute
   PorteursRoute: typeof PorteursRoute
   PresentationRoute: typeof PresentationRoute
   SuiviRoute: typeof SuiviRoute
   AppelsSlugRoute: typeof AppelsSlugRoute
+  ProfilHandleRoute: typeof ProfilHandleRoute
   ProjetsSlugRoute: typeof ProjetsSlugRoute
   AppelsIndexRoute: typeof AppelsIndexRoute
   ProjetsIndexRoute: typeof ProjetsIndexRoute
@@ -195,11 +241,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/citoyens': {
       id: '/citoyens'
       path: '/citoyens'
       fullPath: '/citoyens'
       preLoaderRoute: typeof CitoyensRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/connexion': {
+      id: '/connexion'
+      path: '/connexion'
+      fullPath: '/connexion'
+      preLoaderRoute: typeof ConnexionRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/deposer': {
@@ -237,6 +297,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SuiviRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/moi': {
+      id: '/_authenticated/moi'
+      path: '/moi'
+      fullPath: '/moi'
+      preLoaderRoute: typeof AuthenticatedMoiRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/appels/': {
       id: '/appels/'
       path: '/appels'
@@ -249,6 +316,13 @@ declare module '@tanstack/react-router' {
       path: '/appels/$slug'
       fullPath: '/appels/$slug'
       preLoaderRoute: typeof AppelsSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profil/$handle': {
+      id: '/profil/$handle'
+      path: '/profil/$handle'
+      fullPath: '/profil/$handle'
+      preLoaderRoute: typeof ProfilHandleRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/projets/': {
@@ -275,15 +349,29 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedMoiRoute: typeof AuthenticatedMoiRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedMoiRoute: AuthenticatedMoiRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   CitoyensRoute: CitoyensRoute,
+  ConnexionRoute: ConnexionRoute,
   DeposerRoute: DeposerRoute,
   InstitutionsRoute: InstitutionsRoute,
   PorteursRoute: PorteursRoute,
   PresentationRoute: PresentationRoute,
   SuiviRoute: SuiviRoute,
   AppelsSlugRoute: AppelsSlugRoute,
+  ProfilHandleRoute: ProfilHandleRoute,
   ProjetsSlugRoute: ProjetsSlugRoute,
   AppelsIndexRoute: AppelsIndexRoute,
   ProjetsIndexRoute: ProjetsIndexRoute,

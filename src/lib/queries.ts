@@ -2,6 +2,13 @@ import { queryOptions } from "@tanstack/react-query";
 
 import { getCall, getProject, listApplications, listCalls, listProjects } from "./data.functions";
 import { getCooperation } from "./coop.functions";
+import { getPublicProfile } from "./profiles.functions";
+
+export const profileQuery = (handle: string) =>
+  queryOptions({
+    queryKey: ["profile", handle],
+    queryFn: () => getPublicProfile({ data: { handle } }),
+  });
 
 export const projectsQuery = queryOptions({
   queryKey: ["projects"],

@@ -514,9 +514,27 @@ function MaturationPanel({
                     }
                     placeholder="Votre réponse…"
                   />
-                  <Button size="sm" className="mt-2" onClick={() => save(item.id)}>
-                    Enregistrer la réponse
-                  </Button>
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    <Button size="sm" onClick={() => save(item.id)}>
+                      Enregistrer la réponse
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      disabled={helping === item.id}
+                      onClick={() => assist(item.id, item.question)}
+                    >
+                      <Sparkles className="size-4" />
+                      {helping === item.id ? "Rédaction…" : "M'aider à répondre"}
+                    </Button>
+                  </div>
+                  {(gaps[item.id] ?? []).length ? (
+                    <ul className="mt-2 list-disc pl-5 text-xs text-muted-foreground">
+                      {(gaps[item.id] ?? []).map((gap) => (
+                        <li key={gap}>À préciser : {gap}</li>
+                      ))}
+                    </ul>
+                  ) : null}
                 </div>
               )}
             </li>
@@ -525,7 +543,33 @@ function MaturationPanel({
             <p className="text-sm text-muted-foreground">Aucune question pour l'instant.</p>
           ) : null}
         </ul>
+
+        <div className="mt-6 rounded-lg border border-dashed border-border p-4">
+          <h3 className="font-medium">Ajouter une question</h3>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Notez une question posée par un financeur, un partenaire ou un habitant.
+          </p>
+          <Textarea
+            rows={2}
+            maxLength={500}
+            className="mt-3"
+            value={manual}
+            onChange={(event) => setManual(event.target.value)}
+            placeholder="Ex. Comment le projet se finance-t-il après la subvention ?"
+          />
+          <Input
+            className="mt-2"
+            maxLength={80}
+            value={manualAuthor}
+            onChange={(event) => setManualAuthor(event.target.value)}
+            placeholder="Posée par (facultatif)"
+          />
+          <Button size="sm" className="mt-3" onClick={addManual} disabled={manualBusy}>
+            {manualBusy ? "Ajout…" : "Ajouter la question"}
+          </Button>
+        </div>
       </section>
+
 
       <section className="rounded-xl border border-border bg-card p-6">
         <h2 className="flex items-center gap-2 font-display text-xl">

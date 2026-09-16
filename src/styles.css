@@ -291,6 +291,12 @@
   .presentation-ledger strong { font-size: 2rem; }
   .presentation-final-link { min-height: 8rem; padding: 1.25rem; }
   .presentation-final-link strong { font-size: 1.5rem; }
+  .presentation-slide:last-child .mt-12 { margin-top: 1.25rem; }
+  .presentation-slide:last-child .mt-10 { margin-top: 1rem; }
+  .presentation-slide:last-child .presentation-final-link { min-height: 6.5rem; padding: .85rem 1rem; gap: .3rem .75rem; }
+  .presentation-slide:last-child .presentation-final-link > svg:first-child { width: 1.4rem; height: 1.4rem; }
+  .presentation-slide:last-child .presentation-final-link strong { font-size: 1.28rem; }
+  .presentation-slide:last-child .presentation-final-link span { font-size: .85rem; }
   .presentation-controls { bottom: .65rem; width: calc(100% - 1rem); justify-content: space-between; }
   .presentation-dots { gap: .25rem; }
   .presentation-dot { width: .4rem; height: .4rem; }

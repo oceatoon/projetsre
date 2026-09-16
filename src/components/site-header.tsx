@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 const LINKS = [
   { to: "/projets", label: "Projets" },
   { to: "/appels", label: "Appels à projets" },
+  { to: "/presentation", label: "Présenter" },
   { to: "/suivi", label: "Suivi d'activité" },
   { to: "/porteurs", label: "Porteurs" },
   { to: "/institutions", label: "Institutions" },

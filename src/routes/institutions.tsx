@@ -11,7 +11,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
-import { createCall } from "@/lib/data.functions";
+import { useSession } from "@/hooks/use-session";
+import { createCallAsUser } from "@/lib/participate.functions";
 import { euro, frDate, needLabel, statusLabel, themeLabel } from "@/lib/domain";
 import { NEED_TYPES, THEMES } from "@/lib/domain";
 import { applicationsQuery, callsQuery, projectsQuery } from "@/lib/queries";
@@ -171,7 +172,8 @@ function InstitutionsPage() {
 }
 
 function CallForm() {
-  const create = useServerFn(createCall);
+  const create = useServerFn(createCallAsUser);
+  const { ready, signedIn } = useSession();
   const router = useRouter();
   const [title, setTitle] = useState("");
   const [institution, setInstitution] = useState("");
@@ -194,6 +196,10 @@ function CallForm() {
 
   const submit = async (event: React.FormEvent) => {
     event.preventDefault();
+    if (ready && !signedIn) {
+      toast.error("Connectez-vous pour publier un appel à projets.");
+      return;
+    }
     if (title.trim().length < 3 || institution.trim().length < 2) {
       toast.error("Un titre et une institution sont nécessaires.");
       return;

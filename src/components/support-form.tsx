@@ -1,4 +1,4 @@
-import { useRouter } from "@tanstack/react-router";
+import { Link, useRouter } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -14,14 +14,15 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { addSupport } from "@/lib/data.functions";
+import { useSession } from "@/hooks/use-session";
 import { SUPPORT_KINDS } from "@/lib/domain";
+import { addSupportAsUser } from "@/lib/participate.functions";
 
 export function SupportForm({ projectId }: { projectId: string }) {
-  const send = useServerFn(addSupport);
+  const send = useServerFn(addSupportAsUser);
   const router = useRouter();
+  const { ready, signedIn } = useSession();
   const [kind, setKind] = useState<string>("benevole");
-  const [name, setName] = useState("");
   const [contact, setContact] = useState("");
   const [amount, setAmount] = useState("");
   const [message, setMessage] = useState("");
@@ -35,7 +36,6 @@ export function SupportForm({ projectId }: { projectId: string }) {
         data: {
           project_id: projectId,
           kind: kind as "don" | "benevole" | "testeur" | "soutien",
-          supporter_name: name.trim() || "Anonyme",
           contact: contact.trim(),
           amount: kind === "don" && amount ? Number(amount) : null,
           message: message.trim(),
@@ -51,6 +51,21 @@ export function SupportForm({ projectId }: { projectId: string }) {
       setBusy(false);
     }
   };
+
+  if (ready && !signedIn) {
+    return (
+      <div className="rounded-xl border border-dashed border-border bg-card p-5">
+        <h3 className="font-display text-lg">Soutenir ce projet</h3>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Connectez-vous pour proposer votre aide, votre temps ou une intention de financement : le
+          porteur pourra vous recontacter.
+        </p>
+        <Button asChild className="mt-4">
+          <Link to="/connexion">Me connecter</Link>
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <form onSubmit={submit} className="rounded-xl border border-border bg-card p-5">
@@ -74,16 +89,6 @@ export function SupportForm({ projectId }: { projectId: string }) {
               ))}
             </SelectContent>
           </Select>
-        </div>
-        <div className="grid gap-1.5">
-          <Label htmlFor="su-name">Votre nom</Label>
-          <Input
-            id="su-name"
-            value={name}
-            maxLength={80}
-            onChange={(event) => setName(event.target.value)}
-            placeholder="Anonyme"
-          />
         </div>
         <div className="grid gap-1.5">
           <Label htmlFor="su-contact">Contact (courriel ou téléphone)</Label>

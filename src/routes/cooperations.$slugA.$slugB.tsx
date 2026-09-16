@@ -10,12 +10,13 @@ import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { Textarea } from "@/components/ui/textarea";
 import {
-  addCooperationMessage,
   addCooperationStep,
   openCooperation,
   setCooperationStepStatus,
 } from "@/lib/coop.functions";
+import { useSession } from "@/hooks/use-session";
 import { frDate, frDateTime, stageLabel, themeLabel } from "@/lib/domain";
+import { addCooperationMessageAsUser } from "@/lib/participate.functions";
 import { cooperationQuery } from "@/lib/queries";
 
 export const Route = createFileRoute("/cooperations/$slugA/$slugB")({
@@ -86,7 +87,7 @@ function CooperationPage() {
   const coop = detail.cooperation;
 
   const [busy, setBusy] = useState(false);
-  const [author, setAuthor] = useState("");
+  const { signedIn } = useSession();
   const [body, setBody] = useState("");
   const [step, setStep] = useState({ title: "", deliverable: "", owner_name: "", due_date: "" });
 
@@ -121,8 +122,8 @@ function CooperationPage() {
     if (!coop || body.trim().length < 2) return;
     setBusy(true);
     try {
-      await addCooperationMessage({
-        data: { cooperation_id: coop.id, author_name: author.trim(), body: body.trim() },
+      await addCooperationMessageAsUser({
+        data: { cooperation_id: coop.id, body: body.trim() },
       });
       setBody("");
       await refresh();
@@ -321,18 +322,21 @@ function CooperationPage() {
             </ul>
 
             <div className="mt-6 space-y-3 border-t border-border pt-5">
-              <Input
-                placeholder="Votre nom (optionnel)"
-                value={author}
-                onChange={(e) => setAuthor(e.target.value)}
-              />
+              {!signedIn ? (
+                <p className="text-sm text-muted-foreground">
+                  <Link to="/connexion" className="font-medium text-primary">
+                    Connectez-vous
+                  </Link>{" "}
+                  pour écrire dans ce fil et engager votre projet.
+                </p>
+              ) : null}
               <Textarea
                 placeholder="Votre message"
                 rows={4}
                 value={body}
                 onChange={(e) => setBody(e.target.value)}
               />
-              <Button onClick={handleMessage} disabled={busy || body.trim().length < 2}>
+              <Button onClick={handleMessage} disabled={busy || !signedIn || body.trim().length < 2}>
                 Envoyer
               </Button>
             </div>

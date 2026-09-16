@@ -19,7 +19,9 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { adaptToCall } from "@/lib/ai.functions";
-import { createApplication, getProject } from "@/lib/data.functions";
+import { getProject } from "@/lib/data.functions";
+import { useSession } from "@/hooks/use-session";
+import { createApplicationAsUser } from "@/lib/participate.functions";
 import { euro, frDate, needLabel, statusLabel, themeLabel } from "@/lib/domain";
 import { callQuery, projectsQuery } from "@/lib/queries";
 import { SECTIONS } from "@/lib/domain";
@@ -178,7 +180,8 @@ function ApplyPanel({
 }) {
   const adapt = useServerFn(adaptToCall);
   const fetchProject = useServerFn(getProject);
-  const apply = useServerFn(createApplication);
+  const apply = useServerFn(createApplicationAsUser);
+  const { ready, signedIn } = useSession();
   const router = useRouter();
 
   const [projectSlug, setProjectSlug] = useState<string>("");
@@ -222,6 +225,10 @@ function ApplyPanel({
   };
 
   const submit = async () => {
+    if (ready && !signedIn) {
+      toast.error("Connectez-vous pour déposer une candidature.");
+      return;
+    }
     if (!detail) return;
     setBusy(true);
     try {

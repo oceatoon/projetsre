@@ -16,6 +16,7 @@ export type Database = {
     Tables: {
       actions: {
         Row: {
+          author_id: string | null
           author_name: string
           created_at: string
           id: string
@@ -27,6 +28,7 @@ export type Database = {
           validated_by: string | null
         }
         Insert: {
+          author_id?: string | null
           author_name?: string
           created_at?: string
           id?: string
@@ -38,6 +40,7 @@ export type Database = {
           validated_by?: string | null
         }
         Update: {
+          author_id?: string | null
           author_name?: string
           created_at?: string
           id?: string
@@ -68,6 +71,7 @@ export type Database = {
       applications: {
         Row: {
           answers: Json
+          author_id: string | null
           call_id: string
           created_at: string
           granted_amount: number | null
@@ -78,6 +82,7 @@ export type Database = {
         }
         Insert: {
           answers?: Json
+          author_id?: string | null
           call_id: string
           created_at?: string
           granted_amount?: number | null
@@ -88,6 +93,7 @@ export type Database = {
         }
         Update: {
           answers?: Json
+          author_id?: string | null
           call_id?: string
           created_at?: string
           granted_amount?: number | null
@@ -125,6 +131,7 @@ export type Database = {
           institution: string
           is_open: boolean
           need_types: string[]
+          owner_id: string | null
           slug: string
           themes: string[]
           title: string
@@ -140,6 +147,7 @@ export type Database = {
           institution: string
           is_open?: boolean
           need_types?: string[]
+          owner_id?: string | null
           slug: string
           themes?: string[]
           title: string
@@ -155,6 +163,7 @@ export type Database = {
           institution?: string
           is_open?: boolean
           need_types?: string[]
+          owner_id?: string | null
           slug?: string
           themes?: string[]
           title?: string
@@ -163,6 +172,7 @@ export type Database = {
       }
       cooperation_messages: {
         Row: {
+          author_id: string | null
           author_name: string
           body: string
           cooperation_id: string
@@ -170,6 +180,7 @@ export type Database = {
           id: string
         }
         Insert: {
+          author_id?: string | null
           author_name?: string
           body: string
           cooperation_id: string
@@ -177,6 +188,7 @@ export type Database = {
           id?: string
         }
         Update: {
+          author_id?: string | null
           author_name?: string
           body?: string
           cooperation_id?: string
@@ -195,6 +207,7 @@ export type Database = {
       }
       cooperation_steps: {
         Row: {
+          author_id: string | null
           cooperation_id: string
           created_at: string
           deliverable: string
@@ -207,6 +220,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          author_id?: string | null
           cooperation_id: string
           created_at?: string
           deliverable?: string
@@ -219,6 +233,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          author_id?: string | null
           cooperation_id?: string
           created_at?: string
           deliverable?: string
@@ -242,6 +257,7 @@ export type Database = {
       }
       cooperations: {
         Row: {
+          author_id: string | null
           created_at: string
           id: string
           kind: string
@@ -251,6 +267,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          author_id?: string | null
           created_at?: string
           id?: string
           kind?: string
@@ -260,6 +277,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          author_id?: string | null
           created_at?: string
           id?: string
           kind?: string
@@ -360,6 +378,7 @@ export type Database = {
       }
       feedback: {
         Row: {
+          author_id: string | null
           author_name: string
           body: string
           created_at: string
@@ -369,6 +388,7 @@ export type Database = {
           rating: number | null
         }
         Insert: {
+          author_id?: string | null
           author_name?: string
           body: string
           created_at?: string
@@ -378,6 +398,7 @@ export type Database = {
           rating?: number | null
         }
         Update: {
+          author_id?: string | null
           author_name?: string
           body?: string
           created_at?: string
@@ -435,6 +456,7 @@ export type Database = {
         Row: {
           answer: string
           asked_by: string
+          author_id: string | null
           created_at: string
           id: string
           project_id: string
@@ -443,6 +465,7 @@ export type Database = {
         Insert: {
           answer?: string
           asked_by?: string
+          author_id?: string | null
           created_at?: string
           id?: string
           project_id: string
@@ -451,6 +474,7 @@ export type Database = {
         Update: {
           answer?: string
           asked_by?: string
+          author_id?: string | null
           created_at?: string
           id?: string
           project_id?: string
@@ -468,6 +492,7 @@ export type Database = {
       }
       milestones: {
         Row: {
+          author_id: string | null
           created_at: string
           description: string
           due_date: string | null
@@ -478,6 +503,7 @@ export type Database = {
           title: string
         }
         Insert: {
+          author_id?: string | null
           created_at?: string
           description?: string
           due_date?: string | null
@@ -488,6 +514,7 @@ export type Database = {
           title: string
         }
         Update: {
+          author_id?: string | null
           created_at?: string
           description?: string
           due_date?: string | null
@@ -539,6 +566,42 @@ export type Database = {
           },
         ]
       }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          bio: string
+          commune: string
+          created_at: string
+          display_name: string
+          handle: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string
+          commune?: string
+          created_at?: string
+          display_name?: string
+          handle: string
+          id: string
+          role?: Database["public"]["Enums"]["app_role"]
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string
+          commune?: string
+          created_at?: string
+          display_name?: string
+          handle?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
       projects: {
         Row: {
           budget_needed: number
@@ -557,6 +620,7 @@ export type Database = {
           need_types: string[]
           needs_answered: string
           objectives: string[]
+          owner_id: string | null
           slug: string
           stage: string
           tagline: string
@@ -580,6 +644,7 @@ export type Database = {
           need_types?: string[]
           needs_answered?: string
           objectives?: string[]
+          owner_id?: string | null
           slug: string
           stage?: string
           tagline?: string
@@ -603,6 +668,7 @@ export type Database = {
           need_types?: string[]
           needs_answered?: string
           objectives?: string[]
+          owner_id?: string | null
           slug?: string
           stage?: string
           tagline?: string
@@ -614,6 +680,7 @@ export type Database = {
       supports: {
         Row: {
           amount: number | null
+          author_id: string | null
           contact: string | null
           created_at: string
           id: string
@@ -624,6 +691,7 @@ export type Database = {
         }
         Insert: {
           amount?: number | null
+          author_id?: string | null
           contact?: string | null
           created_at?: string
           id?: string
@@ -634,6 +702,7 @@ export type Database = {
         }
         Update: {
           amount?: number | null
+          author_id?: string | null
           contact?: string | null
           created_at?: string
           id?: string
@@ -652,15 +721,42 @@ export type Database = {
           },
         ]
       }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "citoyen" | "porteur" | "institution" | "admin"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -787,6 +883,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["citoyen", "porteur", "institution", "admin"],
+    },
   },
 } as const

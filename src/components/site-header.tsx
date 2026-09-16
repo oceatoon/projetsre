@@ -3,6 +3,7 @@ import { Menu } from "lucide-react";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import { useSession } from "@/hooks/use-session";
 
 const LINKS = [
   { to: "/projets", label: "Projets" },
@@ -16,6 +17,7 @@ const LINKS = [
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
+  const { ready, signedIn } = useSession();
 
   return (
     <header className="no-print sticky top-0 z-40 border-b border-border bg-background/95 shadow-sm backdrop-blur">
@@ -38,6 +40,17 @@ export function SiteHeader() {
         <Button asChild size="sm" className="ml-auto md:ml-2">
           <Link to="/deposer">Déposer un projet</Link>
         </Button>
+        {ready ? (
+          signedIn ? (
+            <Button asChild variant="ghost" size="sm" className="hidden md:inline-flex">
+              <Link to="/moi">Mon espace</Link>
+            </Button>
+          ) : (
+            <Button asChild variant="outline" size="sm" className="hidden md:inline-flex">
+              <Link to="/connexion">Se connecter</Link>
+            </Button>
+          )
+        ) : null}
         <Button
           variant="ghost"
           size="icon"
@@ -61,6 +74,13 @@ export function SiteHeader() {
               {link.label}
             </Link>
           ))}
+          <Link
+            to={signedIn ? "/moi" : "/connexion"}
+            onClick={() => setOpen(false)}
+            className="rounded-md px-3 py-2 text-sm font-medium text-primary hover:bg-muted"
+          >
+            {signedIn ? "Mon espace" : "Se connecter"}
+          </Link>
         </nav>
       ) : null}
     </header>

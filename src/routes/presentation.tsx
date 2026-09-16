@@ -74,15 +74,17 @@ function PresentationPage() {
   const people = projects.reduce((sum, project) => sum + Number(project.community_size), 0);
   const communes = new Set(projects.map((project) => project.commune)).size;
 
-  const goTo = useCallback((index: number) => {
+  const goTo = useCallback((index: number, behavior: ScrollBehavior = "smooth") => {
     const next = Math.max(0, Math.min(SLIDE_TITLES.length - 1, index));
-    viewportRef.current?.children.item(next)?.scrollIntoView({ behavior: "smooth", inline: "start" });
+    const viewport = viewportRef.current;
+    if (!viewport) return;
+    viewport.scrollTo({ left: viewport.clientWidth * next, behavior });
   }, []);
 
   useEffect(() => {
     const requested = Number(new URLSearchParams(window.location.search).get("slide"));
     if (Number.isInteger(requested) && requested >= 1 && requested <= SLIDE_TITLES.length) {
-      requestAnimationFrame(() => goTo(requested - 1));
+      requestAnimationFrame(() => goTo(requested - 1, "auto"));
     }
   }, [goTo]);
 

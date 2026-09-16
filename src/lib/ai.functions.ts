@@ -123,6 +123,33 @@ export const suggestMaturationQuestions = createServerFn({ method: "POST" })
     return parseJson(raw, { questions: [] as { question: string; why: string }[] });
   });
 
+export const draftQuestionAnswer = createServerFn({ method: "POST" })
+  .inputValidator((input: unknown) =>
+    z
+      .object({
+        slug: z.string().trim().min(1).max(120),
+        question: z.string().trim().min(3).max(500),
+        draft: z.string().trim().max(4000).optional(),
+      })
+      .parse(input),
+  )
+  .handler(async ({ data }) => {
+    const { publicClient } = await import("./supabase-public.server");
+    const { data: project } = await publicClient()
+      .from("projects")
+      .select(
+        "name, tagline, description, value_added, needs_answered, objectives, commune, theme, stage, need_types, budget_needed, budget_secured, community_size, impact, carrier_name",
+      )
+      .eq("slug", data.slug)
+      .maybeSingle();
+    if (!project) throw new Error("Projet introuvable.");
+    const raw = await askAI(
+      `${CONTEXT} Tu rédiges une proposition de réponse à une question de maturation, fondée uniquement sur la fiche du projet. Réponds uniquement en JSON: {"answer": "3 à 6 phrases concrètes", "gaps": ["information que le porteur doit encore préciser", "..."]}. N'invente aucun chiffre absent de la fiche.`,
+      `Fiche projet:\n${JSON.stringify(project)}\n\nQuestion: ${data.question}\n\nBrouillon du porteur (peut être vide):\n${data.draft ?? ""}`,
+    );
+    return parseJson(raw, { answer: data.draft ?? "", gaps: [] as string[] });
+  });
+
 export const adaptToCall = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) =>
     z

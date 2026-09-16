@@ -395,10 +395,63 @@ function MaturationPanel({
   const suggest = useServerFn(suggestMaturationQuestions);
   const addQuestion = useServerFn(addMaturationQuestion);
   const answer = useServerFn(answerMaturationQuestion);
+  const draftAnswer = useServerFn(draftQuestionAnswer);
   const router = useRouter();
   const [busy, setBusy] = useState(false);
   const [suggestions, setSuggestions] = useState<{ question: string; why: string }[]>([]);
   const [drafts, setDrafts] = useState<Record<string, string>>({});
+  const [helping, setHelping] = useState<string | null>(null);
+  const [gaps, setGaps] = useState<Record<string, string[]>>({});
+  const [manual, setManual] = useState("");
+  const [manualAuthor, setManualAuthor] = useState("");
+  const [manualBusy, setManualBusy] = useState(false);
+
+  const addManual = async () => {
+    const question = manual.trim();
+    if (question.length < 3) {
+      toast.error("Écrivez d'abord la question.");
+      return;
+    }
+    setManualBusy(true);
+    try {
+      await addQuestion({
+        data: {
+          project_id: projectId,
+          question,
+          answer: "",
+          asked_by: manualAuthor.trim() || "Porteur",
+        },
+      });
+      setManual("");
+      toast.success("Question ajoutée à la fiche.");
+      await router.invalidate();
+    } catch {
+      toast.error("Ajout impossible.");
+    } finally {
+      setManualBusy(false);
+    }
+  };
+
+  const assist = async (id: string, question: string) => {
+    setHelping(id);
+    try {
+      const result = await draftAnswer({
+        data: { slug, question, draft: (drafts[id] ?? "").trim() || undefined },
+      });
+      if (result.answer) {
+        setDrafts((current) => ({ ...current, [id]: result.answer }));
+        setGaps((current) => ({ ...current, [id]: result.gaps ?? [] }));
+        toast.success("Proposition de réponse prête, relisez-la avant d'enregistrer.");
+      } else {
+        toast.error("L'assistant n'a rien proposé, réessayez.");
+      }
+    } catch {
+      toast.error("L'assistant est indisponible pour le moment.");
+    } finally {
+      setHelping(null);
+    }
+  };
+
 
   const run = async () => {
     setBusy(true);

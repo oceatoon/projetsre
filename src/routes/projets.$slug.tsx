@@ -19,11 +19,12 @@ import { FeedbackForm } from "@/components/feedback-form";
 import { SupportForm } from "@/components/support-form";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { addMaturationQuestion, answerMaturationQuestion } from "@/lib/data.functions";
-import { matchCalls, suggestMaturationQuestions } from "@/lib/ai.functions";
+import { draftQuestionAnswer, matchCalls, suggestMaturationQuestions } from "@/lib/ai.functions";
 import {
   euro,
   feedbackLabel,
@@ -395,10 +396,63 @@ function MaturationPanel({
   const suggest = useServerFn(suggestMaturationQuestions);
   const addQuestion = useServerFn(addMaturationQuestion);
   const answer = useServerFn(answerMaturationQuestion);
+  const draftAnswer = useServerFn(draftQuestionAnswer);
   const router = useRouter();
   const [busy, setBusy] = useState(false);
   const [suggestions, setSuggestions] = useState<{ question: string; why: string }[]>([]);
   const [drafts, setDrafts] = useState<Record<string, string>>({});
+  const [helping, setHelping] = useState<string | null>(null);
+  const [gaps, setGaps] = useState<Record<string, string[]>>({});
+  const [manual, setManual] = useState("");
+  const [manualAuthor, setManualAuthor] = useState("");
+  const [manualBusy, setManualBusy] = useState(false);
+
+  const addManual = async () => {
+    const question = manual.trim();
+    if (question.length < 3) {
+      toast.error("Écrivez d'abord la question.");
+      return;
+    }
+    setManualBusy(true);
+    try {
+      await addQuestion({
+        data: {
+          project_id: projectId,
+          question,
+          answer: "",
+          asked_by: manualAuthor.trim() || "Porteur",
+        },
+      });
+      setManual("");
+      toast.success("Question ajoutée à la fiche.");
+      await router.invalidate();
+    } catch {
+      toast.error("Ajout impossible.");
+    } finally {
+      setManualBusy(false);
+    }
+  };
+
+  const assist = async (id: string, question: string) => {
+    setHelping(id);
+    try {
+      const result = await draftAnswer({
+        data: { slug, question, draft: (drafts[id] ?? "").trim() || undefined },
+      });
+      if (result.answer) {
+        setDrafts((current) => ({ ...current, [id]: result.answer }));
+        setGaps((current) => ({ ...current, [id]: result.gaps ?? [] }));
+        toast.success("Proposition de réponse prête, relisez-la avant d'enregistrer.");
+      } else {
+        toast.error("L'assistant n'a rien proposé, réessayez.");
+      }
+    } catch {
+      toast.error("L'assistant est indisponible pour le moment.");
+    } finally {
+      setHelping(null);
+    }
+  };
+
 
   const run = async () => {
     setBusy(true);
@@ -461,9 +515,27 @@ function MaturationPanel({
                     }
                     placeholder="Votre réponse…"
                   />
-                  <Button size="sm" className="mt-2" onClick={() => save(item.id)}>
-                    Enregistrer la réponse
-                  </Button>
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    <Button size="sm" onClick={() => save(item.id)}>
+                      Enregistrer la réponse
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      disabled={helping === item.id}
+                      onClick={() => assist(item.id, item.question)}
+                    >
+                      <Sparkles className="size-4" />
+                      {helping === item.id ? "Rédaction…" : "M'aider à répondre"}
+                    </Button>
+                  </div>
+                  {(gaps[item.id] ?? []).length ? (
+                    <ul className="mt-2 list-disc pl-5 text-xs text-muted-foreground">
+                      {(gaps[item.id] ?? []).map((gap) => (
+                        <li key={gap}>À préciser : {gap}</li>
+                      ))}
+                    </ul>
+                  ) : null}
                 </div>
               )}
             </li>
@@ -472,7 +544,33 @@ function MaturationPanel({
             <p className="text-sm text-muted-foreground">Aucune question pour l'instant.</p>
           ) : null}
         </ul>
+
+        <div className="mt-6 rounded-lg border border-dashed border-border p-4">
+          <h3 className="font-medium">Ajouter une question</h3>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Notez une question posée par un financeur, un partenaire ou un habitant.
+          </p>
+          <Textarea
+            rows={2}
+            maxLength={500}
+            className="mt-3"
+            value={manual}
+            onChange={(event) => setManual(event.target.value)}
+            placeholder="Ex. Comment le projet se finance-t-il après la subvention ?"
+          />
+          <Input
+            className="mt-2"
+            maxLength={80}
+            value={manualAuthor}
+            onChange={(event) => setManualAuthor(event.target.value)}
+            placeholder="Posée par (facultatif)"
+          />
+          <Button size="sm" className="mt-3" onClick={addManual} disabled={manualBusy}>
+            {manualBusy ? "Ajout…" : "Ajouter la question"}
+          </Button>
+        </div>
       </section>
+
 
       <section className="rounded-xl border border-border bg-card p-6">
         <h2 className="flex items-center gap-2 font-display text-xl">

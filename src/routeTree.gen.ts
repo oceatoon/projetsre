@@ -14,6 +14,7 @@ import { Route as CitoyensRouteImport } from './routes/citoyens'
 import { Route as DeposerRouteImport } from './routes/deposer'
 import { Route as InstitutionsRouteImport } from './routes/institutions'
 import { Route as PorteursRouteImport } from './routes/porteurs'
+import { Route as PresentationRouteImport } from './routes/presentation'
 import { Route as SuiviRouteImport } from './routes/suivi'
 import { Route as AppelsIndexRouteImport } from './routes/appels.index'
 import { Route as AppelsSlugRouteImport } from './routes/appels.$slug'
@@ -44,6 +45,11 @@ const InstitutionsRoute = InstitutionsRouteImport.update({
 const PorteursRoute = PorteursRouteImport.update({
   id: '/porteurs',
   path: '/porteurs',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PresentationRoute = PresentationRouteImport.update({
+  id: '/presentation',
+  path: '/presentation',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SuiviRoute = SuiviRouteImport.update({
@@ -83,6 +89,7 @@ export interface FileRoutesByFullPath {
   '/deposer': typeof DeposerRoute
   '/institutions': typeof InstitutionsRoute
   '/porteurs': typeof PorteursRoute
+  '/presentation': typeof PresentationRoute
   '/suivi': typeof SuiviRoute
   '/appels/$slug': typeof AppelsSlugRoute
   '/projets/$slug': typeof ProjetsSlugRoute
@@ -96,6 +103,7 @@ export interface FileRoutesByTo {
   '/deposer': typeof DeposerRoute
   '/institutions': typeof InstitutionsRoute
   '/porteurs': typeof PorteursRoute
+  '/presentation': typeof PresentationRoute
   '/suivi': typeof SuiviRoute
   '/appels/$slug': typeof AppelsSlugRoute
   '/projets/$slug': typeof ProjetsSlugRoute
@@ -110,6 +118,7 @@ export interface FileRoutesById {
   '/deposer': typeof DeposerRoute
   '/institutions': typeof InstitutionsRoute
   '/porteurs': typeof PorteursRoute
+  '/presentation': typeof PresentationRoute
   '/suivi': typeof SuiviRoute
   '/appels/$slug': typeof AppelsSlugRoute
   '/projets/$slug': typeof ProjetsSlugRoute
@@ -125,6 +134,7 @@ export interface FileRouteTypes {
     | '/deposer'
     | '/institutions'
     | '/porteurs'
+    | '/presentation'
     | '/suivi'
     | '/appels/$slug'
     | '/projets/$slug'
@@ -138,6 +148,7 @@ export interface FileRouteTypes {
     | '/deposer'
     | '/institutions'
     | '/porteurs'
+    | '/presentation'
     | '/suivi'
     | '/appels/$slug'
     | '/projets/$slug'
@@ -151,6 +162,7 @@ export interface FileRouteTypes {
     | '/deposer'
     | '/institutions'
     | '/porteurs'
+    | '/presentation'
     | '/suivi'
     | '/appels/$slug'
     | '/projets/$slug'
@@ -165,6 +177,7 @@ export interface RootRouteChildren {
   DeposerRoute: typeof DeposerRoute
   InstitutionsRoute: typeof InstitutionsRoute
   PorteursRoute: typeof PorteursRoute
+  PresentationRoute: typeof PresentationRoute
   SuiviRoute: typeof SuiviRoute
   AppelsSlugRoute: typeof AppelsSlugRoute
   ProjetsSlugRoute: typeof ProjetsSlugRoute
@@ -208,6 +221,13 @@ declare module '@tanstack/react-router' {
       path: '/porteurs'
       fullPath: '/porteurs'
       preLoaderRoute: typeof PorteursRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/presentation': {
+      id: '/presentation'
+      path: '/presentation'
+      fullPath: '/presentation'
+      preLoaderRoute: typeof PresentationRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/suivi': {
@@ -261,6 +281,7 @@ const rootRouteChildren: RootRouteChildren = {
   DeposerRoute: DeposerRoute,
   InstitutionsRoute: InstitutionsRoute,
   PorteursRoute: PorteursRoute,
+  PresentationRoute: PresentationRoute,
   SuiviRoute: SuiviRoute,
   AppelsSlugRoute: AppelsSlugRoute,
   ProjetsSlugRoute: ProjetsSlugRoute,

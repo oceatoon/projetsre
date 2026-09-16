@@ -95,7 +95,7 @@ function PresentationPage() {
           .filter((entry) => entry.isIntersecting)
           .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
         if (!visible) return;
-        const index = Number((visible.target as HTMLElement).dataset.slide ?? 0);
+        const index = Number((visible.target as HTMLElement).dataset["slide"] ?? 0);
         setActive(index);
         const url = new URL(window.location.href);
         url.searchParams.set("slide", String(index + 1));

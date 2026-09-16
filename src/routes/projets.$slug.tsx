@@ -23,7 +23,7 @@ import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { addMaturationQuestion, answerMaturationQuestion } from "@/lib/data.functions";
-import { matchCalls, suggestMaturationQuestions } from "@/lib/ai.functions";
+import { draftQuestionAnswer, matchCalls, suggestMaturationQuestions } from "@/lib/ai.functions";
 import {
   euro,
   feedbackLabel,

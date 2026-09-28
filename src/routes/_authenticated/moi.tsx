@@ -1,4 +1,4 @@
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useState } from "react";
@@ -17,6 +17,8 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
+import { kindInfo } from "@/lib/campaigns";
+import { listMyCampaigns } from "@/lib/campaigns.functions";
 import { COMMUNES, euro, feedbackLabel, frDate, supportLabel } from "@/lib/domain";
 import {
   getMyActivity,
@@ -262,6 +264,8 @@ function MyspacePage() {
             )}
           </section>
 
+          <MyCampaigns hasProjects={Boolean(activity?.projects.length)} />
+
           <section className="rounded-xl border border-border bg-card p-6">
             <h2 className="font-display text-xl">Mes contributions</h2>
             {loading ? (
@@ -355,5 +359,42 @@ function MyspacePage() {
         </div>
       </div>
     </div>
+  );
+}
+
+function MyCampaigns({ hasProjects }: { hasProjects: boolean }) {
+  const load = useServerFn(listMyCampaigns);
+  const q = useQuery({ queryKey: ["my-campaigns"], queryFn: () => load() });
+  if (!hasProjects && !q.data?.length) return null;
+  return (
+    <section className="rounded-xl border border-border bg-card p-6">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <h2 className="font-display text-xl">Mes campagnes</h2>
+        <Button asChild size="sm">
+          <Link to="/campagnes/nouvelle" search={{}}>Lancer une campagne</Link>
+        </Button>
+      </div>
+      {q.isLoading ? (
+        <p className="mt-2 text-sm text-muted-foreground">Chargement…</p>
+      ) : q.data?.length ? (
+        <ul className="mt-4 space-y-3">
+          {q.data.map((c) => (
+            <li key={c.id} className="rounded-lg border border-border p-4">
+              <Link to="/campagnes/$id" params={{ id: c.id }} className="font-medium hover:text-primary">
+                {c.title}
+              </Link>
+              <p className="mt-1 text-xs text-muted-foreground">
+                {kindInfo(c.kind).label} · {c.project_name} · {c.status === "active" ? "En cours" : "Terminée"} ·{" "}
+                {c.is_public ? "Publique" : "Privée"}
+              </p>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p className="mt-2 text-sm text-muted-foreground">
+          Aucune campagne. Recrutez des bénévoles, donnez des nouvelles ou lancez une collecte.
+        </p>
+      )}
+    </section>
   );
 }

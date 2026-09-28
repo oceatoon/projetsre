@@ -170,6 +170,171 @@ export type Database = {
         }
         Relationships: []
       }
+      campaign_messages: {
+        Row: {
+          audience: string
+          body: string
+          campaign_id: string
+          channel: string
+          created_at: string
+          id: string
+          position: number
+          recipients: number
+          scheduled_for: string
+          sent_at: string | null
+          status: string
+          subject: string
+          updated_at: string
+        }
+        Insert: {
+          audience?: string
+          body?: string
+          campaign_id: string
+          channel?: string
+          created_at?: string
+          id?: string
+          position?: number
+          recipients?: number
+          scheduled_for?: string
+          sent_at?: string | null
+          status?: string
+          subject?: string
+          updated_at?: string
+        }
+        Update: {
+          audience?: string
+          body?: string
+          campaign_id?: string
+          channel?: string
+          created_at?: string
+          id?: string
+          position?: number
+          recipients?: number
+          scheduled_for?: string
+          sent_at?: string | null
+          status?: string
+          subject?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "campaign_messages_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "campaigns"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      campaign_volunteers: {
+        Row: {
+          campaign_id: string
+          created_at: string
+          id: string
+          motivation: string
+          notes: string
+          person_name: string
+          stage: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          campaign_id: string
+          created_at?: string
+          id?: string
+          motivation?: string
+          notes?: string
+          person_name?: string
+          stage?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          campaign_id?: string
+          created_at?: string
+          id?: string
+          motivation?: string
+          notes?: string
+          person_name?: string
+          stage?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "campaign_volunteers_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "campaigns"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      campaigns: {
+        Row: {
+          author_id: string | null
+          cadence: string
+          created_at: string
+          ends_on: string | null
+          goal: string
+          id: string
+          is_public: boolean
+          kind: string
+          project_id: string
+          report: string
+          starts_on: string
+          status: string
+          target_amount: number | null
+          target_count: number | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          author_id?: string | null
+          cadence?: string
+          created_at?: string
+          ends_on?: string | null
+          goal?: string
+          id?: string
+          is_public?: boolean
+          kind?: string
+          project_id: string
+          report?: string
+          starts_on?: string
+          status?: string
+          target_amount?: number | null
+          target_count?: number | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          author_id?: string | null
+          cadence?: string
+          created_at?: string
+          ends_on?: string | null
+          goal?: string
+          id?: string
+          is_public?: boolean
+          kind?: string
+          project_id?: string
+          report?: string
+          starts_on?: string
+          status?: string
+          target_amount?: number | null
+          target_count?: number | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "campaigns_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       cooperation_messages: {
         Row: {
           author_id: string | null
@@ -602,6 +767,35 @@ export type Database = {
         }
         Relationships: []
       }
+      project_followers: {
+        Row: {
+          created_at: string
+          id: string
+          project_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          project_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          project_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_followers_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       projects: {
         Row: {
           budget_needed: number
@@ -747,6 +941,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      campaign_owned: { Args: { _campaign_id: string }; Returns: boolean }
+      campaign_public_stats: { Args: { _campaign_id: string }; Returns: Json }
+      campaign_visible: { Args: { _campaign_id: string }; Returns: boolean }
+      follower_count: { Args: { _project_id: string }; Returns: number }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -754,6 +952,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_project_owner: { Args: { _project_id: string }; Returns: boolean }
     }
     Enums: {
       app_role: "citoyen" | "porteur" | "institution" | "admin"

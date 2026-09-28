@@ -24,6 +24,8 @@ import { Route as AppelsSlugRouteImport } from './routes/appels.$slug'
 import { Route as ProfilHandleRouteImport } from './routes/profil.$handle'
 import { Route as ProjetsIndexRouteImport } from './routes/projets.index'
 import { Route as ProjetsSlugRouteImport } from './routes/projets.$slug'
+import { Route as AuthenticatedCampagnesIdRouteImport } from './routes/_authenticated/campagnes.$id'
+import { Route as AuthenticatedCampagnesNouvelleRouteImport } from './routes/_authenticated/campagnes.nouvelle'
 import { Route as CooperationsSlugASlugBRouteImport } from './routes/cooperations.$slugA.$slugB'
 
 const IndexRoute = IndexRouteImport.update({
@@ -100,6 +102,18 @@ const ProjetsSlugRoute = ProjetsSlugRouteImport.update({
   path: '/projets/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedCampagnesIdRoute =
+  AuthenticatedCampagnesIdRouteImport.update({
+    id: '/campagnes/$id',
+    path: '/campagnes/$id',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedCampagnesNouvelleRoute =
+  AuthenticatedCampagnesNouvelleRouteImport.update({
+    id: '/campagnes/nouvelle',
+    path: '/campagnes/nouvelle',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const CooperationsSlugASlugBRoute = CooperationsSlugASlugBRouteImport.update({
   id: '/cooperations/$slugA/$slugB',
   path: '/cooperations/$slugA/$slugB',
@@ -121,6 +135,8 @@ export interface FileRoutesByFullPath {
   '/projets/$slug': typeof ProjetsSlugRoute
   '/appels/': typeof AppelsIndexRoute
   '/projets/': typeof ProjetsIndexRoute
+  '/campagnes/$id': typeof AuthenticatedCampagnesIdRoute
+  '/campagnes/nouvelle': typeof AuthenticatedCampagnesNouvelleRoute
   '/cooperations/$slugA/$slugB': typeof CooperationsSlugASlugBRoute
 }
 export interface FileRoutesByTo {
@@ -138,6 +154,8 @@ export interface FileRoutesByTo {
   '/projets/$slug': typeof ProjetsSlugRoute
   '/appels': typeof AppelsIndexRoute
   '/projets': typeof ProjetsIndexRoute
+  '/campagnes/$id': typeof AuthenticatedCampagnesIdRoute
+  '/campagnes/nouvelle': typeof AuthenticatedCampagnesNouvelleRoute
   '/cooperations/$slugA/$slugB': typeof CooperationsSlugASlugBRoute
 }
 export interface FileRoutesById {
@@ -157,6 +175,8 @@ export interface FileRoutesById {
   '/projets/$slug': typeof ProjetsSlugRoute
   '/appels/': typeof AppelsIndexRoute
   '/projets/': typeof ProjetsIndexRoute
+  '/_authenticated/campagnes/$id': typeof AuthenticatedCampagnesIdRoute
+  '/_authenticated/campagnes/nouvelle': typeof AuthenticatedCampagnesNouvelleRoute
   '/cooperations/$slugA/$slugB': typeof CooperationsSlugASlugBRoute
 }
 export interface FileRouteTypes {
@@ -176,6 +196,8 @@ export interface FileRouteTypes {
     | '/projets/$slug'
     | '/appels/'
     | '/projets/'
+    | '/campagnes/$id'
+    | '/campagnes/nouvelle'
     | '/cooperations/$slugA/$slugB'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -193,6 +215,8 @@ export interface FileRouteTypes {
     | '/projets/$slug'
     | '/appels'
     | '/projets'
+    | '/campagnes/$id'
+    | '/campagnes/nouvelle'
     | '/cooperations/$slugA/$slugB'
   id:
     | '__root__'
@@ -211,6 +235,8 @@ export interface FileRouteTypes {
     | '/projets/$slug'
     | '/appels/'
     | '/projets/'
+    | '/_authenticated/campagnes/$id'
+    | '/_authenticated/campagnes/nouvelle'
     | '/cooperations/$slugA/$slugB'
   fileRoutesById: FileRoutesById
 }
@@ -339,6 +365,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProjetsSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/campagnes/$id': {
+      id: '/_authenticated/campagnes/$id'
+      path: '/campagnes/$id'
+      fullPath: '/campagnes/$id'
+      preLoaderRoute: typeof AuthenticatedCampagnesIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/campagnes/nouvelle': {
+      id: '/_authenticated/campagnes/nouvelle'
+      path: '/campagnes/nouvelle'
+      fullPath: '/campagnes/nouvelle'
+      preLoaderRoute: typeof AuthenticatedCampagnesNouvelleRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/cooperations/$slugA/$slugB': {
       id: '/cooperations/$slugA/$slugB'
       path: '/cooperations/$slugA/$slugB'
@@ -351,10 +391,14 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedMoiRoute: typeof AuthenticatedMoiRoute
+  AuthenticatedCampagnesIdRoute: typeof AuthenticatedCampagnesIdRoute
+  AuthenticatedCampagnesNouvelleRoute: typeof AuthenticatedCampagnesNouvelleRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedMoiRoute: AuthenticatedMoiRoute,
+  AuthenticatedCampagnesIdRoute: AuthenticatedCampagnesIdRoute,
+  AuthenticatedCampagnesNouvelleRoute: AuthenticatedCampagnesNouvelleRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =

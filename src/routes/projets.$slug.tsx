@@ -39,6 +39,7 @@ import {
 } from "@/lib/domain";
 import { callsQuery, projectQuery, projectsQuery } from "@/lib/queries";
 import { Synergies } from "@/components/synergies";
+import { ProjectCampaigns } from "@/components/project-campaigns";
 
 export const Route = createFileRoute("/projets/$slug")({
   loader: async ({ context, params }) => {
@@ -160,7 +161,12 @@ function ProjectPage() {
             <TabsTrigger value="vie">Actus et agenda</TabsTrigger>
             <TabsTrigger value="maturation">Maturation</TabsTrigger>
             <TabsTrigger value="cooperations">Coopérations</TabsTrigger>
+            <TabsTrigger value="campagnes">Campagnes</TabsTrigger>
           </TabsList>
+
+          <TabsContent value="campagnes" className="mt-6">
+            <ProjectCampaigns projectId={project.id} slug={project.slug} />
+          </TabsContent>
 
           <TabsContent value="fiche" className="mt-6 grid gap-8 lg:grid-cols-3">
             <div className="space-y-6 lg:col-span-2">

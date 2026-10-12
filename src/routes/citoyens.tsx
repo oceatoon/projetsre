@@ -111,6 +111,9 @@ function CitizensPage() {
             Pas besoin d'être expert ni disponible tous les jours. Choisissez ce qui vous ressemble :
             nous vous montrons les projets et les actions où votre contribution compte vraiment.
           </p>
+          <Button asChild size="lg" className="mt-7">
+            <Link to="/trouver">Trouver mon projet en 2 minutes <ArrowRight /></Link>
+          </Button>
         </div>
       </section>
 

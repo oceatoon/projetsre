@@ -68,6 +68,11 @@ function Home() {
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Button asChild size="lg">
+              <Link to="/trouver">
+                Trouver mon projet en 2 minutes <Sparkles className="size-4" />
+              </Link>
+            </Button>
+            <Button asChild size="lg" variant="outline">
               <Link to="/deposer">
                 Déposer mon projet <ArrowRight className="size-4" />
               </Link>

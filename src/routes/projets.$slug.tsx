@@ -91,6 +91,8 @@ function ProjectPage() {
     <div>
       <header className="border-b border-border bg-accent/30">
         <div className="mx-auto max-w-6xl px-4 py-10">
+          <div className="grid gap-8 md:grid-cols-[minmax(0,1fr)_340px] md:items-start">
+            <div>
           <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
             <Link to="/projets" className="hover:text-foreground">
               Projets
@@ -102,6 +104,12 @@ function ProjectPage() {
             {project.name}
           </h1>
           <p className="mt-3 max-w-2xl text-lg text-muted-foreground">{project.tagline}</p>
+            </div>
+            <ProjectImage
+              project={project}
+              className="aspect-16/10 w-full rounded-xl border border-border shadow-md"
+            />
+          </div>
 
           <div className="mt-5 flex flex-wrap items-center gap-2">
             <Badge>{themeLabel(project.theme)}</Badge>

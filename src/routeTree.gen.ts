@@ -18,6 +18,7 @@ import { Route as InstitutionsRouteImport } from './routes/institutions'
 import { Route as PorteursRouteImport } from './routes/porteurs'
 import { Route as PresentationRouteImport } from './routes/presentation'
 import { Route as SuiviRouteImport } from './routes/suivi'
+import { Route as TrouverRouteImport } from './routes/trouver'
 import { Route as AuthenticatedMoiRouteImport } from './routes/_authenticated/moi'
 import { Route as AppelsIndexRouteImport } from './routes/appels.index'
 import { Route as AppelsSlugRouteImport } from './routes/appels.$slug'
@@ -70,6 +71,11 @@ const PresentationRoute = PresentationRouteImport.update({
 const SuiviRoute = SuiviRouteImport.update({
   id: '/suivi',
   path: '/suivi',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TrouverRoute = TrouverRouteImport.update({
+  id: '/trouver',
+  path: '/trouver',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedMoiRoute = AuthenticatedMoiRouteImport.update({
@@ -129,6 +135,7 @@ export interface FileRoutesByFullPath {
   '/porteurs': typeof PorteursRoute
   '/presentation': typeof PresentationRoute
   '/suivi': typeof SuiviRoute
+  '/trouver': typeof TrouverRoute
   '/moi': typeof AuthenticatedMoiRoute
   '/appels/$slug': typeof AppelsSlugRoute
   '/profil/$handle': typeof ProfilHandleRoute
@@ -148,6 +155,7 @@ export interface FileRoutesByTo {
   '/porteurs': typeof PorteursRoute
   '/presentation': typeof PresentationRoute
   '/suivi': typeof SuiviRoute
+  '/trouver': typeof TrouverRoute
   '/moi': typeof AuthenticatedMoiRoute
   '/appels/$slug': typeof AppelsSlugRoute
   '/profil/$handle': typeof ProfilHandleRoute
@@ -169,6 +177,7 @@ export interface FileRoutesById {
   '/porteurs': typeof PorteursRoute
   '/presentation': typeof PresentationRoute
   '/suivi': typeof SuiviRoute
+  '/trouver': typeof TrouverRoute
   '/_authenticated/moi': typeof AuthenticatedMoiRoute
   '/appels/$slug': typeof AppelsSlugRoute
   '/profil/$handle': typeof ProfilHandleRoute
@@ -190,6 +199,7 @@ export interface FileRouteTypes {
     | '/porteurs'
     | '/presentation'
     | '/suivi'
+    | '/trouver'
     | '/moi'
     | '/appels/$slug'
     | '/profil/$handle'
@@ -209,6 +219,7 @@ export interface FileRouteTypes {
     | '/porteurs'
     | '/presentation'
     | '/suivi'
+    | '/trouver'
     | '/moi'
     | '/appels/$slug'
     | '/profil/$handle'
@@ -229,6 +240,7 @@ export interface FileRouteTypes {
     | '/porteurs'
     | '/presentation'
     | '/suivi'
+    | '/trouver'
     | '/_authenticated/moi'
     | '/appels/$slug'
     | '/profil/$handle'
@@ -250,6 +262,7 @@ export interface RootRouteChildren {
   PorteursRoute: typeof PorteursRoute
   PresentationRoute: typeof PresentationRoute
   SuiviRoute: typeof SuiviRoute
+  TrouverRoute: typeof TrouverRoute
   AppelsSlugRoute: typeof AppelsSlugRoute
   ProfilHandleRoute: typeof ProfilHandleRoute
   ProjetsSlugRoute: typeof ProjetsSlugRoute
@@ -321,6 +334,13 @@ declare module '@tanstack/react-router' {
       path: '/suivi'
       fullPath: '/suivi'
       preLoaderRoute: typeof SuiviRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/trouver': {
+      id: '/trouver'
+      path: '/trouver'
+      fullPath: '/trouver'
+      preLoaderRoute: typeof TrouverRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/moi': {
@@ -414,6 +434,7 @@ const rootRouteChildren: RootRouteChildren = {
   PorteursRoute: PorteursRoute,
   PresentationRoute: PresentationRoute,
   SuiviRoute: SuiviRoute,
+  TrouverRoute: TrouverRoute,
   AppelsSlugRoute: AppelsSlugRoute,
   ProfilHandleRoute: ProfilHandleRoute,
   ProjetsSlugRoute: ProjetsSlugRoute,

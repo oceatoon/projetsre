@@ -16,6 +16,7 @@ import { toast } from "sonner";
 
 import { DossierExport } from "@/components/dossier-export";
 import { FeedbackForm } from "@/components/feedback-form";
+import { ProjectImage } from "@/components/project-image";
 import { SupportForm } from "@/components/support-form";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";

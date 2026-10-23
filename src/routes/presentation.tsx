@@ -146,6 +146,7 @@ function PresentationPage() {
         className="presentation-viewport"
         aria-label="Présentation de projets.re"
         onPointerDown={(event) => {
+          draggedRef.current = false;
           swipeRef.current = { x: event.clientX, y: event.clientY, moved: false };
         }}
         onPointerUp={(event) => {

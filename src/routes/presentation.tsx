@@ -69,6 +69,8 @@ function PresentationPage() {
   const { data: calls } = useSuspenseQuery(callsQuery);
   const viewportRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
+  const swipeRef = useRef<{ x: number; y: number; moved: boolean } | null>(null);
+  const draggedRef = useRef(false);
   const totalNeeded = projects.reduce((sum, project) => sum + Number(project.budget_needed), 0);
   const totalSecured = projects.reduce((sum, project) => sum + Number(project.budget_secured), 0);
   const people = projects.reduce((sum, project) => sum + Number(project.community_size), 0);
@@ -139,7 +141,35 @@ function PresentationPage() {
         </Button>
       </div>
 
-      <main ref={viewportRef} className="presentation-viewport" aria-label="Présentation de projets.re">
+      <main
+        ref={viewportRef}
+        className="presentation-viewport"
+        aria-label="Présentation de projets.re"
+        onPointerDown={(event) => {
+          swipeRef.current = { x: event.clientX, y: event.clientY, moved: false };
+        }}
+        onPointerUp={(event) => {
+          const start = swipeRef.current;
+          swipeRef.current = null;
+          if (!start) return;
+          const dx = event.clientX - start.x;
+          const dy = event.clientY - start.y;
+          if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
+            draggedRef.current = true;
+            goTo(active + (dx < 0 ? 1 : -1));
+          }
+        }}
+        onPointerCancel={() => {
+          swipeRef.current = null;
+        }}
+        onClickCapture={(event) => {
+          if (draggedRef.current) {
+            event.preventDefault();
+            event.stopPropagation();
+            draggedRef.current = false;
+          }
+        }}
+      >
         <Slide index={0} tone="basalt" label="La vision">
           <div className="presentation-hero-mark">La Réunion</div>
           <p className="slide-kicker">Le territoire comme point de départ</p>

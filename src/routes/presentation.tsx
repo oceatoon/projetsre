@@ -69,16 +69,42 @@ function PresentationPage() {
   const { data: calls } = useSuspenseQuery(callsQuery);
   const viewportRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
+  const swipeRef = useRef<{ x: number; y: number; moved: boolean } | null>(null);
+  const draggedRef = useRef(false);
   const totalNeeded = projects.reduce((sum, project) => sum + Number(project.budget_needed), 0);
   const totalSecured = projects.reduce((sum, project) => sum + Number(project.budget_secured), 0);
   const people = projects.reduce((sum, project) => sum + Number(project.community_size), 0);
   const communes = new Set(projects.map((project) => project.commune)).size;
 
+  const animRef = useRef<number | null>(null);
   const goTo = useCallback((index: number, behavior: ScrollBehavior = "smooth") => {
     const next = Math.max(0, Math.min(SLIDE_TITLES.length - 1, index));
     const viewport = viewportRef.current;
     if (!viewport) return;
-    viewport.scrollTo({ left: viewport.clientWidth * next, behavior });
+    const target = viewport.clientWidth * next;
+    if (animRef.current) cancelAnimationFrame(animRef.current);
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (behavior !== "smooth" || reduced) {
+      viewport.scrollLeft = target;
+      return;
+    }
+    // Animate manually: native smooth scrolling is unreliable with mandatory scroll-snap.
+    const from = viewport.scrollLeft;
+    const start = performance.now();
+    const duration = 450;
+    viewport.style.scrollSnapType = "none";
+    const step = (now: number) => {
+      const t = Math.min(1, (now - start) / duration);
+      const eased = 1 - Math.pow(1 - t, 3);
+      viewport.scrollLeft = from + (target - from) * eased;
+      if (t < 1) {
+        animRef.current = requestAnimationFrame(step);
+      } else {
+        animRef.current = null;
+        viewport.style.scrollSnapType = "";
+      }
+    };
+    animRef.current = requestAnimationFrame(step);
   }, []);
 
   useEffect(() => {
@@ -139,7 +165,36 @@ function PresentationPage() {
         </Button>
       </div>
 
-      <main ref={viewportRef} className="presentation-viewport" aria-label="Présentation de projets.re">
+      <main
+        ref={viewportRef}
+        className="presentation-viewport"
+        aria-label="Présentation de projets.re"
+        onPointerDown={(event) => {
+          draggedRef.current = false;
+          swipeRef.current = { x: event.clientX, y: event.clientY, moved: false };
+        }}
+        onPointerUp={(event) => {
+          const start = swipeRef.current;
+          swipeRef.current = null;
+          if (!start) return;
+          const dx = event.clientX - start.x;
+          const dy = event.clientY - start.y;
+          if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
+            draggedRef.current = true;
+            goTo(active + (dx < 0 ? 1 : -1));
+          }
+        }}
+        onPointerCancel={() => {
+          swipeRef.current = null;
+        }}
+        onClickCapture={(event) => {
+          if (draggedRef.current) {
+            event.preventDefault();
+            event.stopPropagation();
+            draggedRef.current = false;
+          }
+        }}
+      >
         <Slide index={0} tone="basalt" label="La vision">
           <div className="presentation-hero-mark">La Réunion</div>
           <p className="slide-kicker">Le territoire comme point de départ</p>

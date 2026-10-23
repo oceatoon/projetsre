@@ -1,5 +1,7 @@
 import { Link } from "@tanstack/react-router";
 
+import presentationVideo from "@/assets/videos/projets-re-presentation.mp4.asset.json";
+
 export function SiteFooter() {
   return (
     <footer className="no-print mt-20 border-t border-border/70 bg-muted/40">
@@ -68,6 +70,34 @@ export function SiteFooter() {
             </li>
           </ul>
         </div>
+      </div>
+      <div className="mx-auto grid max-w-6xl items-center gap-6 border-t border-border/70 px-4 py-10 md:grid-cols-[1fr_1.4fr]">
+        <div>
+          <p className="text-sm font-semibold">Découvrir projets.re</p>
+          <p className="mt-2 text-sm text-muted-foreground">
+            En 30 secondes : comment une proposition devient un projet financé, suivi et soutenu.
+          </p>
+          <ul className="mt-3 space-y-1 text-sm text-muted-foreground">
+            <li>
+              <Link to="/presentation" className="hover:text-foreground">
+                Voir la présentation
+              </Link>
+            </li>
+            <li>
+              <a href={presentationVideo.url} download className="hover:text-foreground">
+                Télécharger la vidéo
+              </a>
+            </li>
+          </ul>
+        </div>
+        <video
+          src={presentationVideo.url}
+          controls
+          preload="metadata"
+          playsInline
+          className="aspect-video w-full rounded-lg border border-border bg-basalt"
+          aria-label="Vidéo de présentation de projets.re"
+        />
       </div>
       <div className="border-t border-border/70 px-4 py-4 text-center text-xs text-muted-foreground">
         Projets d'exemple créés pour la démonstration · La Réunion

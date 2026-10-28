@@ -76,65 +76,23 @@ function PresentationPage() {
   const people = projects.reduce((sum, project) => sum + Number(project.community_size), 0);
   const communes = new Set(projects.map((project) => project.commune)).size;
 
-  const animRef = useRef<number | null>(null);
-  const goTo = useCallback((index: number, behavior: ScrollBehavior = "smooth") => {
-    const next = Math.max(0, Math.min(SLIDE_TITLES.length - 1, index));
-    const viewport = viewportRef.current;
-    if (!viewport) return;
-    const target = viewport.clientWidth * next;
-    if (animRef.current) cancelAnimationFrame(animRef.current);
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (behavior !== "smooth" || reduced) {
-      viewport.scrollLeft = target;
-      return;
-    }
-    // Animate manually: native smooth scrolling is unreliable with mandatory scroll-snap.
-    const from = viewport.scrollLeft;
-    const start = performance.now();
-    const duration = 450;
-    viewport.style.scrollSnapType = "none";
-    const step = (now: number) => {
-      const t = Math.min(1, (now - start) / duration);
-      const eased = 1 - Math.pow(1 - t, 3);
-      viewport.scrollLeft = from + (target - from) * eased;
-      if (t < 1) {
-        animRef.current = requestAnimationFrame(step);
-      } else {
-        animRef.current = null;
-        viewport.style.scrollSnapType = "";
-      }
-    };
-    animRef.current = requestAnimationFrame(step);
+  const goTo = useCallback((index: number, _behavior?: string) => {
+    setActive(Math.max(0, Math.min(SLIDE_TITLES.length - 1, index)));
   }, []);
 
   useEffect(() => {
     const requested = Number(new URLSearchParams(window.location.search).get("slide"));
     if (Number.isInteger(requested) && requested >= 1 && requested <= SLIDE_TITLES.length) {
-      requestAnimationFrame(() => goTo(requested - 1, "auto"));
+      setActive(requested - 1);
     }
-  }, [goTo]);
+  }, []);
 
   useEffect(() => {
-    const viewport = viewportRef.current;
-    if (!viewport) return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-        if (!visible) return;
-        const index = Number((visible.target as HTMLElement).dataset["slide"] ?? 0);
-        setActive(index);
-        const url = new URL(window.location.href);
-        url.searchParams.set("slide", String(index + 1));
-        window.history.replaceState({}, "", url);
-        document.title = `${index + 1}/${SLIDE_TITLES.length} — ${SLIDE_TITLES[index]}`;
-      },
-      { root: viewport, threshold: [0.55, 0.75] },
-    );
-    Array.from(viewport.children).forEach((slide) => observer.observe(slide));
-    return () => observer.disconnect();
-  }, []);
+    const url = new URL(window.location.href);
+    url.searchParams.set("slide", String(active + 1));
+    window.history.replaceState(window.history.state, "", url);
+    document.title = `${active + 1}/${SLIDE_TITLES.length} — ${SLIDE_TITLES[active]}`;
+  }, [active]);
 
   useEffect(() => {
     const handleKey = (event: KeyboardEvent) => {
@@ -171,6 +129,7 @@ function PresentationPage() {
         aria-label="Présentation de projets.re"
         onPointerDown={(event) => {
           draggedRef.current = false;
+          if ((event.target as HTMLElement).closest("a,button,input,textarea")) { swipeRef.current = null; return; }
           swipeRef.current = { x: event.clientX, y: event.clientY, moved: false };
         }}
         onPointerUp={(event) => {
@@ -195,6 +154,7 @@ function PresentationPage() {
           }
         }}
       >
+        <div className="presentation-track" style={{ transform: `translateX(-${active * 100}%)` }}>
         <Slide index={0} tone="basalt" label="La vision">
           <div className="presentation-hero-mark">La Réunion</div>
           <p className="slide-kicker">Le territoire comme point de départ</p>
@@ -323,6 +283,7 @@ function PresentationPage() {
           </div>
           <Button asChild variant="secondary" size="lg" className="mt-10"><Link to="/projets">Explorer les projets <ArrowRight /></Link></Button>
         </Slide>
+        </div>
       </main>
 
       <div className="presentation-controls no-print">

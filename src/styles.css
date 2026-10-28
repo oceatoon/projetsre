@@ -212,9 +212,10 @@
 
 .presentation-topbar > :last-child { justify-self: end; }
 .presentation-brand { font-family: var(--font-display); font-size: 1.55rem; line-height: 1; }
-.presentation-viewport { display: flex; width: 100%; height: 100%; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; scrollbar-width: none; overscroll-behavior-x: contain; touch-action: pan-y; cursor: grab; user-select: none; }
+.presentation-viewport { width: 100%; height: 100%; overflow: hidden; touch-action: pan-y; cursor: grab; user-select: none; }
 .presentation-viewport:active { cursor: grabbing; }
 .presentation-viewport::-webkit-scrollbar { display: none; }
+.presentation-track { display: flex; width: 100%; height: 100%; transition: transform .45s cubic-bezier(.22,1,.36,1); will-change: transform; }
 .presentation-slide { position: relative; flex: 0 0 100%; width: 100%; height: 100%; scroll-snap-align: start; overflow-y: auto; }
 .presentation-slide-inner { width: min(100%, 118rem); min-height: 100%; margin: 0 auto; padding: 8rem 6rem 7rem; display: flex; flex-direction: column; justify-content: center; }
 .slide-title-lg { font-size: var(--slide-title-lg); line-height: .94; }
@@ -305,6 +306,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .presentation-viewport { scroll-behavior: auto; }
+  .presentation-track { transition: none; }
   .presentation-final-link, .presentation-dot { transition: none; }
 }

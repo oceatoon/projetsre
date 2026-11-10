@@ -1,7 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
-  Award, CheckCircle2, ClipboardList, Globe2, Inbox, Landmark, Lightbulb, Link2,
-  Network, Search, ShieldCheck, Sparkles, Sprout, XCircle,
+  Archive, Award, CheckCircle2, ClipboardList, Compass, Globe2, Inbox, Landmark,
+  Lightbulb, Link2, Map, MessagesSquare, Network, Rocket, ScrollText, Search,
+  ShieldCheck, Sparkles, Sprout, TrendingUp, Users, XCircle,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -11,7 +12,7 @@ export const Route = createFileRoute("/territoire")({
   head: () => ({
     meta: [
       { title: "Un projet porté par le territoire — projets.re" },
-      { name: "description", content: "projets.re, plateforme commune des financeurs publics et des acteurs du territoire : visibilité, liens entre projets, évaluation IA par critères, modèle réplicable multi-territoires." },
+      { name: "description", content: "projets.re, plateforme commune des financeurs publics et des acteurs du territoire : visibilité, liens entre projets, évaluation IA par critères, impacts pour le territoire, modèle réplicable multi-territoires." },
       { property: "og:title", content: "Un projet porté par le territoire — projets.re" },
       { property: "og:description", content: "Un lieu commun pour tous les projets du territoire, réplicable pour d'autres territoires et d'autres pays." },
       { property: "og:type", content: "website" },
@@ -57,6 +58,18 @@ const ACTORS: Actor[] = [
   { name: "Réseau citoyen", kind: "Citoyens", criteria: [
     { label: "Recherche bénévoles ou testeurs", ok: true },
     { label: "Ouvert au public", ok: true } ] },
+];
+
+const IMPACTS = [
+  { icon: TrendingUp, title: "Des financements cherchés plus efficacement, des sources démultipliées", text: "Une seule fiche exposée à tous les guichets : les financeurs publics du territoire se cumulent sur un même dossier au lieu de se succéder." },
+  { icon: Rocket, title: "Des projets qui avancent plus vite", text: "L'évaluation sur les critères de chaque acteur enclenche les démarches sans que le porteur ait à les relancer une par une." },
+  { icon: ScrollText, title: "Une transparence pour les institutions", text: "Chaque financeur voit ce qu'il soutient, ce que les autres soutiennent, et ce que sont devenus les projets qu'il a accompagnés." },
+  { icon: Lightbulb, title: "Les idées et projets non exprimés mis en lumière", text: "Ce qui n'entre dans aucun processus classique apparaît enfin sur la place publique et devient repérable, orientable, finançable." },
+  { icon: Users, title: "L'empowerment du territoire augmenté", text: "Porteurs, citoyens, chercheurs et élus peuvent voir, proposer et participer : le territoire devient acteur de ses propres projets." },
+  { icon: Archive, title: "Capitaliser sur les projets archivés du passé", text: "Les opérations passées restent consultables : leurs résultats, leurs erreurs et leurs outils servent aux projets suivants." },
+  { icon: Compass, title: "Un accompagnement ciblé et multi-facette", text: "Selon le stade, les besoins et les manques du projet, l'instance oriente vers le bon appui : montage, financement, bénévoles, testeurs, visibilité." },
+  { icon: MessagesSquare, title: "L'écoute à projet donne accès aux conseils de tous les acteurs", text: "La fiche publique et l'écoute ouverte permettent aux chercheurs, citoyens, institutions et organismes d'innovation d'intervenir sur le dossier." },
+  { icon: Map, title: "Une vraie vision globale du territoire", text: "Les acteurs de terrain agissent en connaissance de ce qui existe déjà : moins de doublons, plus de coopérations et de filières." },
 ];
 
 const TODO = [
@@ -199,6 +212,30 @@ function TerritoryPage() {
             </p>
           )}
         </div>
+      </section>
+
+      <section className="mt-16">
+        <h2 className="font-display text-3xl">Impacts pour le territoire</h2>
+        <p className="mt-2 max-w-3xl text-muted-foreground">
+          Ce que l'instance change concrètement pour les porteurs, les institutions et les habitants.
+        </p>
+
+        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {IMPACTS.map((im) => (
+            <div key={im.title} className="rounded-xl border border-border bg-card p-5">
+              <span className="flex size-9 items-center justify-center rounded-lg bg-primary/10">
+                <im.icon className="size-5 text-primary" />
+              </span>
+              <h3 className="mt-3 font-display text-lg leading-snug">{im.title}</h3>
+              <p className="mt-1 text-sm text-muted-foreground">{im.text}</p>
+            </div>
+          ))}
+        </div>
+
+        <p className="mt-4 text-sm text-muted-foreground">
+          Ces impacts se mesurent dans le temps : soutiens engagés, projets accélérés, financements
+          ouverts, coopérations nées.
+        </p>
       </section>
 
       <div className="mt-16 rounded-xl border border-border bg-secondary p-8 text-center">

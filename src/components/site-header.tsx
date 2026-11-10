@@ -12,6 +12,7 @@ const LINKS = [
   { to: "/suivi", label: "Suivi d'activité" },
   { to: "/porteurs", label: "Porteurs" },
   { to: "/institutions", label: "Institutions" },
+  { to: "/territoire", label: "Territoire" },
   { to: "/citoyens", label: "Citoyens" },
 ] as const;
 

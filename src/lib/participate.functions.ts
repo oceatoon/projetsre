@@ -146,7 +146,7 @@ export const createProjectAsUser = createServerFn({ method: "POST" })
         })),
       );
     }
-    return { slug: project.slug as string };
+    return { slug: project.slug as string, id: projectId };
   });
 
 export const createCallAsUser = createServerFn({ method: "POST" })

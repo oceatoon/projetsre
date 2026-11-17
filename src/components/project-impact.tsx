@@ -2,7 +2,7 @@ import { useQuery, useQueryClient, useSuspenseQuery } from "@tanstack/react-quer
 import { Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { ArrowUpRight, Check, Leaf, Pencil, Plus, Save, Target, Trash2 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { ImpactRadar } from "./impact-radar";
 import { Badge } from "./ui/badge";
@@ -38,6 +38,9 @@ export function ProjectImpact({ detail }: { detail: ProjectDetail }) {
   const queryClient = useQueryClient();
   const [draft, setDraft] = useState<AxisRating[] | null>(null);
   const [busy, setBusy] = useState(false);
+  const formRef = useRef<HTMLElement>(null);
+  const isOpen = draft !== null;
+  useEffect(() => { if (isOpen) formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }); }, [isOpen]);
   const [objective, setObjective] = useState<ImpactObjective | "new" | null>(null);
   const ratings = draft ?? emptyRatings().map((a) => data.axes.find((r) => r.axis === a.axis) ?? a);
   const summary = diagnosticSummary(ratings);
@@ -65,7 +68,7 @@ export function ProjectImpact({ detail }: { detail: ProjectDetail }) {
         {project.impact.length > 0 && <div className="border-t border-border pt-5"><h3 className="font-medium">Indicateurs déjà présents dans la fiche</h3><dl className="mt-3 grid grid-cols-2 gap-4">{project.impact.map((item) => <div key={item.label}><dt className="text-xs text-muted-foreground">{item.label}</dt><dd className="mt-1 font-display text-2xl">{item.value}</dd></div>)}</dl></div>}
       </div>
     </div>
-    {draft && <section className="border-y border-border py-6">
+    {draft && <section ref={formRef} className="scroll-mt-24 border-y border-border py-6">
       <h3 className="font-display text-2xl">Diagnostic sur huit dimensions</h3>
       <p className="mt-2 text-sm text-muted-foreground">Typologie : place du thème dans le projet (0 absente, 5 centrale). Impact : 0 aucun effet, 1 émergent, 2 ponctuel, 3 régulier, 4 étendu, 5 structurant. Ambition : niveau souhaité.</p>
       {!canEdit && <p className="mt-3 text-sm text-primary">Exploration non enregistrée. Seul le porteur connecté peut publier le diagnostic.{!signedIn && <> <Link to="/connexion" className="underline">Se connecter</Link></>}</p>}

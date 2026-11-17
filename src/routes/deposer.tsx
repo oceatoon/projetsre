@@ -22,6 +22,9 @@ import { draftProject, improveText } from "@/lib/ai.functions";
 import { useSession } from "@/hooks/use-session";
 import { createProjectAsUser } from "@/lib/participate.functions";
 import { COMMUNES, NEED_TYPES, STAGES, THEMES } from "@/lib/domain";
+import { emptyRatings, IMPACT_AXES, type AxisRating } from "@/lib/impact";
+import { saveImpactDiagnostic } from "@/lib/impact.functions";
+import { ImpactRadar } from "@/components/impact-radar";
 
 export const Route = createFileRoute("/deposer")({
   head: () => ({
@@ -50,9 +53,11 @@ interface Milestone {
   due_date: string;
 }
 
-const STEPS = ["Votre récit", "La fiche", "Besoins et budget", "Passage à l'action"];
+const STEPS = ["Votre récit", "La fiche", "Besoins et budget", "Passage à l'action", "Impact"];
 
 function DepositPage() {
+  const saveImpact = useServerFn(saveImpactDiagnostic);
+  const [ratings, setRatings] = useState<AxisRating[]>(emptyRatings());
   const navigate = useNavigate();
   const draft = useServerFn(draftProject);
   const improve = useServerFn(improveText);
@@ -181,6 +186,9 @@ function DepositPage() {
             .map((a) => ({ title: a.trim(), author_name: carrier.trim() || "Le porteur" })),
         },
       });
+      if (ratings.some((r) => r.typology !== null || r.current_score !== null || r.target_score !== null || r.evidence.trim())) {
+        try { await saveImpact({ data: { project_id: result.id, axes: ratings } }); } catch { toast.error("Fiche publiée, mais le diagnostic d'impact n'a pas pu être enregistré."); }
+      }
       toast.success("Votre fiche projet est publiée.");
       await navigate({ to: "/projets/$slug", params: { slug: result.slug } });
     } catch {
@@ -524,6 +532,40 @@ function DepositPage() {
               >
                 Ajouter une action
               </Button>
+            </div>
+          </div>
+        ) : null}
+
+        {step === 4 ? (
+          <div className="space-y-5">
+            <h2 className="font-display text-2xl">Diagnostic d'impact</h2>
+            <p className="text-sm text-muted-foreground">Facultatif. Notez de 0 à 5 la place de chaque thème dans le projet (typologie), son impact actuel et votre ambition. Vous pourrez le compléter plus tard dans l'onglet Impact.</p>
+            <ImpactRadar ratings={ratings} />
+            <div className="divide-y divide-border">
+              {IMPACT_AXES.map((axis) => {
+                const row = ratings.find((r) => r.axis === axis.key)!;
+                const patch = (fields: Partial<AxisRating>) => setRatings((current) => current.map((r) => (r.axis === axis.key ? { ...r, ...fields } : r)));
+                return (
+                  <div key={axis.key} className="space-y-3 py-4">
+                    <div><p className="font-medium">{axis.label}</p><p className="text-sm text-muted-foreground">{axis.question}</p></div>
+                    <div className="grid grid-cols-3 gap-2">
+                      {(["typology", "current_score", "target_score"] as const).map((field) => (
+                        <div key={field} className="grid min-w-0 gap-1 text-sm">
+                          <span>{{ typology: "Typologie", current_score: "Impact actuel", target_score: "Ambition" }[field]}</span>
+                          <Select value={row[field] === null ? "none" : String(row[field])} onValueChange={(v) => patch({ [field]: v === "none" ? null : Number(v) })}>
+                            <SelectTrigger aria-label={`${axis.label} ${field}`} className="w-full min-w-0"><SelectValue /></SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="none">Non renseigné</SelectItem>
+                              {[0, 1, 2, 3, 4, 5].map((n) => <SelectItem key={n} value={String(n)}>{n}</SelectItem>)}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      ))}
+                    </div>
+                    <Textarea rows={2} maxLength={1500} value={row.evidence} onChange={(e) => patch({ evidence: e.target.value })} placeholder={axis.example} aria-label={`Observations ${axis.label}`} />
+                  </div>
+                );
+              })}
             </div>
           </div>
         ) : null}

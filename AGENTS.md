@@ -8,3 +8,5 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- Keep impact diagnostics and measurable objectives separate from the project’s existing impact indicators; only project owners edit them, and objective links must stay within the same project to preserve evidence integrity.

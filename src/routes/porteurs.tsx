@@ -7,6 +7,8 @@ export const Route = createFileRoute("/porteurs")({
   head: () => ({
     meta: [
       { title: "Porteurs de projet : une fiche unique, plusieurs dossiers — projets.re" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       {
         name: "description",
         content:

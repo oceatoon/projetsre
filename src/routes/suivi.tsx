@@ -17,6 +17,8 @@ export const Route = createFileRoute("/suivi")({
           "Avancement mesurable, transparence de l'organisation et réciprocités : le tableau de bord commun des projets du territoire.",
       },
       { property: "og:title", content: "Suivi d'activité et transparence — projets.re" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       {
         property: "og:description",
         content: "Avancement mesurable et transparence des projets réunionnais.",

@@ -26,6 +26,8 @@ export const Route = createFileRoute("/projets/")({
           "Annuaire des projets réunionnais : recherchez par commune, thématique, besoin et stade d'avancement.",
       },
       { property: "og:title", content: "Tous les projets du territoire — projets.re" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       {
         property: "og:description",
         content: "Recherchez les projets réunionnais par commune, thématique et besoin.",

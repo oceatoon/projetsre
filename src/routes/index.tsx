@@ -27,6 +27,8 @@ export const Route = createFileRoute("/")({
           "Une fiche projet unique pour La Réunion : déposez votre projet une fois, faites-le mûrir avec l'IA, répondez à plusieurs appels à projets et ouvrez-le aux habitants.",
       },
       { property: "og:title", content: "projets.re — les projets du territoire réunionnais" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       {
         property: "og:description",
         content:

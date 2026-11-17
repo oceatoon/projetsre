@@ -17,6 +17,8 @@ export const Route = createFileRoute("/appels/")({
           "Les appels à projets publiés par les institutions réunionnaises : critères, dates limites et montants, avec réponse à partir de votre fiche projet.",
       },
       { property: "og:title", content: "Appels à projets à La Réunion — projets.re" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       {
         property: "og:description",
         content: "Répondez aux appels à projets réunionnais en réutilisant votre fiche unique.",

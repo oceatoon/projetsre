@@ -33,6 +33,8 @@ export const Route = createFileRoute("/deposer")({
           "Créez votre fiche projet unique : racontez votre idée, l'assistant structure le dossier, les jalons et les besoins.",
       },
       { property: "og:title", content: "Déposer un projet — projets.re" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       {
         property: "og:description",
         content: "Une fiche unique, réutilisable pour tous les appels à projets réunionnais.",

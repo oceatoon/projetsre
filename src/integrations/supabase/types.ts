@@ -796,6 +796,117 @@ export type Database = {
           },
         ]
       }
+      project_impact_axes: {
+        Row: {
+          axis: string
+          current_score: number | null
+          evidence: string
+          project_id: string
+          target_score: number | null
+          typology: number | null
+          updated_at: string
+        }
+        Insert: {
+          axis: string
+          current_score?: number | null
+          evidence?: string
+          project_id: string
+          target_score?: number | null
+          typology?: number | null
+          updated_at?: string
+        }
+        Update: {
+          axis?: string
+          current_score?: number | null
+          evidence?: string
+          project_id?: string
+          target_score?: number | null
+          typology?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_impact_axes_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      project_impact_objectives: {
+        Row: {
+          action_id: string | null
+          actual: number
+          axis: string
+          baseline: number
+          created_at: string
+          direction: string
+          evidence: string
+          id: string
+          indicator: string
+          milestone_id: string | null
+          project_id: string
+          target: number
+          title: string
+          unit: string
+        }
+        Insert: {
+          action_id?: string | null
+          actual: number
+          axis: string
+          baseline: number
+          created_at?: string
+          direction: string
+          evidence?: string
+          id?: string
+          indicator: string
+          milestone_id?: string | null
+          project_id: string
+          target: number
+          title: string
+          unit: string
+        }
+        Update: {
+          action_id?: string | null
+          actual?: number
+          axis?: string
+          baseline?: number
+          created_at?: string
+          direction?: string
+          evidence?: string
+          id?: string
+          indicator?: string
+          milestone_id?: string | null
+          project_id?: string
+          target?: number
+          title?: string
+          unit?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_impact_objectives_action_id_fkey"
+            columns: ["action_id"]
+            isOneToOne: false
+            referencedRelation: "actions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "project_impact_objectives_milestone_id_fkey"
+            columns: ["milestone_id"]
+            isOneToOne: false
+            referencedRelation: "milestones"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "project_impact_objectives_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       projects: {
         Row: {
           budget_needed: number

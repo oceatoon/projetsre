@@ -48,6 +48,8 @@ export const Route = createFileRoute("/appels/$slug")({
         { title: `${title} | projets.re` },
         { name: "description", content: loaderData.call.description.slice(0, 155) },
         { property: "og:title", content: title },
+        { property: "og:type", content: "website" },
+        { name: "twitter:card", content: "summary_large_image" },
         { property: "og:description", content: loaderData.call.description.slice(0, 155) },
       ],
     };

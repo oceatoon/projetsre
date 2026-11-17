@@ -41,6 +41,7 @@ import {
 import { callsQuery, projectQuery, projectsQuery } from "@/lib/queries";
 import { Synergies } from "@/components/synergies";
 import { ProjectCampaigns } from "@/components/project-campaigns";
+import { ProjectImpact, impactQuery } from "@/components/project-impact";
 
 export const Route = createFileRoute("/projets/$slug")({
   loader: async ({ context, params }) => {
@@ -48,6 +49,7 @@ export const Route = createFileRoute("/projets/$slug")({
     void context.queryClient.ensureQueryData(projectsQuery);
     const detail = await context.queryClient.ensureQueryData(projectQuery(params.slug));
     if (!detail) throw notFound();
+    await context.queryClient.ensureQueryData(impactQuery(detail.project.id));
     return detail;
   },
   head: ({ loaderData }) => {
@@ -64,6 +66,12 @@ export const Route = createFileRoute("/projets/$slug")({
         { name: "description", content: project.tagline },
         { property: "og:title", content: title },
         { property: "og:description", content: project.tagline },
+        { property: "og:type", content: "website" },
+        { name: "twitter:card", content: "summary_large_image" },
+        ...(project.image_url?.startsWith("https://") ? [
+          { property: "og:image", content: project.image_url },
+          { name: "twitter:image", content: project.image_url },
+        ] : []),
       ],
     };
   },
@@ -165,6 +173,7 @@ function ProjectPage() {
           <TabsList className="flex-wrap">
             <TabsTrigger value="fiche">La fiche</TabsTrigger>
             <TabsTrigger value="action">Passage à l'action</TabsTrigger>
+            <TabsTrigger value="impact">Impact</TabsTrigger>
             <TabsTrigger value="argent">Argent et transparence</TabsTrigger>
             <TabsTrigger value="communaute">Communauté</TabsTrigger>
             <TabsTrigger value="vie">Actus et agenda</TabsTrigger>
@@ -172,6 +181,10 @@ function ProjectPage() {
             <TabsTrigger value="cooperations">Coopérations</TabsTrigger>
             <TabsTrigger value="campagnes">Campagnes</TabsTrigger>
           </TabsList>
+
+          <TabsContent value="impact" className="mt-6">
+            <ProjectImpact detail={detail} />
+          </TabsContent>
 
           <TabsContent value="campagnes" className="mt-6">
             <ProjectCampaigns projectId={project.id} slug={project.slug} />

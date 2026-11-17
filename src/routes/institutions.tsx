@@ -21,6 +21,8 @@ export const Route = createFileRoute("/institutions")({
   head: () => ({
     meta: [
       { title: "Institutions : publier un appel et rendre compte — projets.re" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       {
         name: "description",
         content:

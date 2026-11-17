@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { ArrowLeft, ArrowRight, Sparkles, Wand2 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
 import { Badge } from "@/components/ui/badge";
@@ -65,6 +65,10 @@ function DepositPage() {
   const { ready, signedIn } = useSession();
 
   const [step, setStep] = useState(0);
+  const stepRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (step > 0) stepRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [step]);
   const [busy, setBusy] = useState(false);
   const [pitch, setPitch] = useState("");
 
@@ -215,14 +219,14 @@ function DepositPage() {
         <Progress value={((step + 1) / STEPS.length) * 100} />
         <div className="mt-3 flex flex-wrap gap-2">
           {STEPS.map((label, index) => (
-            <Badge key={label} variant={index === step ? "default" : "outline"}>
+            <Button key={label} size="sm" variant={index === step ? "default" : "outline"} onClick={() => setStep(index)} aria-current={index === step ? "step" : undefined}>
               {index + 1}. {label}
-            </Badge>
+            </Button>
           ))}
         </div>
       </div>
 
-      <div className="mt-8 rounded-xl border border-border bg-card p-6">
+      <div ref={stepRef} className="mt-8 scroll-mt-28 rounded-xl border border-border bg-card p-6">
         {step === 0 ? (
           <div>
             <h2 className="font-display text-2xl">Racontez votre projet</h2>
@@ -543,7 +547,8 @@ function DepositPage() {
             <ImpactRadar ratings={ratings} />
             <div className="divide-y divide-border">
               {IMPACT_AXES.map((axis) => {
-                const row = ratings.find((r) => r.axis === axis.key)!;
+                const row = ratings.find((r) => r.axis === axis.key);
+                if (!row) return null;
                 const patch = (fields: Partial<AxisRating>) => setRatings((current) => current.map((r) => (r.axis === axis.key ? { ...r, ...fields } : r)));
                 return (
                   <div key={axis.key} className="space-y-3 py-4">

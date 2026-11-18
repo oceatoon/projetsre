@@ -1,4 +1,4 @@
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link, notFound, useRouter } from "@tanstack/react-router";
 import { CheckCircle2, CircleDashed, Handshake, MapPin, MessageSquare, Target } from "lucide-react";
 import { useState } from "react";
@@ -18,6 +18,7 @@ import { useSession } from "@/hooks/use-session";
 import { frDate, frDateTime, stageLabel, themeLabel } from "@/lib/domain";
 import { addCooperationMessageAsUser } from "@/lib/participate.functions";
 import { cooperationQuery } from "@/lib/queries";
+import { CooperationCharter, charterQuery } from "@/components/cooperation-charter";
 
 export const Route = createFileRoute("/cooperations/$slugA/$slugB")({
   loader: async ({ context, params }) => {
@@ -25,6 +26,7 @@ export const Route = createFileRoute("/cooperations/$slugA/$slugB")({
       cooperationQuery(params.slugA, params.slugB),
     );
     if (!detail) throw notFound();
+    if (detail.cooperation) await context.queryClient.ensureQueryData(charterQuery(detail.cooperation.id));
     return detail;
   },
   head: ({ loaderData }) => {
@@ -81,6 +83,7 @@ const STEP_LABEL: Record<string, string> = {
 function CooperationPage() {
   const { slugA, slugB } = Route.useParams();
   const router = useRouter();
+  const queryClient = useQueryClient();
   const { data } = useSuspenseQuery(cooperationQuery(slugA, slugB));
   const detail = data!;
   const [a, b] = detail.projects;
@@ -95,6 +98,7 @@ function CooperationPage() {
   const pct = detail.steps.length ? Math.round((done / detail.steps.length) * 100) : 0;
 
   async function refresh() {
+    await queryClient.invalidateQueries({ queryKey: ["cooperation", slugA, slugB] });
     await router.invalidate();
   }
 
@@ -216,6 +220,12 @@ function CooperationPage() {
           </Button>
         </div>
       ) : (
+        <>
+        <CooperationCharter
+          cooperationId={coop.id}
+          projectAId={(coop as unknown as { project_a_id: string }).project_a_id}
+          names={{ [a.id]: a.name, [b.id]: b.name }}
+        />
         <div className="mt-10 grid gap-8 lg:grid-cols-[1.1fr_1fr]">
           <section className="rounded-xl border border-border bg-card p-6">
             <div className="flex items-center gap-2">
@@ -342,6 +352,7 @@ function CooperationPage() {
             </div>
           </section>
         </div>
+        </>
       )}
     </div>
   );

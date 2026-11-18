@@ -335,6 +335,53 @@ export type Database = {
           },
         ]
       }
+      cooperation_charters: {
+        Row: {
+          commons: string[]
+          cooperation_id: string
+          gray: string[]
+          outcome_a: string
+          outcome_b: string
+          sovereign: string[]
+          test_action: string
+          test_due: string | null
+          test_owner: string
+          updated_at: string
+        }
+        Insert: {
+          commons?: string[]
+          cooperation_id: string
+          gray?: string[]
+          outcome_a?: string
+          outcome_b?: string
+          sovereign?: string[]
+          test_action?: string
+          test_due?: string | null
+          test_owner?: string
+          updated_at?: string
+        }
+        Update: {
+          commons?: string[]
+          cooperation_id?: string
+          gray?: string[]
+          outcome_a?: string
+          outcome_b?: string
+          sovereign?: string[]
+          test_action?: string
+          test_due?: string | null
+          test_owner?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cooperation_charters_cooperation_id_fkey"
+            columns: ["cooperation_id"]
+            isOneToOne: true
+            referencedRelation: "cooperations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       cooperation_messages: {
         Row: {
           author_id: string | null
@@ -907,6 +954,50 @@ export type Database = {
           },
         ]
       }
+      project_reciprocity: {
+        Row: {
+          atomicity: number
+          governance: number
+          hard_limits: string
+          offers: string[]
+          permeability: number
+          preferred_return: string
+          project_id: string
+          reciprocity_timing: string
+          updated_at: string
+        }
+        Insert: {
+          atomicity?: number
+          governance?: number
+          hard_limits?: string
+          offers?: string[]
+          permeability?: number
+          preferred_return?: string
+          project_id: string
+          reciprocity_timing?: string
+          updated_at?: string
+        }
+        Update: {
+          atomicity?: number
+          governance?: number
+          hard_limits?: string
+          offers?: string[]
+          permeability?: number
+          preferred_return?: string
+          project_id?: string
+          reciprocity_timing?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_reciprocity_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: true
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       projects: {
         Row: {
           budget_needed: number
@@ -1055,6 +1146,7 @@ export type Database = {
       campaign_owned: { Args: { _campaign_id: string }; Returns: boolean }
       campaign_public_stats: { Args: { _campaign_id: string }; Returns: Json }
       campaign_visible: { Args: { _campaign_id: string }; Returns: boolean }
+      cooperation_side: { Args: { _cooperation_id: string }; Returns: string }
       follower_count: { Args: { _project_id: string }; Returns: number }
       has_role: {
         Args: {

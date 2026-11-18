@@ -42,6 +42,7 @@ import { callsQuery, projectQuery, projectsQuery } from "@/lib/queries";
 import { Synergies } from "@/components/synergies";
 import { ProjectCampaigns } from "@/components/project-campaigns";
 import { ProjectImpact, impactQuery } from "@/components/project-impact";
+import { ProjectReciprocity, reciprocityQuery } from "@/components/project-reciprocity";
 
 export const Route = createFileRoute("/projets/$slug")({
   loader: async ({ context, params }) => {
@@ -49,7 +50,10 @@ export const Route = createFileRoute("/projets/$slug")({
     void context.queryClient.ensureQueryData(projectsQuery);
     const detail = await context.queryClient.ensureQueryData(projectQuery(params.slug));
     if (!detail) throw notFound();
-    await context.queryClient.ensureQueryData(impactQuery(detail.project.id));
+    await Promise.all([
+      context.queryClient.ensureQueryData(impactQuery(detail.project.id)),
+      context.queryClient.ensureQueryData(reciprocityQuery(detail.project.id)),
+    ]);
     return detail;
   },
   head: ({ loaderData }) => {
@@ -178,12 +182,17 @@ function ProjectPage() {
             <TabsTrigger value="communaute">Communauté</TabsTrigger>
             <TabsTrigger value="vie">Actus et agenda</TabsTrigger>
             <TabsTrigger value="maturation">Maturation</TabsTrigger>
+            <TabsTrigger value="cooperer">Coopérer</TabsTrigger>
             <TabsTrigger value="cooperations">Coopérations</TabsTrigger>
             <TabsTrigger value="campagnes">Campagnes</TabsTrigger>
           </TabsList>
 
           <TabsContent value="impact" className="mt-6">
             <ProjectImpact detail={detail} />
+          </TabsContent>
+
+          <TabsContent value="cooperer" className="mt-6">
+            <ProjectReciprocity projectId={project.id} />
           </TabsContent>
 
           <TabsContent value="campagnes" className="mt-6">

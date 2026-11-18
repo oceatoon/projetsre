@@ -56,16 +56,18 @@ function TaoPage() {
 
       <section className="mx-auto max-w-5xl px-6 py-20">
         <ol className="space-y-24">
-          {PRINCIPLES.map((p, i) => (
-            <li key={p.n} className={`grid items-center gap-10 md:grid-cols-[220px_1fr] ${i % 2 ? "md:[&>*:first-child]:order-2 md:grid-cols-[1fr_220px]" : ""}`}>
-              <div className="flex flex-col items-center gap-3">
+          {PRINCIPLES.map((p, i) => {
+            const flipped = i % 2 === 1;
+            return (
+            <li key={p.n} className={`grid items-center gap-10 ${flipped ? "md:grid-cols-[1fr_220px]" : "md:grid-cols-[220px_1fr]"}`}>
+              <div className={`flex flex-col items-center gap-3 ${flipped ? "md:col-start-2 md:row-start-1" : "md:col-start-1"}`}>
                 <div className="flex size-36 items-center justify-center rounded-full border border-border bg-card shadow-sm">
                   <p.icon className="size-14 text-primary" strokeWidth={1} />
                 </div>
                 <span className="font-display text-3xl text-muted-foreground">{p.n}</span>
                 <span className="text-xs uppercase tracking-[0.25em] text-accent-foreground">{p.name}</span>
               </div>
-              <div>
+              <div className={flipped ? "md:col-start-1 md:row-start-1" : "md:col-start-2"}>
                 <h2 className="font-display text-3xl md:text-4xl">{p.title}</h2>
                 <blockquote className="mt-4 border-l-2 border-primary pl-4 italic text-muted-foreground">
                   « {p.quote} » <span className="not-italic text-xs">— Tao Te King, {p.ch}</span>
@@ -77,7 +79,8 @@ function TaoPage() {
                 </ul>
               </div>
             </li>
-          ))}
+            );
+          })}
         </ol>
       </section>
 

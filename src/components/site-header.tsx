@@ -13,6 +13,7 @@ const LINKS = [
   { to: "/porteurs", label: "Porteurs" },
   { to: "/institutions", label: "Institutions" },
   { to: "/territoire", label: "Territoire" },
+  { to: "/tao", label: "Le Tao" },
   { to: "/citoyens", label: "Citoyens" },
 ] as const;
 

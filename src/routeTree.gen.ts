@@ -18,6 +18,7 @@ import { Route as InstitutionsRouteImport } from './routes/institutions'
 import { Route as PorteursRouteImport } from './routes/porteurs'
 import { Route as PresentationRouteImport } from './routes/presentation'
 import { Route as SuiviRouteImport } from './routes/suivi'
+import { Route as TaoRouteImport } from './routes/tao'
 import { Route as TerritoireRouteImport } from './routes/territoire'
 import { Route as TrouverRouteImport } from './routes/trouver'
 import { Route as AuthenticatedMoiRouteImport } from './routes/_authenticated/moi'
@@ -72,6 +73,11 @@ const PresentationRoute = PresentationRouteImport.update({
 const SuiviRoute = SuiviRouteImport.update({
   id: '/suivi',
   path: '/suivi',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TaoRoute = TaoRouteImport.update({
+  id: '/tao',
+  path: '/tao',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TerritoireRoute = TerritoireRouteImport.update({
@@ -141,6 +147,7 @@ export interface FileRoutesByFullPath {
   '/porteurs': typeof PorteursRoute
   '/presentation': typeof PresentationRoute
   '/suivi': typeof SuiviRoute
+  '/tao': typeof TaoRoute
   '/territoire': typeof TerritoireRoute
   '/trouver': typeof TrouverRoute
   '/moi': typeof AuthenticatedMoiRoute
@@ -162,6 +169,7 @@ export interface FileRoutesByTo {
   '/porteurs': typeof PorteursRoute
   '/presentation': typeof PresentationRoute
   '/suivi': typeof SuiviRoute
+  '/tao': typeof TaoRoute
   '/territoire': typeof TerritoireRoute
   '/trouver': typeof TrouverRoute
   '/moi': typeof AuthenticatedMoiRoute
@@ -185,6 +193,7 @@ export interface FileRoutesById {
   '/porteurs': typeof PorteursRoute
   '/presentation': typeof PresentationRoute
   '/suivi': typeof SuiviRoute
+  '/tao': typeof TaoRoute
   '/territoire': typeof TerritoireRoute
   '/trouver': typeof TrouverRoute
   '/_authenticated/moi': typeof AuthenticatedMoiRoute
@@ -208,6 +217,7 @@ export interface FileRouteTypes {
     | '/porteurs'
     | '/presentation'
     | '/suivi'
+    | '/tao'
     | '/territoire'
     | '/trouver'
     | '/moi'
@@ -229,6 +239,7 @@ export interface FileRouteTypes {
     | '/porteurs'
     | '/presentation'
     | '/suivi'
+    | '/tao'
     | '/territoire'
     | '/trouver'
     | '/moi'
@@ -251,6 +262,7 @@ export interface FileRouteTypes {
     | '/porteurs'
     | '/presentation'
     | '/suivi'
+    | '/tao'
     | '/territoire'
     | '/trouver'
     | '/_authenticated/moi'
@@ -274,6 +286,7 @@ export interface RootRouteChildren {
   PorteursRoute: typeof PorteursRoute
   PresentationRoute: typeof PresentationRoute
   SuiviRoute: typeof SuiviRoute
+  TaoRoute: typeof TaoRoute
   TerritoireRoute: typeof TerritoireRoute
   TrouverRoute: typeof TrouverRoute
   AppelsSlugRoute: typeof AppelsSlugRoute
@@ -347,6 +360,13 @@ declare module '@tanstack/react-router' {
       path: '/suivi'
       fullPath: '/suivi'
       preLoaderRoute: typeof SuiviRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tao': {
+      id: '/tao'
+      path: '/tao'
+      fullPath: '/tao'
+      preLoaderRoute: typeof TaoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/territoire': {
@@ -454,6 +474,7 @@ const rootRouteChildren: RootRouteChildren = {
   PorteursRoute: PorteursRoute,
   PresentationRoute: PresentationRoute,
   SuiviRoute: SuiviRoute,
+  TaoRoute: TaoRoute,
   TerritoireRoute: TerritoireRoute,
   TrouverRoute: TrouverRoute,
   AppelsSlugRoute: AppelsSlugRoute,

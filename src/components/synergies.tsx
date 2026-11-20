@@ -1,3 +1,4 @@
+import { T, useTranslation } from "@/components/language-provider";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, Handshake, MapPin } from "lucide-react";
@@ -10,17 +11,15 @@ import { findSynergies } from "@/lib/synergy";
 import type { Project } from "@/lib/types";
 
 export function Synergies({ project }: { project: Project }) {
+  useTranslation();
   const { data: projects } = useSuspenseQuery(projectsQuery);
   const synergies = findSynergies(project, projects);
 
   if (!synergies.length) {
     return (
       <div className="rounded-xl border border-border bg-card p-6">
-        <h2 className="font-display text-2xl">Coopérations possibles</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Aucun rapprochement évident pour l'instant. À mesure que d'autres projets se publient,
-          les points communs apparaîtront ici.
-        </p>
+        <h2 className="font-display text-2xl"><T>{"Coopérations possibles"}</T></h2>
+        <p className="mt-2 text-sm text-muted-foreground"><T>{" Aucun rapprochement évident pour l'instant. À mesure que d'autres projets se publient, les points communs apparaîtront ici. "}</T></p>
       </div>
     );
   }
@@ -30,13 +29,10 @@ export function Synergies({ project }: { project: Project }) {
       <div className="max-w-2xl">
         <div className="flex items-center gap-2 text-primary">
           <Handshake className="size-5" />
-          <span className="text-sm font-semibold">Faire équipe plutôt que chacun dans son coin</span>
+          <span className="text-sm font-semibold"><T>{"Faire équipe plutôt que chacun dans son coin"}</T></span>
         </div>
-        <h2 className="mt-2 font-display text-3xl md:text-4xl">Coopérations possibles</h2>
-        <p className="mt-3 text-muted-foreground">
-          Ces projets partagent un territoire, un besoin ou une expérience avec celui-ci. Pour
-          chacun, voici ce qu'il y aurait de concret à mettre en commun.
-        </p>
+        <h2 className="mt-2 font-display text-3xl md:text-4xl"><T>{"Coopérations possibles"}</T></h2>
+        <p className="mt-3 text-muted-foreground"><T>{" Ces projets partagent un territoire, un besoin ou une expérience avec celui-ci. Pour chacun, voici ce qu'il y aurait de concret à mettre en commun. "}</T></p>
       </div>
 
       <div className="grid gap-5 md:grid-cols-2">
@@ -46,22 +42,22 @@ export function Synergies({ project }: { project: Project }) {
             className="flex flex-col rounded-lg border border-border bg-card p-5 shadow-sm"
           >
             <div className="flex flex-wrap items-center gap-2">
-              <Badge>{kind}</Badge>
-              <Badge variant="outline">{stageLabel(other.stage)}</Badge>
+              <Badge><T>{kind}</T></Badge>
+              <Badge variant="outline"><T>{stageLabel(other.stage)}</T></Badge>
             </div>
-            <h3 className="mt-3 font-display text-2xl leading-[1.1]">{other.name}</h3>
+            <h3 className="mt-3 font-display text-2xl leading-[1.1]"><T>{other.name}</T></h3>
             <p className="mt-1 flex items-center gap-1.5 text-xs text-muted-foreground">
               <MapPin className="size-3.5" />
-              {other.commune || "La Réunion"}
+              <T>{other.commune || "La Réunion"}</T>
               <span className="text-border">•</span>
-              {themeLabel(other.theme)}
+              <T>{themeLabel(other.theme)}</T>
             </p>
-            <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{other.tagline}</p>
+            <p className="mt-2 text-sm leading-relaxed text-muted-foreground"><T>{other.tagline}</T></p>
 
             <ul className="mt-4 space-y-2 border-t border-border pt-4">
               {reasons.map((reason) => (
                 <li key={reason} className="text-sm leading-relaxed">
-                  {reason}
+                  <T>{reason}</T>
                 </li>
               ))}
             </ul>
@@ -69,7 +65,7 @@ export function Synergies({ project }: { project: Project }) {
             <div className="mt-4 flex flex-wrap gap-1.5">
               {other.need_types.slice(0, 3).map((need) => (
                 <Badge key={need} variant="secondary">
-                  {needLabel(need)}
+                  <T>{needLabel(need)}</T>
                 </Badge>
               ))}
             </div>
@@ -79,14 +75,11 @@ export function Synergies({ project }: { project: Project }) {
                 <Link
                   to="/cooperations/$slugA/$slugB"
                   params={{ slugA: project.slug, slugB: other.slug }}
-                >
-                  Ouvrir la coopération <ArrowRight />
+                ><T>{" Ouvrir la coopération "}</T><ArrowRight />
                 </Link>
               </Button>
               <Button asChild variant="outline" size="sm">
-                <Link to="/projets/$slug" params={{ slug: other.slug }}>
-                  Voir ce projet
-                </Link>
+                <Link to="/projets/$slug" params={{ slug: other.slug }}><T>{" Voir ce projet "}</T></Link>
               </Button>
             </div>
           </article>

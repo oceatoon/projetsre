@@ -1,3 +1,4 @@
+import { T, useTranslation } from "@/components/language-provider";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   Archive, Award, CheckCircle2, ClipboardList, Compass, Globe2, Inbox, Landmark,
@@ -81,56 +82,48 @@ const TODO = [
 ];
 
 function TerritoryPage() {
+  useTranslation();
   const [ran, setRan] = useState(false);
   const [done, setDone] = useState<number[]>([]);
   const matches = ACTORS.filter((a) => a.criteria.every((c) => c.ok));
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-12">
-      <p className="text-sm font-semibold uppercase tracking-wide text-primary">Pitch territoire</p>
-      <h1 className="mt-2 font-display text-4xl font-semibold md:text-5xl">
-        projets.re, un projet porté par le territoire
-      </h1>
-      <p className="mt-4 max-w-3xl text-lg text-muted-foreground">
-        Une instance commune où les acteurs publics, les porteurs et les citoyens voient ensemble
-        tout ce qui se construit — et un modèle que d'autres territoires et d'autres pays peuvent
-        reprendre sous leur propre nom de domaine.
-      </p>
+      <p className="text-sm font-semibold uppercase tracking-wide text-primary"><T>{"Pitch territoire"}</T></p>
+      <h1 className="mt-2 font-display text-4xl font-semibold md:text-5xl"><T>{" projets.re, un projet porté par le territoire "}</T></h1>
+      <p className="mt-4 max-w-3xl text-lg text-muted-foreground"><T>{" Une instance commune où les acteurs publics, les porteurs et les citoyens voient ensemble tout ce qui se construit — et un modèle que d'autres territoires et d'autres pays peuvent reprendre sous leur propre nom de domaine. "}</T></p>
 
       <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {PITCH.map((p) => (
           <div key={p.title} className="rounded-xl border border-border bg-card p-6">
             <p.icon className="size-5 text-primary" />
-            <h2 className="mt-3 font-display text-xl">{p.title}</h2>
-            <p className="mt-1 text-sm text-muted-foreground">{p.text}</p>
+            <h2 className="mt-3 font-display text-xl"><T>{p.title}</T></h2>
+            <p className="mt-1 text-sm text-muted-foreground"><T>{p.text}</T></p>
           </div>
         ))}
       </div>
 
       <section className="mt-16">
-        <h2 className="font-display text-3xl">Pour un nouveau territoire</h2>
+        <h2 className="font-display text-3xl"><T>{"Pour un nouveau territoire"}</T></h2>
         <ol className="mt-6 grid gap-4 md:grid-cols-4">
           {NEW_TERRITORY.map((s, i) => (
             <li key={s.title} className="rounded-xl border border-border bg-card p-5">
-              <span className="flex size-8 items-center justify-center rounded-full bg-primary font-semibold text-primary-foreground">{i + 1}</span>
-              <h3 className="mt-3 font-semibold">{s.title}</h3>
-              <p className="mt-1 text-sm text-muted-foreground">{s.text}</p>
+              <span className="flex size-8 items-center justify-center rounded-full bg-primary font-semibold text-primary-foreground"><T>{i + 1}</T></span>
+              <h3 className="mt-3 font-semibold"><T>{s.title}</T></h3>
+              <p className="mt-1 text-sm text-muted-foreground"><T>{s.text}</T></p>
             </li>
           ))}
         </ol>
         <div className="mt-4 flex flex-wrap gap-2 text-sm">
           {["projets.re", "projets.mu", "projets.yt", "projets.sn", "…"].map((d) => (
-            <span key={d} className="rounded-full border border-border bg-secondary px-3 py-1 font-medium">{d}</span>
+            <span key={d} className="rounded-full border border-border bg-secondary px-3 py-1 font-medium"><T>{d}</T></span>
           ))}
         </div>
       </section>
 
       <section className="mt-16">
-        <h2 className="font-display text-3xl">Évaluation IA au guichet unique</h2>
-        <p className="mt-2 max-w-3xl text-muted-foreground">
-          Chaque nouveau projet est évalué sur les critères de chaque acteur. Si le projet y répond,
-          l'acteur est sollicité pour analyser le dossier : la démarche du porteur s'accélère.
-        </p>
+        <h2 className="font-display text-3xl"><T>{"Évaluation IA au guichet unique"}</T></h2>
+        <p className="mt-2 max-w-3xl text-muted-foreground"><T>{" Chaque nouveau projet est évalué sur les critères de chaque acteur. Si le projet y répond, l'acteur est sollicité pour analyser le dossier : la démarche du porteur s'accélère. "}</T></p>
 
         <div className="mt-6 grid gap-3 md:grid-cols-4">
           {[
@@ -140,7 +133,7 @@ function TerritoryPage() {
             { icon: Award, t: "Labellisation" },
           ].map((s) => (
             <div key={s.t} className="flex items-center gap-3 rounded-lg border border-border bg-muted/40 p-4">
-              <s.icon className="size-5 text-primary" /> <span className="text-sm font-medium">{s.t}</span>
+              <s.icon className="size-5 text-primary" /> <span className="text-sm font-medium"><T>{s.t}</T></span>
             </div>
           ))}
         </div>
@@ -148,15 +141,15 @@ function TerritoryPage() {
         <div className="mt-8 rounded-xl border border-border bg-card p-6">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
-              <p className="text-xs uppercase tracking-wide text-muted-foreground">Exemple</p>
-              <h3 className="font-display text-2xl">Tiers-lieu solidaire à Saint-Louis</h3>
+              <p className="text-xs uppercase tracking-wide text-muted-foreground"><T>{"Exemple"}</T></p>
+              <h3 className="font-display text-2xl"><T>{"Tiers-lieu solidaire à Saint-Louis"}</T></h3>
             </div>
             <Button onClick={() => { setRan(true); setDone([]); }}>
-              <Sparkles className="size-4" /> {ran ? "Relancer l'évaluation" : "Lancer l'évaluation"}
+              <Sparkles className="size-4" /> <T>{ran ? "Relancer l'évaluation" : "Lancer l'évaluation"}</T>
             </Button>
           </div>
 
-          {ran ? (
+          <T>{ran ? (
             <>
               <div className="mt-6 grid gap-4 md:grid-cols-2">
                 {ACTORS.map((a) => {
@@ -165,18 +158,18 @@ function TerritoryPage() {
                     <div key={a.name} className={`rounded-lg border p-4 ${ok ? "border-primary bg-primary/5" : "border-border"}`}>
                       <div className="flex items-center justify-between gap-2">
                         <div>
-                          <p className="font-semibold">{a.name}</p>
-                          <p className="text-xs text-muted-foreground">{a.kind}</p>
+                          <p className="font-semibold"><T>{a.name}</T></p>
+                          <p className="text-xs text-muted-foreground"><T>{a.kind}</T></p>
                         </div>
                         <span className={`rounded-full px-2 py-0.5 text-xs font-semibold ${ok ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"}`}>
-                          {ok ? "Éligible — sollicité" : "Non éligible"}
+                          <T>{ok ? "Éligible — sollicité" : "Non éligible"}</T>
                         </span>
                       </div>
                       <ul className="mt-3 space-y-1 text-sm">
                         {a.criteria.map((c) => (
                           <li key={c.label} className="flex items-center gap-2">
                             {c.ok ? <CheckCircle2 className="size-4 text-primary" /> : <XCircle className="size-4 text-muted-foreground" />}
-                            <span className={c.ok ? "" : "text-muted-foreground"}>{c.label}</span>
+                            <span className={c.ok ? "" : "text-muted-foreground"}><T>{c.label}</T></span>
                           </li>
                         ))}
                       </ul>
@@ -186,39 +179,34 @@ function TerritoryPage() {
               </div>
 
               <div className="mt-6 rounded-lg border border-border p-4">
-                <p className="font-semibold">
-                  Liste d'actions activée — {matches.length} acteurs sollicités ({matches.map((m) => m.name).join(", ")})
+                <p className="font-semibold"><T>{" Liste d'actions activée — "}</T><T>{matches.length}</T><T>{" acteurs sollicités ("}</T><T>{matches.map((m) => m.name).join(", ")}</T>)
                 </p>
                 <ul className="mt-3 space-y-2">
                   {TODO.map((t, i) => (
                     <li key={t}>
                       <label className="flex cursor-pointer items-center gap-2 text-sm">
                         <input type="checkbox" checked={done.includes(i)} onChange={() => setDone((d) => d.includes(i) ? d.filter((x) => x !== i) : [...d, i])} />
-                        <span className={done.includes(i) ? "line-through text-muted-foreground" : ""}>{t}</span>
+                        <span className={done.includes(i) ? "line-through text-muted-foreground" : ""}><T>{t}</T></span>
                       </label>
                     </li>
                   ))}
                 </ul>
                 {done.length === TODO.length ? (
                   <p className="mt-4 flex items-center gap-2 font-semibold text-primary">
-                    <ShieldCheck className="size-5" /> Projet labellisé par les dispositifs sollicités
-                  </p>
+                    <ShieldCheck className="size-5" /><T>{" Projet labellisé par les dispositifs sollicités "}</T></p>
                 ) : null}
               </div>
             </>
           ) : (
             <p className="mt-4 flex items-center gap-2 text-sm text-muted-foreground">
-              <Lightbulb className="size-4" /> Lancez l'évaluation pour voir quels acteurs sont sollicités.
-            </p>
-          )}
+              <Lightbulb className="size-4" /><T>{" Lancez l'évaluation pour voir quels acteurs sont sollicités. "}</T></p>
+          )}</T>
         </div>
       </section>
 
       <section className="mt-16">
-        <h2 className="font-display text-3xl">Impacts pour le territoire</h2>
-        <p className="mt-2 max-w-3xl text-muted-foreground">
-          Ce que l'instance change concrètement pour les porteurs, les institutions et les habitants.
-        </p>
+        <h2 className="font-display text-3xl"><T>{"Impacts pour le territoire"}</T></h2>
+        <p className="mt-2 max-w-3xl text-muted-foreground"><T>{" Ce que l'instance change concrètement pour les porteurs, les institutions et les habitants. "}</T></p>
 
         <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {IMPACTS.map((im) => (
@@ -226,27 +214,21 @@ function TerritoryPage() {
               <span className="flex size-9 items-center justify-center rounded-lg bg-primary/10">
                 <im.icon className="size-5 text-primary" />
               </span>
-              <h3 className="mt-3 font-display text-lg leading-snug">{im.title}</h3>
-              <p className="mt-1 text-sm text-muted-foreground">{im.text}</p>
+              <h3 className="mt-3 font-display text-lg leading-snug"><T>{im.title}</T></h3>
+              <p className="mt-1 text-sm text-muted-foreground"><T>{im.text}</T></p>
             </div>
           ))}
         </div>
 
-        <p className="mt-4 text-sm text-muted-foreground">
-          Ces impacts se mesurent dans le temps : soutiens engagés, projets accélérés, financements
-          ouverts, coopérations nées.
-        </p>
+        <p className="mt-4 text-sm text-muted-foreground"><T>{" Ces impacts se mesurent dans le temps : soutiens engagés, projets accélérés, financements ouverts, coopérations nées. "}</T></p>
       </section>
 
       <div className="mt-16 rounded-xl border border-border bg-secondary p-8 text-center">
-        <h2 className="font-display text-3xl">Rejoindre le partenariat</h2>
-        <p className="mx-auto mt-2 max-w-2xl text-muted-foreground">
-          Financeur public, collectivité, agence, technopole, laboratoire : intégrez vos critères et
-          mettez en lumière les projets que vous soutenez.
-        </p>
+        <h2 className="font-display text-3xl"><T>{"Rejoindre le partenariat"}</T></h2>
+        <p className="mx-auto mt-2 max-w-2xl text-muted-foreground"><T>{" Financeur public, collectivité, agence, technopole, laboratoire : intégrez vos critères et mettez en lumière les projets que vous soutenez. "}</T></p>
         <div className="mt-6 flex flex-wrap justify-center gap-3">
-          <Button asChild><Link to="/institutions">Espace institutions</Link></Button>
-          <Button asChild variant="outline"><Link to="/presentation">Voir la présentation</Link></Button>
+          <Button asChild><Link to="/institutions"><T>{"Espace institutions"}</T></Link></Button>
+          <Button asChild variant="outline"><Link to="/presentation"><T>{"Voir la présentation"}</T></Link></Button>
         </div>
       </div>
     </div>

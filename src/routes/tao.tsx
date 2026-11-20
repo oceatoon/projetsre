@@ -1,3 +1,4 @@
+import { T, useTranslation } from "@/components/language-provider";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Droplets, Eye, Feather, Leaf, Sprout, Sun, Waves, Wind, CircleDashed as Yin } from "lucide-react";
 
@@ -33,6 +34,7 @@ const PRINCIPLES = [
 ];
 
 function TaoPage() {
+  useTranslation();
   return (
     <div className="bg-background text-foreground">
       <section className="relative overflow-hidden border-b border-border">
@@ -43,14 +45,10 @@ function TaoPage() {
           <div className="mb-8 flex justify-center gap-6 text-muted-foreground">
             <Sun className="size-5" strokeWidth={1.25} /><Waves className="size-5" strokeWidth={1.25} /><Wind className="size-5" strokeWidth={1.25} /><Leaf className="size-5" strokeWidth={1.25} />
           </div>
-          <p className="text-sm uppercase tracking-[0.3em] text-primary">Principes universels</p>
-          <h1 className="mt-4 font-display text-5xl leading-tight md:text-7xl">Le Tao de projets.re</h1>
-          <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground md:text-xl">
-            Le maître ne construit pas le monde par décret. Il façonne le vase, dégage le lit de la rivière, et laisse la vie s'organiser selon sa nature.
-          </p>
-          <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
-            projets.re traduit cette sagesse en architecture civique : un écosystème ouvert où l'ordre naît de la visibilité, de l'alignement spontané et du mouvement sans effort.
-          </p>
+          <p className="text-sm uppercase tracking-[0.3em] text-primary"><T>{"Principes universels"}</T></p>
+          <h1 className="mt-4 font-display text-5xl leading-tight md:text-7xl"><T>{"Le Tao de projets.re"}</T></h1>
+          <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground md:text-xl"><T>{" Le maître ne construit pas le monde par décret. Il façonne le vase, dégage le lit de la rivière, et laisse la vie s'organiser selon sa nature. "}</T></p>
+          <p className="mx-auto mt-4 max-w-2xl text-muted-foreground"><T>{" projets.re traduit cette sagesse en architecture civique : un écosystème ouvert où l'ordre naît de la visibilité, de l'alignement spontané et du mouvement sans effort. "}</T></p>
         </div>
       </section>
 
@@ -64,17 +62,17 @@ function TaoPage() {
                 <div className="flex size-36 items-center justify-center rounded-full border border-border bg-card shadow-sm">
                   <p.icon className="size-14 text-primary" strokeWidth={1} />
                 </div>
-                <span className="font-display text-3xl text-muted-foreground">{p.n}</span>
-                <span className="text-xs uppercase tracking-[0.25em] text-accent-foreground">{p.name}</span>
+                <span className="font-display text-3xl text-muted-foreground"><T>{p.n}</T></span>
+                <span className="text-xs uppercase tracking-[0.25em] text-accent-foreground"><T>{p.name}</T></span>
               </div>
               <div className={flipped ? "md:col-start-1 md:row-start-1" : "md:col-start-2"}>
-                <h2 className="font-display text-3xl md:text-4xl">{p.title}</h2>
+                <h2 className="font-display text-3xl md:text-4xl"><T>{p.title}</T></h2>
                 <blockquote className="mt-4 border-l-2 border-primary pl-4 italic text-muted-foreground">
-                  « {p.quote} » <span className="not-italic text-xs">— Tao Te King, {p.ch}</span>
+                  « <T>{p.quote}</T> » <span className="not-italic text-xs"><T>{"— Tao Te King, "}</T><T>{p.ch}</T></span>
                 </blockquote>
                 <ul className="mt-6 space-y-3">
                   {p.points.map((pt) => (
-                    <li key={pt} className="flex gap-3"><span className="mt-2 size-1.5 shrink-0 rounded-full bg-primary" /><span>{pt}</span></li>
+                    <li key={pt} className="flex gap-3"><span className="mt-2 size-1.5 shrink-0 rounded-full bg-primary" /><span><T>{pt}</T></span></li>
                   ))}
                 </ul>
               </div>
@@ -87,12 +85,12 @@ function TaoPage() {
       <section className="border-t border-border bg-muted/40">
         <div className="mx-auto max-w-3xl px-6 py-24 text-center">
           <Waves className="mx-auto size-8 text-primary" strokeWidth={1.25} />
-          <p className="mt-6 font-display text-3xl leading-snug md:text-4xl">« Le meilleur guide est celui dont on sait à peine qu'il existe. »</p>
-          <p className="mt-6 text-muted-foreground">Déposez une idée, rejoignez un projet, ou ouvrez la voie sur votre territoire.</p>
+          <p className="mt-6 font-display text-3xl leading-snug md:text-4xl"><T>{"« Le meilleur guide est celui dont on sait à peine qu'il existe. »"}</T></p>
+          <p className="mt-6 text-muted-foreground"><T>{"Déposez une idée, rejoignez un projet, ou ouvrez la voie sur votre territoire."}</T></p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <Button asChild size="lg"><Link to="/deposer">Déposer mon projet</Link></Button>
-            <Button asChild size="lg" variant="outline"><Link to="/trouver">Trouver mon projet</Link></Button>
-            <Button asChild size="lg" variant="ghost"><Link to="/territoire">Le territoire</Link></Button>
+            <Button asChild size="lg"><Link to="/deposer"><T>{"Déposer mon projet"}</T></Link></Button>
+            <Button asChild size="lg" variant="outline"><Link to="/trouver"><T>{"Trouver mon projet"}</T></Link></Button>
+            <Button asChild size="lg" variant="ghost"><Link to="/territoire"><T>{"Le territoire"}</T></Link></Button>
           </div>
         </div>
       </section>

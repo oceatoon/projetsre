@@ -1,3 +1,5 @@
+import { T, useTranslation } from "@/components/language-provider";
+import { translate } from "@/lib/i18n";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft, ArrowRight, Check, RotateCcw, Sparkles } from "lucide-react";
@@ -97,6 +99,7 @@ function Choice({
   title: string;
   text?: string;
 }) {
+  useTranslation();
   return (
     <button
       type="button"
@@ -111,17 +114,18 @@ function Choice({
           selected ? "border-primary bg-primary text-primary-foreground" : "border-border"
         }`}
       >
-        {selected ? <Check className="size-3" /> : null}
+        <T>{selected ? <Check className="size-3" /> : null}</T>
       </span>
       <span>
-        <span className="block font-semibold">{title}</span>
-        {text ? <span className="mt-1 block text-sm text-muted-foreground">{text}</span> : null}
+        <span className="block font-semibold"><T>{title}</T></span>
+        <T>{text ? <span className="mt-1 block text-sm text-muted-foreground"><T>{text}</T></span> : null}</T>
       </span>
     </button>
   );
 }
 
 function FinderPage() {
+  useTranslation();
   const { data: projects } = useSuspenseQuery(projectsQuery);
   const [step, setStep] = useState(0);
   const [a, setA] = useState<Answers>(INITIAL);
@@ -191,47 +195,42 @@ function FinderPage() {
     <div>
       <section className="border-b border-border bg-accent/45">
         <div className="mx-auto max-w-4xl px-4 py-12 md:py-16">
-          <Badge variant="secondary">Parcours personnalisé · 2 minutes</Badge>
-          <h1 className="mt-4 font-display text-4xl leading-tight md:text-6xl">
-            Trouvez le projet qui vous ressemble
-          </h1>
-          <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
-            Dites-nous qui vous êtes, ce qui compte pour vous et le temps que vous pouvez donner.
-            Nous vous montrons où votre contribution sera vraiment utile.
-          </p>
+          <Badge variant="secondary"><T>{"Parcours personnalisé · 2 minutes"}</T></Badge>
+          <h1 className="mt-4 font-display text-4xl leading-tight md:text-6xl"><T>{" Trouvez le projet qui vous ressemble "}</T></h1>
+          <p className="mt-4 max-w-2xl text-lg text-muted-foreground"><T>{" Dites-nous qui vous êtes, ce qui compte pour vous et le temps que vous pouvez donner. Nous vous montrons où votre contribution sera vraiment utile. "}</T></p>
         </div>
       </section>
 
       <div className="mx-auto max-w-4xl px-4 py-10">
-        <ol className="grid grid-cols-4 gap-2" aria-label="Étapes">
+        <ol className="grid grid-cols-4 gap-2" aria-label={translate("Étapes")}>
           {STEPS.map((label, i) => (
             <li key={label}>
               <div className={`h-1.5 rounded-full ${i <= step ? "bg-primary" : "bg-muted"}`} />
               <p className={`mt-2 hidden text-xs font-semibold sm:block ${i === step ? "text-foreground" : "text-muted-foreground"}`}>
-                {i + 1}. {label}
+                <T>{i + 1}</T>. <T>{label}</T>
               </p>
             </li>
           ))}
         </ol>
 
-        {!done ? (
+        <T>{!done ? (
           <div className="mt-8">
             {step === 0 ? (
               <>
-                <h2 className="font-display text-3xl">Qui êtes-vous ?</h2>
+                <h2 className="font-display text-3xl"><T>{"Qui êtes-vous ?"}</T></h2>
                 <div className="mt-5 grid gap-3 sm:grid-cols-2">
                   {PROFILES.map((p) => (
-                    <Choice key={p.value} selected={a.profile === p.value} onClick={() => setA({ ...a, profile: p.value })} title={p.label} text={p.text} />
+                    <Choice key={p.value} selected={a.profile === p.value} onClick={() => setA({ ...a, profile: p.value })} title={translate(p.label)} text={p.text} />
                   ))}
                 </div>
                 <div className="mt-6 max-w-sm">
-                  <p className="mb-2 text-sm font-semibold">Votre commune</p>
+                  <p className="mb-2 text-sm font-semibold"><T>{"Votre commune"}</T></p>
                   <Select value={a.commune} onValueChange={(v) => setA({ ...a, commune: v })}>
                     <SelectTrigger><SelectValue /></SelectTrigger>
                     <SelectContent>
-                      <SelectItem value={ANY}>Toute l'île me va</SelectItem>
+                      <SelectItem value={ANY}><T>{"Toute l'île me va"}</T></SelectItem>
                       {COMMUNES.map((c) => (
-                        <SelectItem key={c} value={c}>{c}</SelectItem>
+                        <SelectItem key={c} value={c}><T>{c}</T></SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
@@ -241,11 +240,11 @@ function FinderPage() {
 
             {step === 1 ? (
               <>
-                <h2 className="font-display text-3xl">Qu'est-ce qui vous tient à cœur ?</h2>
-                <p className="mt-2 text-muted-foreground">Plusieurs choix possibles, ou aucun si tout vous intéresse.</p>
+                <h2 className="font-display text-3xl"><T>{"Qu'est-ce qui vous tient à cœur ?"}</T></h2>
+                <p className="mt-2 text-muted-foreground"><T>{"Plusieurs choix possibles, ou aucun si tout vous intéresse."}</T></p>
                 <div className="mt-5 grid gap-3 sm:grid-cols-2">
                   {THEMES.map((t) => (
-                    <Choice key={t.value} selected={a.themes.includes(t.value)} onClick={() => setA({ ...a, themes: toggle(a.themes, t.value) })} title={t.label} />
+                    <Choice key={t.value} selected={a.themes.includes(t.value)} onClick={() => setA({ ...a, themes: toggle(a.themes, t.value) })} title={translate(t.label)} />
                   ))}
                 </div>
               </>
@@ -253,11 +252,11 @@ function FinderPage() {
 
             {step === 2 ? (
               <>
-                <h2 className="font-display text-3xl">Que voulez-vous apporter ?</h2>
-                <p className="mt-2 text-muted-foreground">Choisissez au moins une façon d'aider.</p>
+                <h2 className="font-display text-3xl"><T>{"Que voulez-vous apporter ?"}</T></h2>
+                <p className="mt-2 text-muted-foreground"><T>{"Choisissez au moins une façon d'aider."}</T></p>
                 <div className="mt-5 grid gap-3 sm:grid-cols-2">
                   {SKILLS.map((s) => (
-                    <Choice key={s.value} selected={a.skills.includes(s.value)} onClick={() => setA({ ...a, skills: toggle(a.skills, s.value) })} title={s.label} />
+                    <Choice key={s.value} selected={a.skills.includes(s.value)} onClick={() => setA({ ...a, skills: toggle(a.skills, s.value) })} title={translate(s.label)} />
                   ))}
                 </div>
               </>
@@ -265,17 +264,17 @@ function FinderPage() {
 
             {step === 3 ? (
               <>
-                <h2 className="font-display text-3xl">Quelle est votre capacité d'engagement ?</h2>
-                <p className="mt-4 text-sm font-semibold">Votre temps</p>
+                <h2 className="font-display text-3xl"><T>{"Quelle est votre capacité d'engagement ?"}</T></h2>
+                <p className="mt-4 text-sm font-semibold"><T>{"Votre temps"}</T></p>
                 <div className="mt-3 grid gap-3 sm:grid-cols-2">
                   {TIME.map((t) => (
-                    <Choice key={t.value} selected={a.time === t.value} onClick={() => setA({ ...a, time: t.value })} title={t.label} text={t.text} />
+                    <Choice key={t.value} selected={a.time === t.value} onClick={() => setA({ ...a, time: t.value })} title={translate(t.label)} text={t.text} />
                   ))}
                 </div>
-                <p className="mt-6 text-sm font-semibold">Votre soutien financier</p>
+                <p className="mt-6 text-sm font-semibold"><T>{"Votre soutien financier"}</T></p>
                 <div className="mt-3 grid gap-3 sm:grid-cols-2">
                   {BUDGET.map((b) => (
-                    <Choice key={b.value} selected={a.budget === b.value} onClick={() => setA({ ...a, budget: b.value })} title={b.label} />
+                    <Choice key={b.value} selected={a.budget === b.value} onClick={() => setA({ ...a, budget: b.value })} title={translate(b.label)} />
                   ))}
                 </div>
               </>
@@ -283,10 +282,9 @@ function FinderPage() {
 
             <div className="mt-8 flex justify-between">
               <Button variant="ghost" disabled={step === 0} onClick={() => setStep(step - 1)}>
-                <ArrowLeft /> Retour
-              </Button>
+                <ArrowLeft /><T>{" Retour "}</T></Button>
               <Button disabled={!canNext} onClick={() => setStep(step + 1)}>
-                {step === STEPS.length - 1 ? "Voir mes projets" : "Continuer"} <ArrowRight />
+                <T>{step === STEPS.length - 1 ? "Voir mes projets" : "Continuer"}</T> <ArrowRight />
               </Button>
             </div>
           </div>
@@ -294,15 +292,14 @@ function FinderPage() {
           <div className="mt-8" aria-live="polite">
             <div className="flex flex-wrap items-end justify-between gap-4">
               <div>
-                <p className="flex items-center gap-2 text-sm font-semibold text-primary"><Sparkles className="size-4" /> Vos correspondances</p>
+                <p className="flex items-center gap-2 text-sm font-semibold text-primary"><Sparkles className="size-4" /><T>{" Vos correspondances"}</T></p>
                 <h2 className="mt-1 font-display text-3xl">
-                  {results.length ? `${results.length} projet${results.length > 1 ? "s" : ""} pour vous` : "Aucune correspondance forte"}
+                  <T>{results.length ? translate("{0} projects for you", undefined, [results.length]) : "Aucune correspondance forte"}</T>
                 </h2>
-                <p className="mt-2 text-muted-foreground">{firstStep}</p>
+                <p className="mt-2 text-muted-foreground"><T>{firstStep}</T></p>
               </div>
               <Button variant="outline" onClick={() => { setA(INITIAL); setStep(0); }}>
-                <RotateCcw /> Recommencer
-              </Button>
+                <RotateCcw /><T>{" Recommencer "}</T></Button>
             </div>
 
             <div className="mt-6 grid gap-4">
@@ -310,23 +307,22 @@ function FinderPage() {
                 <article key={project.id} className="rounded-lg border border-border bg-card p-5 shadow-sm">
                   <div className="flex flex-wrap items-start justify-between gap-3">
                     <div>
-                      <h3 className="font-display text-2xl">{project.name}</h3>
-                      <p className="text-sm text-muted-foreground">{project.commune} · {themeLabel(project.theme)}</p>
+                      <h3 className="font-display text-2xl"><T>{project.name}</T></h3>
+                      <p className="text-sm text-muted-foreground"><T>{project.commune}</T> · <T>{themeLabel(project.theme)}</T></p>
                     </div>
-                    <Badge>{Math.round((score / maxScore) * 100)} % de correspondance</Badge>
+                    <Badge><T>{Math.round((score / maxScore) * 100)}</T><T>{" % de correspondance"}</T></Badge>
                   </div>
-                  <p className="mt-3">{project.tagline}</p>
+                  <p className="mt-3"><T>{project.tagline}</T></p>
                   <ul className="mt-3 space-y-1.5">
                     {reasons.map((r) => (
-                      <li key={r} className="flex gap-2 text-sm"><Check className="mt-0.5 size-4 shrink-0 text-primary" />{r}</li>
+                      <li key={r} className="flex gap-2 text-sm"><Check className="mt-0.5 size-4 shrink-0 text-primary" /><T>{r}</T></li>
                     ))}
                   </ul>
                   <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
-                    <p className="text-xs text-muted-foreground">
-                      Financement réuni : {progress(Number(project.budget_secured), Number(project.budget_needed))} %
+                    <p className="text-xs text-muted-foreground"><T>{" Financement réuni : "}</T><T>{progress(Number(project.budget_secured), Number(project.budget_needed))}</T> %
                     </p>
                     <Button asChild size="sm">
-                      <Link to="/projets/$slug" params={{ slug: project.slug }}>Découvrir et agir <ArrowRight /></Link>
+                      <Link to="/projets/$slug" params={{ slug: project.slug }}><T>{"Découvrir et agir "}</T><ArrowRight /></Link>
                     </Button>
                   </div>
                 </article>
@@ -334,12 +330,11 @@ function FinderPage() {
             </div>
 
             {results.length === 0 ? (
-              <p className="mt-6 text-muted-foreground">
-                Élargissez vos choix ou <Link to="/projets" className="text-primary underline">parcourez tous les projets</Link>.
+              <p className="mt-6 text-muted-foreground"><T>{" Élargissez vos choix ou "}</T><Link to="/projets" className="text-primary underline"><T>{"parcourez tous les projets"}</T></Link>.
               </p>
             ) : null}
           </div>
-        )}
+        )}</T>
       </div>
     </div>
   );

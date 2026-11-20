@@ -1,3 +1,5 @@
+import { T, useTranslation } from "@/components/language-provider";
+import { translate } from "@/lib/i18n";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { Search } from "lucide-react";
@@ -41,6 +43,7 @@ export const Route = createFileRoute("/projets/")({
 const ALL = "tous";
 
 function ProjectsPage() {
+  useTranslation();
   const { data: projects } = useSuspenseQuery(projectsQuery);
   const [search, setSearch] = useState("");
   const [commune, setCommune] = useState(ALL);
@@ -54,7 +57,7 @@ function ProjectsPage() {
   );
 
   const filtered = projects.filter((project) => {
-    const haystack = `${project.name} ${project.tagline} ${project.description} ${project.carrier_name}`.toLowerCase();
+    const haystack = `${project.name} ${project.tagline} ${translate(project.tagline)} ${project.description} ${translate(project.description)} ${project.carrier_name}`.toLowerCase();
     if (search && !haystack.includes(search.toLowerCase())) return false;
     if (commune !== ALL && project.commune !== commune) return false;
     if (theme !== ALL && project.theme !== theme) return false;
@@ -73,11 +76,8 @@ function ProjectsPage() {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-12">
-      <h1 className="font-display text-4xl font-semibold">Les projets du territoire</h1>
-      <p className="mt-2 max-w-2xl text-muted-foreground">
-        Chaque fiche est déposée une seule fois par son porteur, puis enrichie au fil des questions
-        et des appels à projets.
-      </p>
+      <h1 className="font-display text-4xl font-semibold"><T>{"Les projets du territoire"}</T></h1>
+      <p className="mt-2 max-w-2xl text-muted-foreground"><T>{" Chaque fiche est déposée une seule fois par son porteur, puis enrichie au fil des questions et des appels à projets. "}</T></p>
 
       <div className="mt-8 grid gap-3 rounded-xl border border-border bg-card p-4 md:grid-cols-5">
         <div className="relative md:col-span-2">
@@ -85,59 +85,59 @@ function ProjectsPage() {
           <Input
             value={search}
             onChange={(event) => setSearch(event.target.value)}
-            placeholder="Rechercher un projet, un porteur…"
+            placeholder={translate("Rechercher un projet, un porteur…")}
             className="pl-9"
             maxLength={100}
           />
         </div>
         <Select value={commune} onValueChange={setCommune}>
           <SelectTrigger>
-            <SelectValue placeholder="Commune" />
+            <SelectValue placeholder={translate("Commune")} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value={ALL}>Toutes les communes</SelectItem>
+            <SelectItem value={ALL}><T>{"Toutes les communes"}</T></SelectItem>
             {communes.map((item) => (
               <SelectItem key={item} value={item}>
-                {item}
+                <T>{item}</T>
               </SelectItem>
             ))}
           </SelectContent>
         </Select>
         <Select value={theme} onValueChange={setTheme}>
           <SelectTrigger>
-            <SelectValue placeholder="Thématique" />
+            <SelectValue placeholder={translate("Thématique")} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value={ALL}>Toutes les thématiques</SelectItem>
+            <SelectItem value={ALL}><T>{"Toutes les thématiques"}</T></SelectItem>
             {THEMES.map((item) => (
               <SelectItem key={item.value} value={item.value}>
-                {item.label}
+                <T>{item.label}</T>
               </SelectItem>
             ))}
           </SelectContent>
         </Select>
         <Select value={need} onValueChange={setNeed}>
           <SelectTrigger>
-            <SelectValue placeholder="Besoin" />
+            <SelectValue placeholder={translate("Besoin")} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value={ALL}>Tous les besoins</SelectItem>
+            <SelectItem value={ALL}><T>{"Tous les besoins"}</T></SelectItem>
             {NEED_TYPES.map((item) => (
               <SelectItem key={item.value} value={item.value}>
-                {item.label}
+                <T>{item.label}</T>
               </SelectItem>
             ))}
           </SelectContent>
         </Select>
         <Select value={stage} onValueChange={setStage}>
           <SelectTrigger>
-            <SelectValue placeholder="Avancement" />
+            <SelectValue placeholder={translate("Avancement")} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value={ALL}>Tous les stades</SelectItem>
+            <SelectItem value={ALL}><T>{"Tous les stades"}</T></SelectItem>
             {STAGES.map((item) => (
               <SelectItem key={item.value} value={item.value}>
-                {item.label}
+                <T>{item.label}</T>
               </SelectItem>
             ))}
           </SelectContent>
@@ -146,12 +146,9 @@ function ProjectsPage() {
 
       <div className="mt-6 flex items-center justify-between">
         <p className="text-sm text-muted-foreground">
-          {filtered.length} projet{filtered.length > 1 ? "s" : ""} affiché
-          {filtered.length > 1 ? "s" : ""}
+          <T>{translate("{0} projects displayed", undefined, [filtered.length])}</T>
         </p>
-        <Button variant="ghost" size="sm" onClick={reset}>
-          Réinitialiser les filtres
-        </Button>
+        <Button variant="ghost" size="sm" onClick={reset}><T>{" Réinitialiser les filtres "}</T></Button>
       </div>
 
       <div className="mt-4 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
@@ -159,11 +156,9 @@ function ProjectsPage() {
           <ProjectCard key={project.id} project={project} />
         ))}
       </div>
-      {filtered.length === 0 ? (
-        <p className="mt-16 text-center text-muted-foreground">
-          Aucun projet ne correspond à cette recherche.
-        </p>
-      ) : null}
+      <T>{filtered.length === 0 ? (
+        <p className="mt-16 text-center text-muted-foreground"><T>{" Aucun projet ne correspond à cette recherche. "}</T></p>
+      ) : null}</T>
     </div>
   );
 }

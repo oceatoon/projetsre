@@ -1,3 +1,5 @@
+import { T, useTranslation } from "@/components/language-provider";
+import { translate } from "@/lib/i18n";
 import { Link, useRouter } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
@@ -19,6 +21,7 @@ import { SUPPORT_KINDS } from "@/lib/domain";
 import { addSupportAsUser } from "@/lib/participate.functions";
 
 export function SupportForm({ projectId }: { projectId: string }) {
+  useTranslation();
   const send = useServerFn(addSupportAsUser);
   const router = useRouter();
   const { ready, signedIn } = useSession();
@@ -43,10 +46,10 @@ export function SupportForm({ projectId }: { projectId: string }) {
       });
       setMessage("");
       setAmount("");
-      toast.success("Votre soutien est enregistré, le porteur peut vous recontacter.");
+      toast.success(translate("Votre soutien est enregistré, le porteur peut vous recontacter."));
       await router.invalidate();
     } catch {
-      toast.error("Enregistrement impossible pour le moment.");
+      toast.error(translate("Enregistrement impossible pour le moment."));
     } finally {
       setBusy(false);
     }
@@ -55,13 +58,10 @@ export function SupportForm({ projectId }: { projectId: string }) {
   if (ready && !signedIn) {
     return (
       <div className="rounded-xl border border-dashed border-border bg-card p-5">
-        <h3 className="font-display text-lg">Soutenir ce projet</h3>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Connectez-vous pour proposer votre aide, votre temps ou une intention de financement : le
-          porteur pourra vous recontacter.
-        </p>
+        <h3 className="font-display text-lg"><T>{"Soutenir ce projet"}</T></h3>
+        <p className="mt-2 text-sm text-muted-foreground"><T>{" Connectez-vous pour proposer votre aide, votre temps ou une intention de financement : le porteur pourra vous recontacter. "}</T></p>
         <Button asChild className="mt-4">
-          <Link to="/connexion">Me connecter</Link>
+          <Link to="/connexion"><T>{"Me connecter"}</T></Link>
         </Button>
       </div>
     );
@@ -69,14 +69,11 @@ export function SupportForm({ projectId }: { projectId: string }) {
 
   return (
     <form onSubmit={submit} className="rounded-xl border border-border bg-card p-5">
-      <h3 className="font-display text-lg">Soutenir ce projet</h3>
-      <p className="mt-1 text-sm text-muted-foreground">
-        Les intentions de financement ne sont pas des paiements : le porteur vous recontacte pour la
-        suite.
-      </p>
+      <h3 className="font-display text-lg"><T>{"Soutenir ce projet"}</T></h3>
+      <p className="mt-1 text-sm text-muted-foreground"><T>{" Les intentions de financement ne sont pas des paiements : le porteur vous recontacte pour la suite. "}</T></p>
       <div className="mt-4 grid gap-3 sm:grid-cols-2">
         <div className="grid gap-1.5">
-          <Label htmlFor="su-kind">Comment ?</Label>
+          <Label htmlFor="su-kind"><T>{"Comment ?"}</T></Label>
           <Select value={kind} onValueChange={setKind}>
             <SelectTrigger id="su-kind">
               <SelectValue />
@@ -84,25 +81,25 @@ export function SupportForm({ projectId }: { projectId: string }) {
             <SelectContent>
               {SUPPORT_KINDS.map((item) => (
                 <SelectItem key={item.value} value={item.value}>
-                  {item.label}
+                  <T>{item.label}</T>
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
         </div>
         <div className="grid gap-1.5">
-          <Label htmlFor="su-contact">Contact (courriel ou téléphone)</Label>
+          <Label htmlFor="su-contact"><T>{"Contact (courriel ou téléphone)"}</T></Label>
           <Input
             id="su-contact"
             value={contact}
             maxLength={160}
             onChange={(event) => setContact(event.target.value)}
-            placeholder="Facultatif"
+            placeholder={translate("Facultatif")}
           />
         </div>
-        {kind === "don" ? (
+        <T>{kind === "don" ? (
           <div className="grid gap-1.5">
-            <Label htmlFor="su-amount">Montant envisagé (€)</Label>
+            <Label htmlFor="su-amount"><T>{"Montant envisagé (€)"}</T></Label>
             <Input
               id="su-amount"
               type="number"
@@ -112,21 +109,21 @@ export function SupportForm({ projectId }: { projectId: string }) {
               onChange={(event) => setAmount(event.target.value)}
             />
           </div>
-        ) : null}
+        ) : null}</T>
       </div>
       <div className="mt-3 grid gap-1.5">
-        <Label htmlFor="su-message">Message au porteur</Label>
+        <Label htmlFor="su-message"><T>{"Message au porteur"}</T></Label>
         <Textarea
           id="su-message"
           value={message}
           maxLength={1000}
           rows={3}
           onChange={(event) => setMessage(event.target.value)}
-          placeholder="Ce que vous pouvez apporter, vos disponibilités…"
+          placeholder={translate("Ce que vous pouvez apporter, vos disponibilités…")}
         />
       </div>
       <Button type="submit" className="mt-4" disabled={busy}>
-        {busy ? "Envoi…" : "Enregistrer mon soutien"}
+        <T>{busy ? "Envoi…" : "Enregistrer mon soutien"}</T>
       </Button>
     </form>
   );

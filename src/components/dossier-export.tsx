@@ -1,3 +1,5 @@
+import { T, useTranslation } from "@/components/language-provider";
+import { translate } from "@/lib/i18n";
 import { Printer } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -29,6 +31,7 @@ export function DossierExport({
   answers?: { question: string; answer: string }[];
   label?: string;
 }) {
+  useTranslation();
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState<string[]>(SECTIONS.map((s) => s.value));
 
@@ -42,27 +45,24 @@ export function DossierExport({
     const html = buildDossier({ detail, sections: ordered, call: call ?? null, answers });
     const ok = printHtml(html);
     if (!ok) {
-      toast.error("Autorisez les fenêtres surgissantes pour générer le PDF.");
+      toast.error(translate("Autorisez les fenêtres surgissantes pour générer le PDF."));
       return;
     }
     setOpen(false);
-    toast.success("Dossier prêt : choisissez « Enregistrer au format PDF ».");
+    toast.success(translate("Dossier prêt : choisissez « Enregistrer au format PDF »."));
   };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="outline">
-          <Printer className="size-4" /> {label}
+          <Printer className="size-4" /> <T>{label}</T>
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Composer le dossier</DialogTitle>
-          <DialogDescription>
-            Choisissez les parties de la fiche à inclure. Le dossier s'ouvre dans une nouvelle
-            fenêtre : enregistrez-le au format PDF.
-          </DialogDescription>
+          <DialogTitle><T>{"Composer le dossier"}</T></DialogTitle>
+          <DialogDescription><T>{" Choisissez les parties de la fiche à inclure. Le dossier s'ouvre dans une nouvelle fenêtre : enregistrez-le au format PDF. "}</T></DialogDescription>
         </DialogHeader>
         <div className="grid gap-3 sm:grid-cols-2">
           {SECTIONS.map((section) => (
@@ -73,15 +73,14 @@ export function DossierExport({
                 onCheckedChange={() => toggle(section.value)}
               />
               <Label htmlFor={`section-${section.value}`} className="text-sm leading-snug">
-                {section.label}
+                <T>{section.label}</T>
               </Label>
             </div>
           ))}
         </div>
         <DialogFooter>
           <Button onClick={handleExport} disabled={selected.length === 0}>
-            <Printer className="size-4" /> Générer le dossier
-          </Button>
+            <Printer className="size-4" /><T>{" Générer le dossier "}</T></Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

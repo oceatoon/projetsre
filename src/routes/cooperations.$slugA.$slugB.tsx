@@ -1,3 +1,5 @@
+import { T, useTranslation } from "@/components/language-provider";
+import { translate } from "@/lib/i18n";
 import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link, notFound, useRouter } from "@tanstack/react-router";
 import { CheckCircle2, CircleDashed, Handshake, MapPin, MessageSquare, Target } from "lucide-react";
@@ -54,19 +56,19 @@ export const Route = createFileRoute("/cooperations/$slugA/$slugB")({
   },
   errorComponent: () => (
     <div className="mx-auto max-w-2xl px-4 py-24 text-center">
-      <h1 className="font-display text-3xl">Coopération indisponible</h1>
-      <p className="mt-2 text-muted-foreground">Réessayez dans un instant.</p>
+      <h1 className="font-display text-3xl"><T>{"Coopération indisponible"}</T></h1>
+      <p className="mt-2 text-muted-foreground"><T>{"Réessayez dans un instant."}</T></p>
       <Button asChild className="mt-6">
-        <Link to="/projets">Retour aux projets</Link>
+        <Link to="/projets"><T>{"Retour aux projets"}</T></Link>
       </Button>
     </div>
   ),
   notFoundComponent: () => (
     <div className="mx-auto max-w-2xl px-4 py-24 text-center">
-      <h1 className="font-display text-3xl">Cette coopération n'existe pas</h1>
-      <p className="mt-2 text-muted-foreground">L'un des deux projets est introuvable.</p>
+      <h1 className="font-display text-3xl"><T>{"Cette coopération n'existe pas"}</T></h1>
+      <p className="mt-2 text-muted-foreground"><T>{"L'un des deux projets est introuvable."}</T></p>
       <Button asChild className="mt-6">
-        <Link to="/projets">Retour aux projets</Link>
+        <Link to="/projets"><T>{"Retour aux projets"}</T></Link>
       </Button>
     </div>
   ),
@@ -81,6 +83,7 @@ const STEP_LABEL: Record<string, string> = {
 };
 
 function CooperationPage() {
+  useTranslation();
   const { slugA, slugB } = Route.useParams();
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -113,10 +116,10 @@ function CooperationPage() {
           title: `${a.name} × ${b.name}`,
         },
       });
-      toast.success("Coopération ouverte");
+      toast.success(translate("Coopération ouverte"));
       await refresh();
     } catch {
-      toast.error("Impossible d'ouvrir la coopération");
+      toast.error(translate("Impossible d'ouvrir la coopération"));
     } finally {
       setBusy(false);
     }
@@ -132,7 +135,7 @@ function CooperationPage() {
       setBody("");
       await refresh();
     } catch {
-      toast.error("Message non envoyé");
+      toast.error(translate("Message non envoyé"));
     } finally {
       setBusy(false);
     }
@@ -153,10 +156,10 @@ function CooperationPage() {
         },
       });
       setStep({ title: "", deliverable: "", owner_name: "", due_date: "" });
-      toast.success("Étape ajoutée");
+      toast.success(translate("Étape ajoutée"));
       await refresh();
     } catch {
-      toast.error("Étape non ajoutée");
+      toast.error(translate("Étape non ajoutée"));
     } finally {
       setBusy(false);
     }
@@ -169,7 +172,7 @@ function CooperationPage() {
       await setCooperationStepStatus({ data: { id, status: next } });
       await refresh();
     } catch {
-      toast.error("État non modifié");
+      toast.error(translate("État non modifié"));
     } finally {
       setBusy(false);
     }
@@ -179,45 +182,38 @@ function CooperationPage() {
     <div className="mx-auto max-w-5xl px-4 py-12">
       <div className="flex items-center gap-2 text-primary">
         <Handshake className="size-5" />
-        <span className="text-sm font-semibold">Coopération entre deux projets</span>
+        <span className="text-sm font-semibold"><T>{"Coopération entre deux projets"}</T></span>
       </div>
       <h1 className="mt-2 font-display text-3xl leading-[1.1] md:text-5xl">
-        {a.name} <span className="text-muted-foreground">×</span> {b.name}
+        <T>{a.name}</T> <span className="text-muted-foreground">×</span> <T>{b.name}</T>
       </h1>
 
       <div className="mt-6 grid gap-4 md:grid-cols-2">
         {[a, b].map((p) => (
           <article key={p.id} className="rounded-lg border border-border bg-card p-5">
-            <h2 className="font-display text-2xl leading-tight">{p.name}</h2>
+            <h2 className="font-display text-2xl leading-tight"><T>{p.name}</T></h2>
             <p className="mt-1 flex items-center gap-1.5 text-xs text-muted-foreground">
               <MapPin className="size-3.5" />
-              {p.commune || "La Réunion"}
+              <T>{p.commune || "La Réunion"}</T>
               <span className="text-border">•</span>
-              {themeLabel(p.theme)}
+              <T>{themeLabel(p.theme)}</T>
             </p>
-            <p className="mt-2 text-sm text-muted-foreground">{p.tagline}</p>
+            <p className="mt-2 text-sm text-muted-foreground"><T>{p.tagline}</T></p>
             <div className="mt-3 flex items-center justify-between gap-3">
-              <Badge variant="outline">{stageLabel(p.stage)}</Badge>
+              <Badge variant="outline"><T>{stageLabel(p.stage)}</T></Badge>
               <Button asChild variant="ghost" size="sm">
-                <Link to="/projets/$slug" params={{ slug: p.slug }}>
-                  Voir la fiche
-                </Link>
+                <Link to="/projets/$slug" params={{ slug: p.slug }}><T>{" Voir la fiche "}</T></Link>
               </Button>
             </div>
           </article>
         ))}
       </div>
 
-      {!coop ? (
+      <T>{!coop ? (
         <div className="mt-10 rounded-xl border border-border bg-card p-6">
-          <h2 className="font-display text-2xl">Ouvrir l'espace de coopération</h2>
-          <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
-            Un fil de discussion partagé et un plan d'action avec étapes et livrables, pour aligner
-            les deux porteurs sans réunion supplémentaire.
-          </p>
-          <Button className="mt-4" onClick={handleOpen} disabled={busy}>
-            Ouvrir la coopération
-          </Button>
+          <h2 className="font-display text-2xl"><T>{"Ouvrir l'espace de coopération"}</T></h2>
+          <p className="mt-2 max-w-2xl text-sm text-muted-foreground"><T>{" Un fil de discussion partagé et un plan d'action avec étapes et livrables, pour aligner les deux porteurs sans réunion supplémentaire. "}</T></p>
+          <Button className="mt-4" onClick={handleOpen} disabled={busy}><T>{" Ouvrir la coopération "}</T></Button>
         </div>
       ) : (
         <>
@@ -230,10 +226,10 @@ function CooperationPage() {
           <section className="rounded-xl border border-border bg-card p-6">
             <div className="flex items-center gap-2">
               <Target className="size-5 text-primary" />
-              <h2 className="font-display text-2xl">Plan d'action</h2>
+              <h2 className="font-display text-2xl"><T>{"Plan d'action"}</T></h2>
             </div>
             <p className="mt-1 text-sm text-muted-foreground">
-              {done} étape{done > 1 ? "s" : ""} faite{done > 1 ? "s" : ""} sur {detail.steps.length}
+              <T>{done}</T><T>{" étape"}</T><T>{done > 1 ? "s" : ""}</T><T>{" faite"}</T><T>{done > 1 ? "s" : ""}</T><T>{" sur "}</T><T>{detail.steps.length}</T>
             </p>
             <Progress value={pct} className="mt-3" />
 
@@ -242,15 +238,14 @@ function CooperationPage() {
                 <li key={s.id} className="rounded-lg border border-border p-4">
                   <div className="flex items-start justify-between gap-3">
                     <div>
-                      <p className="font-medium leading-snug">{s.title}</p>
+                      <p className="font-medium leading-snug"><T>{s.title}</T></p>
                       {s.deliverable && (
-                        <p className="mt-1 text-sm text-muted-foreground">
-                          Livrable : {s.deliverable}
+                        <p className="mt-1 text-sm text-muted-foreground"><T>{" Livrable : "}</T><T>{s.deliverable}</T>
                         </p>
                       )}
                       <p className="mt-1 text-xs text-muted-foreground">
-                        {s.owner_name || "Responsable à définir"}
-                        {s.due_date ? ` • échéance ${frDate(s.due_date)}` : ""}
+                        <T>{s.owner_name || "Responsable à définir"}</T>
+                        <T>{s.due_date ? ` • échéance ${frDate(s.due_date)}` : ""}</T>
                       </p>
                     </div>
                     <Button
@@ -264,33 +259,31 @@ function CooperationPage() {
                       ) : (
                         <CircleDashed />
                       )}
-                      {STEP_LABEL[s.status] ?? s.status}
+                      <T>{STEP_LABEL[s.status] ?? s.status}</T>
                     </Button>
                   </div>
                 </li>
               ))}
               {!detail.steps.length && (
-                <li className="text-sm text-muted-foreground">
-                  Aucune étape pour l'instant. Commencez par la première chose à faire ensemble.
-                </li>
+                <li className="text-sm text-muted-foreground"><T>{" Aucune étape pour l'instant. Commencez par la première chose à faire ensemble. "}</T></li>
               )}
             </ul>
 
             <div className="mt-6 space-y-3 border-t border-border pt-5">
-              <h3 className="font-medium">Ajouter une étape</h3>
+              <h3 className="font-medium"><T>{"Ajouter une étape"}</T></h3>
               <Input
-                placeholder="Ce qu'il y a à faire"
+                placeholder={translate("Ce qu'il y a à faire")}
                 value={step.title}
                 onChange={(e) => setStep({ ...step, title: e.target.value })}
               />
               <Input
-                placeholder="Livrable attendu (document, atelier, matériel…)"
+                placeholder={translate("Livrable attendu (document, atelier, matériel…)")}
                 value={step.deliverable}
                 onChange={(e) => setStep({ ...step, deliverable: e.target.value })}
               />
               <div className="grid gap-3 sm:grid-cols-2">
                 <Input
-                  placeholder="Qui s'en occupe"
+                  placeholder={translate("Qui s'en occupe")}
                   value={step.owner_name}
                   onChange={(e) => setStep({ ...step, owner_name: e.target.value })}
                 />
@@ -300,60 +293,48 @@ function CooperationPage() {
                   onChange={(e) => setStep({ ...step, due_date: e.target.value })}
                 />
               </div>
-              <Button onClick={handleStep} disabled={busy || step.title.trim().length < 2}>
-                Ajouter au plan
-              </Button>
+              <Button onClick={handleStep} disabled={busy || step.title.trim().length < 2}><T>{" Ajouter au plan "}</T></Button>
             </div>
           </section>
 
           <section className="rounded-xl border border-border bg-card p-6">
             <div className="flex items-center gap-2">
               <MessageSquare className="size-5 text-primary" />
-              <h2 className="font-display text-2xl">Fil de discussion</h2>
+              <h2 className="font-display text-2xl"><T>{"Fil de discussion"}</T></h2>
             </div>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Tout est public : les échanges servent aussi à celles et ceux qui voudront rejoindre.
-            </p>
+            <p className="mt-1 text-sm text-muted-foreground"><T>{" Tout est public : les échanges servent aussi à celles et ceux qui voudront rejoindre. "}</T></p>
 
             <ul className="mt-5 space-y-3">
               {detail.messages.map((m) => (
                 <li key={m.id} className="rounded-lg border border-border p-4">
                   <p className="text-xs text-muted-foreground">
-                    {m.author_name} • {frDateTime(m.created_at)}
+                    <T>{m.author_name}</T> • <T>{frDateTime(m.created_at)}</T>
                   </p>
-                  <p className="mt-1 text-sm leading-relaxed whitespace-pre-line">{m.body}</p>
+                  <p className="mt-1 text-sm leading-relaxed whitespace-pre-line"><T>{m.body}</T></p>
                 </li>
               ))}
               {!detail.messages.length && (
-                <li className="text-sm text-muted-foreground">
-                  Lancez la discussion : ce que vous cherchez, ce que vous pouvez apporter.
-                </li>
+                <li className="text-sm text-muted-foreground"><T>{" Lancez la discussion : ce que vous cherchez, ce que vous pouvez apporter. "}</T></li>
               )}
             </ul>
 
             <div className="mt-6 space-y-3 border-t border-border pt-5">
               {!signedIn ? (
                 <p className="text-sm text-muted-foreground">
-                  <Link to="/connexion" className="font-medium text-primary">
-                    Connectez-vous
-                  </Link>{" "}
-                  pour écrire dans ce fil et engager votre projet.
-                </p>
+                  <Link to="/connexion" className="font-medium text-primary"><T>{" Connectez-vous "}</T></Link><T>{" "}</T><T>{" pour écrire dans ce fil et engager votre projet. "}</T></p>
               ) : null}
               <Textarea
-                placeholder="Votre message"
+                placeholder={translate("Votre message")}
                 rows={4}
                 value={body}
                 onChange={(e) => setBody(e.target.value)}
               />
-              <Button onClick={handleMessage} disabled={busy || !signedIn || body.trim().length < 2}>
-                Envoyer
-              </Button>
+              <Button onClick={handleMessage} disabled={busy || !signedIn || body.trim().length < 2}><T>{" Envoyer "}</T></Button>
             </div>
           </section>
         </div>
         </>
-      )}
+      )}</T>
     </div>
   );
 }

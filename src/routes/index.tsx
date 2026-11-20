@@ -1,3 +1,4 @@
+import { T, useTranslation } from "@/components/language-provider";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
@@ -45,6 +46,7 @@ export const Route = createFileRoute("/")({
 });
 
 function Home() {
+  useTranslation();
   const { data: projects } = useSuspenseQuery(projectsQuery);
   const { data: calls } = useSuspenseQuery(callsQuery);
 
@@ -57,30 +59,20 @@ function Home() {
     <div>
       <section className="border-b border-border bg-linear-to-b from-accent/55 to-background">
         <div className="mx-auto max-w-6xl px-4 py-16 md:py-24">
-          <Badge variant="secondary" className="mb-6">
-            Écoute à projet pour le territoire de La Réunion
-          </Badge>
-          <h1 className="max-w-4xl text-balance font-display text-5xl leading-[0.98] md:text-7xl">
-            Déposez votre projet une fois. Répondez à tous les appels.
-          </h1>
-          <p className="mt-7 max-w-2xl text-lg leading-8 text-muted-foreground md:text-xl">
-            Une fiche unique par projet, enrichie au fil des questions qu'on vous pose. Les
-            institutions publient leurs appels et les projets qu'elles soutiennent. Les habitants
-            donnent leur avis, du temps ou de l'argent.
-          </p>
+          <Badge variant="secondary" className="mb-6"><T>{" Écoute à projet pour le territoire de La Réunion "}</T></Badge>
+          <h1 className="max-w-4xl text-balance font-display text-5xl leading-[0.98] md:text-7xl"><T>{" Déposez votre projet une fois. Répondez à tous les appels. "}</T></h1>
+          <p className="mt-7 max-w-2xl text-lg leading-8 text-muted-foreground md:text-xl"><T>{" Une fiche unique par projet, enrichie au fil des questions qu'on vous pose. Les institutions publient leurs appels et les projets qu'elles soutiennent. Les habitants donnent leur avis, du temps ou de l'argent. "}</T></p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Button asChild size="lg">
-              <Link to="/trouver">
-                Trouver mon projet en 2 minutes <Sparkles className="size-4" />
+              <Link to="/trouver"><T>{" Trouver mon projet en 2 minutes "}</T><Sparkles className="size-4" />
               </Link>
             </Button>
             <Button asChild size="lg" variant="outline">
-              <Link to="/deposer">
-                Déposer mon projet <ArrowRight className="size-4" />
+              <Link to="/deposer"><T>{" Déposer mon projet "}</T><ArrowRight className="size-4" />
               </Link>
             </Button>
             <Button asChild size="lg" variant="outline">
-              <Link to="/projets">Découvrir les projets</Link>
+              <Link to="/projets"><T>{"Découvrir les projets"}</T></Link>
             </Button>
           </div>
 
@@ -92,23 +84,19 @@ function Home() {
               { label: "Financement déjà réuni", value: `${euro(totalSecured)}` },
             ].map((stat) => (
               <div key={stat.label}>
-                <dt className="text-sm font-medium text-muted-foreground">{stat.label}</dt>
-                <dd className="mt-1 font-display text-4xl leading-none">{stat.value}</dd>
+                <dt className="text-sm font-medium text-muted-foreground"><T>{stat.label}</T></dt>
+                <dd className="mt-1 font-display text-4xl leading-none"><T>{stat.value}</T></dd>
               </div>
             ))}
           </dl>
-          <p className="mt-3 text-xs text-muted-foreground">
-            Besoin de financement exprimé sur la plateforme : {euro(totalNeeded)}
+          <p className="mt-3 text-xs text-muted-foreground"><T>{" Besoin de financement exprimé sur la plateforme : "}</T><T>{euro(totalNeeded)}</T>
           </p>
         </div>
       </section>
 
       <section className="mx-auto max-w-6xl px-4 py-16">
-        <h2 className="font-display text-4xl md:text-5xl">Un projet, plusieurs besoins</h2>
-        <p className="mt-2 max-w-2xl text-muted-foreground">
-          Carrière personnelle, association, produit, innovation, coopérative ou structure déjà en
-          fonctionnement : votre besoin réel décide de ce que la plateforme met en avant.
-        </p>
+        <h2 className="font-display text-4xl md:text-5xl"><T>{"Un projet, plusieurs besoins"}</T></h2>
+        <p className="mt-2 max-w-2xl text-muted-foreground"><T>{" Carrière personnelle, association, produit, innovation, coopérative ou structure déjà en fonctionnement : votre besoin réel décide de ce que la plateforme met en avant. "}</T></p>
         <div className="mt-8 grid gap-4 md:grid-cols-3">
           {[
             { icon: HandHeart, title: "Besoin de bénévoles", text: "Ouvrez votre communauté et recevez des candidatures spontanées." },
@@ -120,8 +108,8 @@ function Home() {
           ].map((item) => (
             <div key={item.title} className="rounded-lg border border-border bg-card p-6 shadow-sm">
               <item.icon className="size-5 text-primary" />
-              <h3 className="mt-3 font-display text-2xl">{item.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{item.text}</p>
+              <h3 className="mt-3 font-display text-2xl"><T>{item.title}</T></h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground"><T>{item.text}</T></p>
             </div>
           ))}
         </div>
@@ -129,7 +117,7 @@ function Home() {
 
       <section className="border-y border-border bg-muted/40">
         <div className="mx-auto max-w-6xl px-4 py-16">
-          <h2 className="font-display text-4xl md:text-5xl">Comment ça marche</h2>
+          <h2 className="font-display text-4xl md:text-5xl"><T>{"Comment ça marche"}</T></h2>
           <ol className="mt-8 grid gap-6 md:grid-cols-4">
             {[
               { step: "1", title: "Racontez votre projet", text: "Un texte libre suffit : l'assistant propose un nom, un résumé, une thématique et des étapes." },
@@ -138,9 +126,9 @@ function Home() {
               { step: "4", title: "Passez à l'action", text: "Jalons, actions, dépenses et avancement visibles par tous." },
             ].map((item) => (
               <li key={item.step} className="rounded-lg border border-border bg-card p-6 shadow-sm">
-                <span className="font-display text-4xl text-primary">{item.step}</span>
-                <h3 className="mt-2 font-display text-2xl">{item.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{item.text}</p>
+                <span className="font-display text-4xl text-primary"><T>{item.step}</T></span>
+                <h3 className="mt-2 font-display text-2xl"><T>{item.title}</T></h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground"><T>{item.text}</T></p>
               </li>
             ))}
           </ol>
@@ -150,14 +138,11 @@ function Home() {
       <section className="mx-auto max-w-6xl px-4 py-16">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <h2 className="font-display text-4xl md:text-5xl">Projets à la une</h2>
-            <p className="mt-2 text-muted-foreground">
-              Des initiatives d'intérêt général et d'économie sociale et solidaire à La Réunion.
-            </p>
+            <h2 className="font-display text-4xl md:text-5xl"><T>{"Projets à la une"}</T></h2>
+            <p className="mt-2 text-muted-foreground"><T>{" Des initiatives d'intérêt général et d'économie sociale et solidaire à La Réunion. "}</T></p>
           </div>
           <Button asChild variant="ghost">
-            <Link to="/projets">
-              Tous les projets <ArrowRight className="size-4" />
+            <Link to="/projets"><T>{" Tous les projets "}</T><ArrowRight className="size-4" />
             </Link>
           </Button>
         </div>
@@ -172,35 +157,26 @@ function Home() {
         <div className="mx-auto grid max-w-6xl gap-8 px-4 py-16 md:grid-cols-3">
           <div>
             <FileText className="size-5" />
-            <h3 className="mt-3 font-display text-xl">Un dossier unique, réutilisable</h3>
-            <p className="mt-2 text-sm opacity-80">
-              Ne répétez plus les mêmes informations à chaque dépôt : une fiche peut répondre à
-              plusieurs appels, et chaque nouvelle question la renforce.
-            </p>
+            <h3 className="mt-3 font-display text-xl"><T>{"Un dossier unique, réutilisable"}</T></h3>
+            <p className="mt-2 text-sm opacity-80"><T>{" Ne répétez plus les mêmes informations à chaque dépôt : une fiche peut répondre à plusieurs appels, et chaque nouvelle question la renforce. "}</T></p>
             <Button asChild variant="secondary" className="mt-4">
-              <Link to="/porteurs">Côté porteurs</Link>
+              <Link to="/porteurs"><T>{"Côté porteurs"}</T></Link>
             </Button>
           </div>
           <div>
             <Landmark className="size-5" />
-            <h3 className="mt-3 font-display text-xl">La transparence de l'argent public</h3>
-            <p className="mt-2 text-sm opacity-80">
-              Les institutions publient leurs appels et la liste des projets soutenus, avec les
-              montants accordés.
-            </p>
+            <h3 className="mt-3 font-display text-xl"><T>{"La transparence de l'argent public"}</T></h3>
+            <p className="mt-2 text-sm opacity-80"><T>{" Les institutions publient leurs appels et la liste des projets soutenus, avec les montants accordés. "}</T></p>
             <Button asChild variant="secondary" className="mt-4">
-              <Link to="/institutions">Côté institutions</Link>
+              <Link to="/institutions"><T>{"Côté institutions"}</T></Link>
             </Button>
           </div>
           <div>
             <Users className="size-5" />
-            <h3 className="mt-3 font-display text-xl">Les habitants au long cours</h3>
-            <p className="mt-2 text-sm opacity-80">
-              Donner son avis, proposer une idée, du temps ou un soutien financier : le suivi
-              citoyen ne s'arrête pas au dépôt du dossier.
-            </p>
+            <h3 className="mt-3 font-display text-xl"><T>{"Les habitants au long cours"}</T></h3>
+            <p className="mt-2 text-sm opacity-80"><T>{" Donner son avis, proposer une idée, du temps ou un soutien financier : le suivi citoyen ne s'arrête pas au dépôt du dossier. "}</T></p>
             <Button asChild variant="secondary" className="mt-4">
-              <Link to="/citoyens">Côté citoyens</Link>
+              <Link to="/citoyens"><T>{"Côté citoyens"}</T></Link>
             </Button>
           </div>
         </div>

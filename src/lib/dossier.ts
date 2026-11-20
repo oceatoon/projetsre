@@ -1,5 +1,6 @@
 import { euro, frDate, needLabel, sectionLabel, stageLabel, statusLabel, themeLabel } from "./domain";
 import type { Call, ProjectDetail } from "./types";
+import { getLocale, translate } from "./i18n";
 
 function esc(value: string | null | undefined) {
   return String(value ?? "")
@@ -181,6 +182,14 @@ export function printHtml(html: string) {
   if (!win) return false;
   win.document.write(html);
   win.document.close();
+  win.document.documentElement.lang = getLocale();
+  const walker = win.document.createTreeWalker(win.document.body, NodeFilter.SHOW_TEXT);
+  while (walker.nextNode()) {
+    const node = walker.currentNode;
+    if (node.parentElement?.closest("style, script")) continue;
+    if (node.textContent) node.textContent = translate(node.textContent);
+  }
+  win.document.title = translate(win.document.title);
   win.focus();
   setTimeout(() => win.print(), 400);
   return true;

@@ -1,3 +1,5 @@
+import { T, useTranslation } from "@/components/language-provider";
+import { translate } from "@/lib/i18n";
 import { useQuery, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { Check, Handshake, ShieldCheck } from "lucide-react";
@@ -26,6 +28,7 @@ const PROMPTS = [
 ];
 
 export function ProjectReciprocity({ projectId }: { projectId: string }) {
+  useTranslation();
   const { data } = useSuspenseQuery(reciprocityQuery(projectId));
   const { signedIn, ready, user } = useSession();
   const loadOwner = useServerFn(getFollowState);
@@ -47,9 +50,9 @@ export function ProjectReciprocity({ projectId }: { projectId: string }) {
       await save({ data: draft });
       await qc.invalidateQueries({ queryKey: ["reciprocity", projectId] });
       setDraft(null);
-      toast.success("Posture collaborative enregistrée");
+      toast.success(translate("Posture collaborative enregistrée"));
     } catch (e) {
-      toast.error(e instanceof Error ? e.message : "Erreur");
+      toast.error(translate(e instanceof Error ? e.message : "Erreur"));
     } finally {
       setBusy(false);
     }
@@ -62,36 +65,36 @@ export function ProjectReciprocity({ projectId }: { projectId: string }) {
       <section className="rounded-xl border border-border bg-card p-6">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
-            <div className="flex items-center gap-2 text-primary"><Handshake className="size-5" /><span className="text-sm font-semibold">Posture collaborative</span></div>
-            <h2 className="mt-1 font-display text-3xl">Charte de collaboration et de réciprocité</h2>
-            <p className="mt-1 max-w-2xl text-sm text-muted-foreground">Ce que le projet partage, comment on peut y contribuer, et ce que chacun reçoit en retour. Pour que personne ne contribue à l'aveugle.</p>
+            <div className="flex items-center gap-2 text-primary"><Handshake className="size-5" /><span className="text-sm font-semibold"><T>{"Posture collaborative"}</T></span></div>
+            <h2 className="mt-1 font-display text-3xl"><T>{"Charte de collaboration et de réciprocité"}</T></h2>
+            <p className="mt-1 max-w-2xl text-sm text-muted-foreground"><T>{"Ce que le projet partage, comment on peut y contribuer, et ce que chacun reçoit en retour. Pour que personne ne contribue à l'aveugle."}</T></p>
           </div>
-          {shown && (
+          <T>{shown && (
             <div className="text-right">
-              <p className="font-display text-5xl leading-none">{score}<span className="text-xl text-muted-foreground">/100</span></p>
-              <Badge className="mt-2">{opennessLabel(score)}</Badge>
+              <p className="font-display text-5xl leading-none"><T>{score}</T><span className="text-xl text-muted-foreground">/100</span></p>
+              <Badge className="mt-2"><T>{opennessLabel(score)}</T></Badge>
             </div>
-          )}
+          )}</T>
         </div>
-        {!shown && <p className="mt-6 text-sm text-muted-foreground">Le porteur n'a pas encore décrit sa posture collaborative.</p>}
-        {canEdit && !draft && <Button className="mt-5" onClick={() => setDraft(data ?? blank)}>{data ? "Modifier la posture" : "Évaluer notre ouverture"}</Button>}
+        <T>{!shown && <p className="mt-6 text-sm text-muted-foreground"><T>{"Le porteur n'a pas encore décrit sa posture collaborative."}</T></p>}</T>
+        <T>{canEdit && !draft && <Button className="mt-5" onClick={() => setDraft(data ?? blank)}><T>{data ? "Modifier la posture" : "Évaluer notre ouverture"}</T></Button>}</T>
       </section>
 
-      {draft ? (
+      <T>{draft ? (
         <section className="space-y-8 rounded-xl border border-primary/40 bg-card p-6">
           <div className="rounded-lg bg-muted p-4">
-            <p className="text-sm font-semibold">Quatre questions pour vous guider</p>
-            <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-muted-foreground">{PROMPTS.map((p) => <li key={p}>{p}</li>)}</ul>
+            <p className="text-sm font-semibold"><T>{"Quatre questions pour vous guider"}</T></p>
+            <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-muted-foreground">{PROMPTS.map((p) => <li key={p}><T>{p}</T></li>)}</ul>
           </div>
           {OPENNESS_AXES.map((axis) => (
             <div key={axis.key}>
-              <p className="font-medium">{axis.label}</p>
+              <p className="font-medium"><T>{axis.label}</T></p>
               <div className="mt-2 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
                 {axis.levels.map((lvl, i) => {
                   const on = draft[axis.key] === i + 1;
                   return (
                     <button key={lvl} type="button" onClick={() => setDraft({ ...draft, [axis.key]: i + 1 })} className={`rounded-lg border p-3 text-left text-sm transition ${on ? "border-primary bg-primary/10" : "border-border hover:border-primary/50"}`}>
-                      <span className="text-xs text-muted-foreground">Niveau {i + 1}</span><br />{lvl}
+                      <span className="text-xs text-muted-foreground"><T>{"Niveau "}</T><T>{i + 1}</T></span><br /><T>{lvl}</T>
                     </button>
                   );
                 })}
@@ -99,15 +102,15 @@ export function ProjectReciprocity({ projectId }: { projectId: string }) {
             </div>
           ))}
           <div>
-            <p className="font-medium">Ce que nous offrons en retour</p>
+            <p className="font-medium"><T>{"Ce que nous offrons en retour"}</T></p>
             <div className="mt-3 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
               {OFFER_FAMILIES.map((f) => (
                 <div key={f.family} className="rounded-lg border border-border p-4">
-                  <p className="text-sm font-semibold">{f.family}</p>
+                  <p className="text-sm font-semibold"><T>{f.family}</T></p>
                   <div className="mt-2 space-y-1.5">
                     {f.items.map((it) => (
                       <label key={it} className="flex cursor-pointer items-start gap-2 text-sm">
-                        <input type="checkbox" className="mt-1 accent-primary" checked={draft.offers.includes(it)} onChange={() => toggle(it)} />{it}
+                        <input type="checkbox" className="mt-1 accent-primary" checked={draft.offers.includes(it)} onChange={() => toggle(it)} /><T>{it}</T>
                       </label>
                     ))}
                   </div>
@@ -116,51 +119,49 @@ export function ProjectReciprocity({ projectId }: { projectId: string }) {
             </div>
           </div>
           <div>
-            <p className="font-medium">Quand rendez-vous ?</p>
+            <p className="font-medium"><T>{"Quand rendez-vous ?"}</T></p>
             <div className="mt-2 flex flex-wrap gap-2">
               {(Object.keys(TIMINGS) as (keyof typeof TIMINGS)[]).map((t) => (
-                <Button key={t} type="button" size="sm" variant={draft.reciprocity_timing === t ? "default" : "outline"} onClick={() => setDraft({ ...draft, reciprocity_timing: t })}>{TIMINGS[t]}</Button>
+                <Button key={t} type="button" size="sm" variant={draft.reciprocity_timing === t ? "default" : "outline"} onClick={() => setDraft({ ...draft, reciprocity_timing: t })}><T>{TIMINGS[t]}</T></Button>
               ))}
             </div>
           </div>
           <div className="grid gap-4 md:grid-cols-2">
-            <label className="text-sm font-medium">Le retour qui nous aiderait le plus
-              <Textarea className="mt-1" rows={3} value={draft.preferred_return} onChange={(e) => setDraft({ ...draft, preferred_return: e.target.value })} />
+            <label className="text-sm font-medium"><T>{"Le retour qui nous aiderait le plus "}</T><Textarea className="mt-1" rows={3} value={draft.preferred_return} onChange={(e) => setDraft({ ...draft, preferred_return: e.target.value })} />
             </label>
-            <label className="text-sm font-medium">Ce que nous ne partagerons jamais
-              <Textarea className="mt-1" rows={3} value={draft.hard_limits} onChange={(e) => setDraft({ ...draft, hard_limits: e.target.value })} />
+            <label className="text-sm font-medium"><T>{"Ce que nous ne partagerons jamais "}</T><Textarea className="mt-1" rows={3} value={draft.hard_limits} onChange={(e) => setDraft({ ...draft, hard_limits: e.target.value })} />
             </label>
           </div>
           <div className="flex items-center gap-4">
-            <p className="text-sm">Indice d'ouverture : <strong>{opennessIndex(draft)}/100</strong></p>
-            <Button onClick={submit} disabled={busy}>Enregistrer</Button>
-            <Button variant="ghost" onClick={() => setDraft(null)}>Annuler</Button>
+            <p className="text-sm"><T>{"Indice d'ouverture : "}</T><strong><T>{opennessIndex(draft)}</T>/100</strong></p>
+            <Button onClick={submit} disabled={busy}><T>{"Enregistrer"}</T></Button>
+            <Button variant="ghost" onClick={() => setDraft(null)}><T>{"Annuler"}</T></Button>
           </div>
         </section>
       ) : data ? (
         <div className="grid gap-6 lg:grid-cols-2">
           <section className="rounded-xl border border-border bg-card p-6">
-            <h3 className="font-display text-2xl">Ouverture</h3>
+            <h3 className="font-display text-2xl"><T>{"Ouverture"}</T></h3>
             <ul className="mt-4 space-y-4">
               {OPENNESS_AXES.map((a) => (
                 <li key={a.key}>
-                  <div className="flex justify-between text-sm"><span className="font-medium">{a.label}</span><span className="text-muted-foreground">{a.levels[data[a.key] - 1]}</span></div>
+                  <div className="flex justify-between text-sm"><span className="font-medium"><T>{a.label}</T></span><span className="text-muted-foreground"><T>{a.levels[data[a.key] - 1]}</T></span></div>
                   <Progress value={data[a.key] * 25} className="mt-1.5" />
                 </li>
               ))}
             </ul>
-            <p className="mt-5 text-sm">Réciprocité : <strong>{TIMINGS[data.reciprocity_timing]}</strong></p>
+            <p className="mt-5 text-sm"><T>{"Réciprocité : "}</T><strong><T>{TIMINGS[data.reciprocity_timing]}</T></strong></p>
           </section>
           <section className="rounded-xl border border-border bg-card p-6">
-            <h3 className="font-display text-2xl">Ce que vous recevez en contribuant</h3>
+            <h3 className="font-display text-2xl"><T>{"Ce que vous recevez en contribuant"}</T></h3>
             {data.offers.length ? (
-              <ul className="mt-4 space-y-2">{data.offers.map((o) => <li key={o} className="flex gap-2 text-sm"><Check className="mt-0.5 size-4 shrink-0 text-primary" />{o}</li>)}</ul>
-            ) : <p className="mt-3 text-sm text-muted-foreground">Aucune contrepartie listée.</p>}
-            {data.preferred_return && <p className="mt-5 text-sm"><span className="font-medium">Ce qui les aiderait :</span> {data.preferred_return}</p>}
-            {data.hard_limits && <p className="mt-3 flex gap-2 text-sm"><ShieldCheck className="mt-0.5 size-4 shrink-0 text-primary" /><span><span className="font-medium">Zone souveraine :</span> {data.hard_limits}</span></p>}
+              <ul className="mt-4 space-y-2">{data.offers.map((o) => <li key={o} className="flex gap-2 text-sm"><Check className="mt-0.5 size-4 shrink-0 text-primary" /><T>{o}</T></li>)}</ul>
+            ) : <p className="mt-3 text-sm text-muted-foreground"><T>{"Aucune contrepartie listée."}</T></p>}
+            {data.preferred_return && <p className="mt-5 text-sm"><span className="font-medium"><T>{"Ce qui les aiderait :"}</T></span> <T>{data.preferred_return}</T></p>}
+            {data.hard_limits && <p className="mt-3 flex gap-2 text-sm"><ShieldCheck className="mt-0.5 size-4 shrink-0 text-primary" /><span><span className="font-medium"><T>{"Zone souveraine :"}</T></span> <T>{data.hard_limits}</T></span></p>}
           </section>
         </div>
-      ) : null}
+      ) : null}</T>
     </div>
   );
 }

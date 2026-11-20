@@ -1,3 +1,5 @@
+import { T, useTranslation } from "@/components/language-provider";
+import { translate } from "@/lib/i18n";
 import { Link } from "@tanstack/react-router";
 import { ChevronDown, Menu } from "lucide-react";
 import { useState } from "react";
@@ -10,6 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useSession } from "@/hooks/use-session";
+import { LanguageSelector } from "./language-selector";
 
 const LINKS = [
   { to: "/projets", label: "Projets" },
@@ -27,17 +30,17 @@ const COMPRENDRE_LINKS = [
 ] as const;
 
 export function SiteHeader() {
+  useTranslation();
   const [open, setOpen] = useState(false);
   const [comprendreOpen, setComprendreOpen] = useState(false);
   const { ready, signedIn } = useSession();
 
   return (
     <header className="no-print sticky top-0 z-40 border-b border-border bg-background/95 shadow-sm backdrop-blur">
-      <div className="mx-auto flex max-w-6xl items-center gap-4 px-4 py-3.5">
-        <Link to="/" className="font-display text-2xl leading-none">
-          projets<span className="text-primary">.re</span>
+      <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-2 px-4 py-3.5 lg:gap-4">
+        <Link to="/" className="font-display text-2xl leading-none"><T>{" projets"}</T><span className="text-primary"><T>{".re"}</T></span>
         </Link>
-        <nav className="ml-auto hidden items-center gap-1 md:flex">
+        <nav className="ml-auto hidden items-center gap-1 xl:flex">
           {LINKS.map((link) => (
             <Link
               key={link.to}
@@ -45,51 +48,50 @@ export function SiteHeader() {
               className="rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
               activeProps={{ className: "bg-secondary text-foreground" }}
             >
-              {link.label}
+              <T>{link.label}</T>
             </Link>
           ))}
           <DropdownMenu>
-            <DropdownMenuTrigger className="inline-flex items-center gap-1 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground data-[state=open]:bg-secondary data-[state=open]:text-foreground">
-              Comprendre
-              <ChevronDown className="size-4" />
+            <DropdownMenuTrigger className="inline-flex items-center gap-1 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground data-[state=open]:bg-secondary data-[state=open]:text-foreground"><T>{" Comprendre "}</T><ChevronDown className="size-4" />
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-72">
               {COMPRENDRE_LINKS.map((link) => (
                 <DropdownMenuItem key={link.to} asChild>
                   <Link to={link.to} className="cursor-pointer">
-                    {link.label}
+                    <T>{link.label}</T>
                   </Link>
                 </DropdownMenuItem>
               ))}
             </DropdownMenuContent>
           </DropdownMenu>
         </nav>
-        <Button asChild size="sm" className="ml-auto md:ml-2">
-          <Link to="/deposer">Déposer un projet</Link>
+        <LanguageSelector />
+        <Button asChild size="sm" className="ml-auto whitespace-normal text-center xl:ml-2">
+          <Link to="/deposer"><T>{"Déposer un projet"}</T></Link>
         </Button>
-        {ready ? (
+        <T>{ready ? (
           signedIn ? (
-            <Button asChild variant="ghost" size="sm" className="hidden md:inline-flex">
-              <Link to="/moi">Mon espace</Link>
+            <Button asChild variant="ghost" size="sm" className="hidden xl:inline-flex">
+              <Link to="/moi"><T>{"Mon espace"}</T></Link>
             </Button>
           ) : (
-            <Button asChild variant="outline" size="sm" className="hidden md:inline-flex">
-              <Link to="/connexion">Se connecter</Link>
+            <Button asChild variant="outline" size="sm" className="hidden xl:inline-flex">
+              <Link to="/connexion"><T>{"Se connecter"}</T></Link>
             </Button>
           )
-        ) : null}
+        ) : null}</T>
         <Button
           variant="ghost"
           size="icon"
-          className="min-h-11 min-w-11 md:hidden"
-          aria-label="Ouvrir le menu"
+          className="min-h-11 min-w-11 xl:hidden"
+          aria-label={translate("Ouvrir le menu")}
           onClick={() => setOpen((value) => !value)}
         >
           <Menu className="size-5" />
         </Button>
       </div>
-      {open ? (
-        <nav className="grid gap-1 border-t border-border/70 px-4 py-3 md:hidden">
+      <T>{open ? (
+        <nav className="grid gap-1 border-t border-border/70 px-4 py-3 xl:hidden">
           {LINKS.map((link) => (
             <Link
               key={link.to}
@@ -98,7 +100,7 @@ export function SiteHeader() {
               className="rounded-md px-3 py-2 text-sm text-muted-foreground hover:bg-muted hover:text-foreground"
               activeProps={{ className: "bg-muted text-foreground" }}
             >
-              {link.label}
+              <T>{link.label}</T>
             </Link>
           ))}
           <button
@@ -106,9 +108,7 @@ export function SiteHeader() {
             onClick={() => setComprendreOpen((value) => !value)}
             className="flex items-center justify-between rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground"
             aria-expanded={comprendreOpen}
-          >
-            Comprendre
-            <ChevronDown
+          ><T>{" Comprendre "}</T><ChevronDown
               className={`size-4 transition-transform ${comprendreOpen ? "rotate-180" : ""}`}
             />
           </button>
@@ -122,7 +122,7 @@ export function SiteHeader() {
                   className="rounded-md px-3 py-2 text-sm text-muted-foreground hover:bg-muted hover:text-foreground"
                   activeProps={{ className: "bg-muted text-foreground" }}
                 >
-                  {link.label}
+                  <T>{link.label}</T>
                 </Link>
               ))}
             </div>
@@ -132,10 +132,10 @@ export function SiteHeader() {
             onClick={() => setOpen(false)}
             className="rounded-md px-3 py-2 text-sm font-medium text-primary hover:bg-muted"
           >
-            {signedIn ? "Mon espace" : "Se connecter"}
+            <T>{signedIn ? "Mon espace" : "Se connecter"}</T>
           </Link>
         </nav>
-      ) : null}
+      ) : null}</T>
     </header>
   );
 }

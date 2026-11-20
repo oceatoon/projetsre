@@ -1,3 +1,4 @@
+import { T, useTranslation } from "@/components/language-provider";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { FileText, Repeat, Sparkles, Users } from "lucide-react";
 
@@ -28,13 +29,11 @@ export const Route = createFileRoute("/porteurs")({
 });
 
 function CarriersPage() {
+  useTranslation();
   return (
     <div className="mx-auto max-w-4xl px-4 py-12">
-      <h1 className="font-display text-4xl font-semibold">Côté porteurs de projet</h1>
-      <p className="mt-3 text-lg text-muted-foreground">
-        Vous passez plus de temps à réécrire des dossiers qu'à faire avancer votre projet. L'idée
-        ici est inverse : une seule fiche, enrichie en continu, qui sert à tous vos dépôts.
-      </p>
+      <h1 className="font-display text-4xl font-semibold"><T>{"Côté porteurs de projet"}</T></h1>
+      <p className="mt-3 text-lg text-muted-foreground"><T>{" Vous passez plus de temps à réécrire des dossiers qu'à faire avancer votre projet. L'idée ici est inverse : une seule fiche, enrichie en continu, qui sert à tous vos dépôts. "}</T></p>
 
       <div className="mt-10 grid gap-5 sm:grid-cols-2">
         {[
@@ -61,34 +60,26 @@ function CarriersPage() {
         ].map((item) => (
           <div key={item.title} className="rounded-xl border border-border bg-card p-6">
             <item.icon className="size-5 text-primary" />
-            <h2 className="mt-3 font-display text-xl">{item.title}</h2>
-            <p className="mt-1 text-sm text-muted-foreground">{item.text}</p>
+            <h2 className="mt-3 font-display text-xl"><T>{item.title}</T></h2>
+            <p className="mt-1 text-sm text-muted-foreground"><T>{item.text}</T></p>
           </div>
         ))}
       </div>
 
       <div className="mt-10 rounded-xl border border-border bg-card p-6">
-        <h2 className="font-display text-2xl">Sur quoi construire la valeur de votre projet ?</h2>
+        <h2 className="font-display text-2xl"><T>{"Sur quoi construire la valeur de votre projet ?"}</T></h2>
         <ul className="mt-4 space-y-3 text-sm text-muted-foreground">
           <li>
-            <strong className="text-foreground">Les besoins auxquels il répond</strong> — décrivez le
-            manque concret constaté sur le territoire, pas la solution.
-          </li>
+            <strong className="text-foreground"><T>{"Les besoins auxquels il répond"}</T></strong><T>{" — décrivez le manque concret constaté sur le territoire, pas la solution. "}</T></li>
           <li>
-            <strong className="text-foreground">Sa communauté</strong> — qui participe déjà,
-            bénévoles, familles, partenaires, collectifs.
-          </li>
+            <strong className="text-foreground"><T>{"Sa communauté"}</T></strong><T>{" — qui participe déjà, bénévoles, familles, partenaires, collectifs. "}</T></li>
           <li>
-            <strong className="text-foreground">Ses objectifs</strong> — ce que vous vous engagez à
-            atteindre, avec une échéance.
-          </li>
+            <strong className="text-foreground"><T>{"Ses objectifs"}</T></strong><T>{" — ce que vous vous engagez à atteindre, avec une échéance. "}</T></li>
           <li>
-            <strong className="text-foreground">Ses résultats tangibles</strong> — les indicateurs que
-            vous publiez, même modestes, valent mieux que des intentions.
-          </li>
+            <strong className="text-foreground"><T>{"Ses résultats tangibles"}</T></strong><T>{" — les indicateurs que vous publiez, même modestes, valent mieux que des intentions. "}</T></li>
         </ul>
         <Button asChild className="mt-6">
-          <Link to="/deposer">Commencer ma fiche projet</Link>
+          <Link to="/deposer"><T>{"Commencer ma fiche projet"}</T></Link>
         </Button>
       </div>
     </div>

@@ -1,3 +1,5 @@
+import { T, useTranslation } from "@/components/language-provider";
+import { translate } from "@/lib/i18n";
 import { ImageIcon } from "lucide-react";
 
 import { themeLabel } from "@/lib/domain";
@@ -9,11 +11,12 @@ interface ProjectImageProps {
 
 /** Cover image of a project, with a themed placeholder when none was added. */
 export function ProjectImage({ project, className = "" }: ProjectImageProps) {
+  useTranslation();
   if (project.image_url) {
     return (
       <img
         src={project.image_url}
-        alt={`${project.name} — ${project.commune || "La Réunion"}`}
+        alt={translate(`${project.name} — ${project.commune || "La Réunion"}`)}
         loading="lazy"
         width={1024}
         height={640}
@@ -27,7 +30,7 @@ export function ProjectImage({ project, className = "" }: ProjectImageProps) {
     >
       <ImageIcon className="size-7" />
       <span className="px-4 text-center text-xs font-medium tracking-wide uppercase">
-        {themeLabel(project.theme)}
+        <T>{themeLabel(project.theme)}</T>
       </span>
     </div>
   );

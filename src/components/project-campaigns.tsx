@@ -1,3 +1,5 @@
+import { T, useTranslation } from "@/components/language-provider";
+import { translate } from "@/lib/i18n";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
@@ -20,6 +22,7 @@ import {
 import { euro, frDate } from "@/lib/domain";
 
 export function ProjectCampaigns({ projectId, slug }: { projectId: string; slug: string }) {
+  useTranslation();
   const { signedIn, ready } = useSession();
   const queryClient = useQueryClient();
   const list = useServerFn(listProjectCampaigns);
@@ -46,9 +49,9 @@ export function ProjectCampaigns({ projectId, slug }: { projectId: string; slug:
     try {
       await follow({ data: { projectId, follow: !followQ.data?.following } });
       await Promise.all([followQ.refetch(), campaignsQ.refetch()]);
-      toast.success(followQ.data?.following ? "Vous ne suivez plus ce projet." : "Vous suivez ce projet.");
+      toast.success(translate(followQ.data?.following ? "Vous ne suivez plus ce projet." : "Vous suivez ce projet."));
     } catch (e) {
-      toast.error((e as Error).message);
+      toast.error(translate((e as Error).message));
     } finally {
       setBusy(false);
     }
@@ -62,9 +65,9 @@ export function ProjectCampaigns({ projectId, slug }: { projectId: string; slug:
       setMotivation("");
       await queryClient.invalidateQueries({ queryKey: ["follow", projectId] });
       await campaignsQ.refetch();
-      toast.success("Merci ! Le porteur va vous recontacter.");
+      toast.success(translate("Merci ! Le porteur va vous recontacter."));
     } catch (e) {
-      toast.error((e as Error).message);
+      toast.error(translate((e as Error).message));
     } finally {
       setBusy(false);
     }
@@ -77,41 +80,37 @@ export function ProjectCampaigns({ projectId, slug }: { projectId: string; slug:
     <div className="grid gap-6">
       <div className="flex flex-wrap items-center justify-between gap-4 rounded-xl border border-border bg-card p-5">
         <div>
-          <p className="font-display text-xl">Suivre ce projet</p>
+          <p className="font-display text-xl"><T>{"Suivre ce projet"}</T></p>
           <p className="text-sm text-muted-foreground">
-            {data?.followers ?? 0} abonné{(data?.followers ?? 0) > 1 ? "s" : ""} reçoivent ses nouvelles et ses appels.
-          </p>
+            <T>{data?.followers ?? 0}</T><T>{" abonné"}</T><T>{(data?.followers ?? 0) > 1 ? "s" : ""}</T><T>{" reçoivent ses nouvelles et ses appels. "}</T></p>
         </div>
         <div className="flex flex-wrap gap-2">
-          {signedIn ? (
+          <T>{signedIn ? (
             <Button onClick={onFollow} disabled={busy} variant={followQ.data?.following ? "outline" : "default"}>
               {followQ.data?.following ? <BellOff className="size-4" /> : <Bell className="size-4" />}
-              {followQ.data?.following ? "Ne plus suivre" : "Suivre ce projet"}
+              <T>{followQ.data?.following ? "Ne plus suivre" : "Suivre ce projet"}</T>
             </Button>
           ) : (
             <Button asChild variant="outline">
-              <Link to="/connexion">Connectez-vous pour suivre</Link>
+              <Link to="/connexion"><T>{"Connectez-vous pour suivre"}</T></Link>
             </Button>
-          )}
-          {isOwner && (
+          )}</T>
+          <T>{isOwner && (
             <Button asChild>
               <Link to="/campagnes/nouvelle" search={{ projet: slug }}>
-                <Plus className="size-4" /> Lancer une campagne
-              </Link>
+                <Plus className="size-4" /><T>{" Lancer une campagne "}</T></Link>
             </Button>
-          )}
+          )}</T>
         </div>
       </div>
 
-      {campaignsQ.isLoading ? (
-        <p className="text-sm text-muted-foreground">Chargement des campagnes…</p>
+      <T>{campaignsQ.isLoading ? (
+        <p className="text-sm text-muted-foreground"><T>{"Chargement des campagnes…"}</T></p>
       ) : !data?.campaigns.length ? (
         <div className="rounded-xl border border-dashed border-border p-8 text-center">
           <Megaphone className="mx-auto size-8 text-muted-foreground" />
-          <p className="mt-3 font-medium">Aucune campagne publique pour l'instant.</p>
-          <p className="text-sm text-muted-foreground">
-            Suivez le projet pour être prévenu de la prochaine.
-          </p>
+          <p className="mt-3 font-medium"><T>{"Aucune campagne publique pour l'instant."}</T></p>
+          <p className="text-sm text-muted-foreground"><T>{" Suivez le projet pour être prévenu de la prochaine. "}</T></p>
         </div>
       ) : (
         data.campaigns.map(({ campaign, stats, messages }) => {
@@ -123,63 +122,57 @@ export function ProjectCampaigns({ projectId, slug }: { projectId: string; slug:
           return (
             <article key={campaign.id} className="rounded-xl border border-border bg-card p-6">
               <div className="flex flex-wrap items-center gap-2">
-                <Badge>{info.label}</Badge>
+                <Badge><T>{info.label}</T></Badge>
                 <Badge variant={campaign.status === "active" ? "secondary" : "outline"}>
-                  {campaign.status === "active" ? "En cours" : "Terminée"}
+                  <T>{campaign.status === "active" ? "En cours" : "Terminée"}</T>
                 </Badge>
-                {!campaign.is_public && <Badge variant="outline">Privée</Badge>}
+                {!campaign.is_public && <Badge variant="outline"><T>{"Privée"}</T></Badge>}
                 <span className="text-xs text-muted-foreground">
-                  {frDate(campaign.starts_on)}
-                  {campaign.ends_on ? ` → ${frDate(campaign.ends_on)}` : ""}
+                  <T>{frDate(campaign.starts_on)}</T>
+                  <T>{campaign.ends_on ? ` → ${frDate(campaign.ends_on)}` : ""}</T>
                 </span>
               </div>
-              <h3 className="mt-3 font-display text-2xl">{campaign.title}</h3>
-              {campaign.goal && <p className="mt-2 text-muted-foreground">{campaign.goal}</p>}
+              <h3 className="mt-3 font-display text-2xl"><T>{campaign.title}</T></h3>
+              {campaign.goal && <p className="mt-2 text-muted-foreground"><T>{campaign.goal}</T></p>}
 
               <div className="mt-5">
                 <div className="flex items-baseline justify-between text-sm">
-                  <span className="text-muted-foreground">Résultat</span>
+                  <span className="text-muted-foreground"><T>{"Résultat"}</T></span>
                   <span className="font-display text-xl">
-                    {campaign.kind === "financement" ? euro(result) : result}{" "}
+                    <T>{campaign.kind === "financement" ? euro(result) : result}</T><T>{" "}</T>
                     <span className="text-sm text-muted-foreground">
-                      {target ? `sur ${campaign.kind === "financement" ? euro(target) : target} ` : ""}
-                      {campaign.kind === "financement" ? "promis" : info.metric}
+                      <T>{target ? `sur ${campaign.kind === "financement" ? euro(target) : target} ` : ""}</T>
+                      <T>{campaign.kind === "financement" ? "promis" : info.metric}</T>
                     </span>
                   </span>
                 </div>
                 {target > 0 && <Progress value={pct} className="mt-2" />}
                 {stats && (
                   <p className="mt-2 text-xs text-muted-foreground">
-                    {stats.messages_sent} message{stats.messages_sent > 1 ? "s" : ""} diffusé
-                    {stats.messages_sent > 1 ? "s" : ""} · {stats.supports} soutien
-                    {stats.supports > 1 ? "s" : ""} · {stats.feedback} avis · {stats.followers_new} nouvel
-                    {stats.followers_new > 1 ? "s" : ""} abonné{stats.followers_new > 1 ? "s" : ""}
+                    <T>{stats.messages_sent}</T><T>{" message"}</T><T>{stats.messages_sent > 1 ? "s" : ""}</T><T>{" diffusé "}</T><T>{stats.messages_sent > 1 ? "s" : ""}</T> · <T>{stats.supports}</T><T>{" soutien "}</T><T>{stats.supports > 1 ? "s" : ""}</T> · <T>{stats.feedback}</T><T>{" avis · "}</T><T>{stats.followers_new}</T><T>{" nouvel "}</T><T>{stats.followers_new > 1 ? "s" : ""}</T><T>{" abonné"}</T><T>{stats.followers_new > 1 ? "s" : ""}</T>
                   </p>
                 )}
               </div>
 
               {campaign.report && (
                 <div className="mt-5 rounded-lg bg-accent/40 p-4">
-                  <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                    Ce que cette campagne a apporté
-                  </p>
-                  <p className="mt-1 whitespace-pre-line">{campaign.report}</p>
+                  <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground"><T>{" Ce que cette campagne a apporté "}</T></p>
+                  <p className="mt-1 whitespace-pre-line"><T>{campaign.report}</T></p>
                 </div>
               )}
 
               {messages.length > 0 && (
                 <details className="mt-4">
-                  <summary className="cursor-pointer text-sm font-medium">
-                    Messages diffusés ({messages.length})
+                  <summary className="cursor-pointer text-sm font-medium"><T>{" Messages diffusés ("}</T><T>{messages.length}</T>)
                   </summary>
                   <ul className="mt-3 space-y-3">
                     {messages.map((m) => (
                       <li key={m.id} className="rounded-lg border border-border p-3 text-sm">
                         <p className="text-xs text-muted-foreground">
-                          {frDate(m.scheduled_for)} · {channelLabel(m.channel)}
+                          <T>{frDate(m.scheduled_for)}</T> · <T>{channelLabel(m.channel)}</T>
                         </p>
-                        <p className="font-medium">{m.subject}</p>
-                        {m.body && <p className="mt-1 whitespace-pre-line text-muted-foreground">{m.body}</p>}
+                        <p className="font-medium"><T>{m.subject}</T></p>
+                        {m.body && <p className="mt-1 whitespace-pre-line text-muted-foreground"><T>{m.body}</T></p>}
                       </li>
                     ))}
                   </ul>
@@ -189,9 +182,7 @@ export function ProjectCampaigns({ projectId, slug }: { projectId: string; slug:
               <div className="mt-5 flex flex-wrap gap-2">
                 {isOwner && (
                   <Button asChild variant="outline">
-                    <Link to="/campagnes/$id" params={{ id: campaign.id }}>
-                      Piloter la campagne
-                    </Link>
+                    <Link to="/campagnes/$id" params={{ id: campaign.id }}><T>{" Piloter la campagne "}</T></Link>
                   </Button>
                 )}
                 {campaign.status === "active" && !isOwner && (
@@ -199,39 +190,35 @@ export function ProjectCampaigns({ projectId, slug }: { projectId: string; slug:
                     {campaign.kind === "benevoles" ? (
                       !signedIn ? (
                         <Button asChild>
-                          <Link to="/connexion">Connectez-vous pour devenir bénévole</Link>
+                          <Link to="/connexion"><T>{"Connectez-vous pour devenir bénévole"}</T></Link>
                         </Button>
                       ) : alreadyVolunteer ? (
-                        <Badge variant="secondary">Vous êtes inscrit comme bénévole</Badge>
+                        <Badge variant="secondary"><T>{"Vous êtes inscrit comme bénévole"}</T></Badge>
                       ) : joining === campaign.id ? (
                         <div className="w-full space-y-2">
                           <Textarea
                             value={motivation}
                             onChange={(e) => setMotivation(e.target.value)}
-                            placeholder="Ce que vous aimeriez faire, vos disponibilités…"
+                            placeholder={translate("Ce que vous aimeriez faire, vos disponibilités…")}
                             maxLength={1000}
                           />
                           <div className="flex gap-2">
-                            <Button disabled={busy} onClick={() => onJoin(campaign.id)}>
-                              Envoyer ma candidature
-                            </Button>
-                            <Button variant="ghost" onClick={() => setJoining(null)}>
-                              Annuler
-                            </Button>
+                            <Button disabled={busy} onClick={() => onJoin(campaign.id)}><T>{" Envoyer ma candidature "}</T></Button>
+                            <Button variant="ghost" onClick={() => setJoining(null)}><T>{" Annuler "}</T></Button>
                           </div>
                         </div>
                       ) : (
-                        <Button onClick={() => setJoining(campaign.id)}>{info.cta}</Button>
+                        <Button onClick={() => setJoining(campaign.id)}><T>{info.cta}</T></Button>
                       )
                     ) : campaign.kind === "communication" ? (
                       !followQ.data?.following && (
                         <Button onClick={onFollow} disabled={busy || !signedIn}>
-                          {info.cta}
+                          <T>{info.cta}</T>
                         </Button>
                       )
                     ) : (
                       <Button asChild>
-                        <a href="#soutenir">{info.cta}</a>
+                        <a href="#soutenir"><T>{info.cta}</T></a>
                       </Button>
                     )}
                   </>
@@ -240,7 +227,7 @@ export function ProjectCampaigns({ projectId, slug }: { projectId: string; slug:
             </article>
           );
         })
-      )}
+      )}</T>
     </div>
   );
 }

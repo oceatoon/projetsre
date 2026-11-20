@@ -1,3 +1,5 @@
+import { T, useTranslation } from "@/components/language-provider";
+import { translate } from "@/lib/i18n";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
@@ -48,6 +50,7 @@ export const Route = createFileRoute("/institutions")({
 });
 
 function InstitutionsPage() {
+  useTranslation();
   const { data: applications } = useSuspenseQuery(applicationsQuery);
   const { data: calls } = useSuspenseQuery(callsQuery);
   const { data: projects } = useSuspenseQuery(projectsQuery);
@@ -58,11 +61,8 @@ function InstitutionsPage() {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-12">
-      <h1 className="font-display text-4xl font-semibold">Côté institutions</h1>
-      <p className="mt-2 max-w-2xl text-muted-foreground">
-        Publier un appel, recevoir des dossiers déjà structurés et rendre public ce que l'argent
-        public soutient, projet par projet.
-      </p>
+      <h1 className="font-display text-4xl font-semibold"><T>{"Côté institutions"}</T></h1>
+      <p className="mt-2 max-w-2xl text-muted-foreground"><T>{" Publier un appel, recevoir des dossiers déjà structurés et rendre public ce que l'argent public soutient, projet par projet. "}</T></p>
 
       <dl className="mt-8 grid gap-6 rounded-xl border border-border bg-card p-6 sm:grid-cols-4">
         {[
@@ -72,20 +72,19 @@ function InstitutionsPage() {
           { label: "Montants accordés", value: euro(granted) },
         ].map((stat) => (
           <div key={stat.label}>
-            <dt className="text-sm text-muted-foreground">{stat.label}</dt>
-            <dd className="font-display text-2xl font-semibold">{stat.value}</dd>
+            <dt className="text-sm text-muted-foreground"><T>{stat.label}</T></dt>
+            <dd className="font-display text-2xl font-semibold"><T>{stat.value}</T></dd>
           </div>
         ))}
       </dl>
-      <p className="mt-2 text-xs text-muted-foreground">
-        Financement déclaré par l'ensemble des projets de la plateforme : {euro(publicFunding)}
+      <p className="mt-2 text-xs text-muted-foreground"><T>{" Financement déclaré par l'ensemble des projets de la plateforme : "}</T><T>{euro(publicFunding)}</T>
       </p>
 
       <Tabs defaultValue="candidatures" className="mt-10">
         <TabsList>
-          <TabsTrigger value="candidatures">Candidatures</TabsTrigger>
-          <TabsTrigger value="soutenus">Projets soutenus</TabsTrigger>
-          <TabsTrigger value="publier">Publier un appel</TabsTrigger>
+          <TabsTrigger value="candidatures"><T>{"Candidatures"}</T></TabsTrigger>
+          <TabsTrigger value="soutenus"><T>{"Projets soutenus"}</T></TabsTrigger>
+          <TabsTrigger value="publier"><T>{"Publier un appel"}</T></TabsTrigger>
         </TabsList>
 
         <TabsContent value="candidatures" className="mt-6 space-y-3">
@@ -95,29 +94,29 @@ function InstitutionsPage() {
               className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-card p-4"
             >
               <div>
-                {application.project ? (
+                <T>{application.project ? (
                   <Link
                     to="/projets/$slug"
                     params={{ slug: application.project.slug }}
                     className="font-medium hover:underline"
                   >
-                    {application.project.name}
+                    <T>{application.project.name}</T>
                   </Link>
                 ) : (
-                  <span className="font-medium">Projet retiré</span>
-                )}
+                  <span className="font-medium"><T>{"Projet retiré"}</T></span>
+                )}</T>
                 <p className="text-xs text-muted-foreground">
-                  {application.call ? `${application.call.title} · ${application.call.institution}` : ""}
-                  {application.project ? ` · ${application.project.commune}` : ""}
+                  <T>{application.call ? `${application.call.title} · ${application.call.institution}` : ""}</T>
+                  <T>{application.project ? ` · ${application.project.commune}` : ""}</T>
                 </p>
               </div>
               <div className="flex items-center gap-3">
                 <Badge variant={application.status === "soutenu" ? "default" : "secondary"}>
-                  {statusLabel(application.status)}
+                  <T>{statusLabel(application.status)}</T>
                 </Badge>
-                <span className="text-sm">{euro(application.granted_amount)}</span>
+                <span className="text-sm"><T>{euro(application.granted_amount)}</T></span>
                 <span className="text-xs text-muted-foreground">
-                  {frDate(application.created_at)}
+                  <T>{frDate(application.created_at)}</T>
                 </span>
               </div>
             </article>
@@ -125,39 +124,36 @@ function InstitutionsPage() {
         </TabsContent>
 
         <TabsContent value="soutenus" className="mt-6">
-          <p className="text-sm text-muted-foreground">
-            Ce que l'argent public soutient, avec le montant accordé et le lien vers le suivi du
-            projet.
-          </p>
+          <p className="text-sm text-muted-foreground"><T>{" Ce que l'argent public soutient, avec le montant accordé et le lien vers le suivi du projet. "}</T></p>
           <div className="mt-4 overflow-x-auto rounded-xl border border-border">
             <table className="w-full text-sm">
               <thead className="bg-muted/50 text-left">
                 <tr>
-                  <th className="p-3">Projet</th>
-                  <th className="p-3">Commune</th>
-                  <th className="p-3">Appel</th>
-                  <th className="p-3">Montant accordé</th>
+                  <th className="p-3"><T>{"Projet"}</T></th>
+                  <th className="p-3"><T>{"Commune"}</T></th>
+                  <th className="p-3"><T>{"Appel"}</T></th>
+                  <th className="p-3"><T>{"Montant accordé"}</T></th>
                 </tr>
               </thead>
               <tbody>
                 {supported.map((item) => (
                   <tr key={item.id} className="border-t border-border">
                     <td className="p-3">
-                      {item.project ? (
+                      <T>{item.project ? (
                         <Link
                           to="/projets/$slug"
                           params={{ slug: item.project.slug }}
                           className="font-medium hover:underline"
                         >
-                          {item.project.name}
+                          <T>{item.project.name}</T>
                         </Link>
                       ) : (
                         "—"
-                      )}
+                      )}</T>
                     </td>
-                    <td className="p-3">{item.project?.commune ?? "—"}</td>
-                    <td className="p-3">{item.call?.title ?? "—"}</td>
-                    <td className="p-3">{euro(item.granted_amount)}</td>
+                    <td className="p-3"><T>{item.project?.commune ?? "—"}</T></td>
+                    <td className="p-3"><T>{item.call?.title ?? "—"}</T></td>
+                    <td className="p-3"><T>{euro(item.granted_amount)}</T></td>
                   </tr>
                 ))}
               </tbody>
@@ -174,6 +170,7 @@ function InstitutionsPage() {
 }
 
 function CallForm() {
+  useTranslation();
   const create = useServerFn(createCallAsUser);
   const { ready, signedIn } = useSession();
   const router = useRouter();
@@ -199,11 +196,11 @@ function CallForm() {
   const submit = async (event: React.FormEvent) => {
     event.preventDefault();
     if (ready && !signedIn) {
-      toast.error("Connectez-vous pour publier un appel à projets.");
+      toast.error(translate("Connectez-vous pour publier un appel à projets."));
       return;
     }
     if (title.trim().length < 3 || institution.trim().length < 2) {
-      toast.error("Un titre et une institution sont nécessaires.");
+      toast.error(translate("Un titre et une institution sont nécessaires."));
       return;
     }
     setBusy(true);
@@ -230,11 +227,11 @@ function CallForm() {
             .map((label, index) => ({ id: `q${index + 1}`, label })),
         },
       });
-      toast.success("Appel publié.");
+      toast.success(translate("Appel publié."));
       await router.invalidate();
       await router.navigate({ to: "/appels/$slug", params: { slug: result.slug } });
     } catch {
-      toast.error("Publication impossible pour le moment.");
+      toast.error(translate("Publication impossible pour le moment."));
     } finally {
       setBusy(false);
     }
@@ -242,14 +239,14 @@ function CallForm() {
 
   return (
     <form onSubmit={submit} className="max-w-3xl space-y-4 rounded-xl border border-border bg-card p-6">
-      <h2 className="font-display text-2xl">Publier un appel à projets</h2>
+      <h2 className="font-display text-2xl"><T>{"Publier un appel à projets"}</T></h2>
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="grid gap-1.5">
-          <Label htmlFor="c-title">Titre</Label>
+          <Label htmlFor="c-title"><T>{"Titre"}</T></Label>
           <Input id="c-title" value={title} maxLength={160} onChange={(e) => setTitle(e.target.value)} />
         </div>
         <div className="grid gap-1.5">
-          <Label htmlFor="c-inst">Institution</Label>
+          <Label htmlFor="c-inst"><T>{"Institution"}</T></Label>
           <Input
             id="c-inst"
             value={institution}
@@ -259,7 +256,7 @@ function CallForm() {
         </div>
       </div>
       <div className="grid gap-1.5">
-        <Label htmlFor="c-desc">Description</Label>
+        <Label htmlFor="c-desc"><T>{"Description"}</T></Label>
         <Textarea
           id="c-desc"
           rows={5}
@@ -269,17 +266,17 @@ function CallForm() {
         />
       </div>
       <div className="grid gap-1.5">
-        <Label htmlFor="c-crit">Critères (un par ligne)</Label>
+        <Label htmlFor="c-crit"><T>{"Critères (un par ligne)"}</T></Label>
         <Textarea
           id="c-crit"
           rows={4}
           value={criteria}
           onChange={(e) => setCriteria(e.target.value)}
-          placeholder={"Structure basée à La Réunion\nProjet d'intérêt général"}
+          placeholder={translate("Structure basée à La Réunion\nProjet d'intérêt général")}
         />
       </div>
       <div>
-        <Label>Thématiques visées</Label>
+        <Label><T>{"Thématiques visées"}</T></Label>
         <div className="mt-2 grid gap-2 sm:grid-cols-3">
           {THEMES.map((item) => (
             <div key={item.value} className="flex items-center gap-2">
@@ -289,14 +286,14 @@ function CallForm() {
                 onCheckedChange={() => toggle(item.value, setThemes)}
               />
               <Label htmlFor={`ct-${item.value}`} className="text-sm">
-                {themeLabel(item.value)}
+                <T>{themeLabel(item.value)}</T>
               </Label>
             </div>
           ))}
         </div>
       </div>
       <div>
-        <Label>Besoins couverts</Label>
+        <Label><T>{"Besoins couverts"}</T></Label>
         <div className="mt-2 grid gap-2 sm:grid-cols-3">
           {NEED_TYPES.map((item) => (
             <div key={item.value} className="flex items-center gap-2">
@@ -306,7 +303,7 @@ function CallForm() {
                 onCheckedChange={() => toggle(item.value, setNeeds)}
               />
               <Label htmlFor={`cn-${item.value}`} className="text-sm">
-                {needLabel(item.value)}
+                <T>{needLabel(item.value)}</T>
               </Label>
             </div>
           ))}
@@ -314,7 +311,7 @@ function CallForm() {
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="grid gap-1.5">
-          <Label htmlFor="c-budget">Montant maximum (€)</Label>
+          <Label htmlFor="c-budget"><T>{"Montant maximum (€)"}</T></Label>
           <Input
             id="c-budget"
             type="number"
@@ -324,7 +321,7 @@ function CallForm() {
           />
         </div>
         <div className="grid gap-1.5">
-          <Label htmlFor="c-deadline">Date limite de dépôt</Label>
+          <Label htmlFor="c-deadline"><T>{"Date limite de dépôt"}</T></Label>
           <Input
             id="c-deadline"
             type="date"
@@ -334,20 +331,18 @@ function CallForm() {
         </div>
       </div>
       <div className="grid gap-1.5">
-        <Label htmlFor="c-quest">Questions complémentaires (une par ligne)</Label>
+        <Label htmlFor="c-quest"><T>{"Questions complémentaires (une par ligne)"}</T></Label>
         <Textarea
           id="c-quest"
           rows={4}
           value={questions}
           onChange={(e) => setQuestions(e.target.value)}
-          placeholder={"Comment mesurez-vous votre impact ?\nQuelle est votre gouvernance ?"}
+          placeholder={translate("Comment mesurez-vous votre impact ?\nQuelle est votre gouvernance ?")}
         />
-        <p className="text-xs text-muted-foreground">
-          Les porteurs y répondent une fois : leurs réponses enrichissent leur fiche.
-        </p>
+        <p className="text-xs text-muted-foreground"><T>{" Les porteurs y répondent une fois : leurs réponses enrichissent leur fiche. "}</T></p>
       </div>
       <Button type="submit" disabled={busy}>
-        {busy ? "Publication…" : "Publier l'appel"}
+        <T>{busy ? "Publication…" : "Publier l'appel"}</T>
       </Button>
     </form>
   );

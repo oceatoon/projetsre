@@ -1,3 +1,4 @@
+import { T, useTranslation } from "@/components/language-provider";
 import { Link } from "@tanstack/react-router";
 import { MapPin, Users } from "lucide-react";
 
@@ -8,6 +9,7 @@ import { euro, needLabel, progress, stageLabel, themeLabel } from "@/lib/domain"
 import type { Project } from "@/lib/types";
 
 export function ProjectCard({ project }: { project: Project }) {
+  useTranslation();
   const pct = progress(project.budget_secured, project.budget_needed);
 
   return (
@@ -23,20 +25,20 @@ export function ProjectCard({ project }: { project: Project }) {
       <div className="flex grow flex-col p-5">
         <div className="flex items-center gap-2 text-xs text-muted-foreground">
           <MapPin className="size-3.5" />
-          {project.commune || "La Réunion"}
+          <T>{project.commune || "La Réunion"}</T>
           <span className="text-border">•</span>
-          {themeLabel(project.theme)}
+          <T>{themeLabel(project.theme)}</T>
         </div>
         <h3 className="mt-3 font-display text-2xl leading-[1.08] group-hover:text-primary">
-          {project.name}
+          <T>{project.name}</T>
         </h3>
-        <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{project.tagline}</p>
+        <p className="mt-2 text-sm leading-relaxed text-muted-foreground"><T>{project.tagline}</T></p>
 
         <div className="mt-4 flex flex-wrap gap-1.5">
-          <Badge variant="secondary">{stageLabel(project.stage)}</Badge>
+          <Badge variant="secondary"><T>{stageLabel(project.stage)}</T></Badge>
           {project.need_types.slice(0, 3).map((need) => (
             <Badge key={need} variant="outline">
-              {needLabel(need)}
+              <T>{needLabel(need)}</T>
             </Badge>
           ))}
         </div>
@@ -45,11 +47,11 @@ export function ProjectCard({ project }: { project: Project }) {
           <Progress value={pct} className="h-1.5" />
           <div className="mt-2 flex items-center justify-between text-xs text-muted-foreground">
             <span>
-              {euro(project.budget_secured)} réunis sur {euro(project.budget_needed)}
+              <T>{euro(project.budget_secured)}</T><T>{" réunis sur "}</T><T>{euro(project.budget_needed)}</T>
             </span>
             <span className="flex items-center gap-1">
               <Users className="size-3.5" />
-              {project.community_size}
+              <T>{project.community_size}</T>
             </span>
           </div>
         </div>

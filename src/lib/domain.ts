@@ -1,3 +1,5 @@
+import { localeFormat } from "./i18n";
+
 export const THEMES = [
   { value: "social", label: "Social et solidarité" },
   { value: "environnement", label: "Environnement" },
@@ -104,7 +106,7 @@ export function statusLabel(value: string) {
 
 export function euro(amount: number | null | undefined) {
   if (amount === null || amount === undefined) return "—";
-  return new Intl.NumberFormat("fr-FR", {
+  return new Intl.NumberFormat(localeFormat(), {
     style: "currency",
     currency: "EUR",
     maximumFractionDigits: 0,
@@ -113,12 +115,12 @@ export function euro(amount: number | null | undefined) {
 
 export function frDate(value: string | null | undefined) {
   if (!value) return "—";
-  return new Intl.DateTimeFormat("fr-FR", { dateStyle: "long" }).format(new Date(value));
+  return new Intl.DateTimeFormat(localeFormat(), { dateStyle: "long" }).format(new Date(value));
 }
 
 export function frDateTime(value: string | null | undefined) {
   if (!value) return "—";
-  return new Intl.DateTimeFormat("fr-FR", { dateStyle: "long", timeStyle: "short" }).format(
+  return new Intl.DateTimeFormat(localeFormat(), { dateStyle: "long", timeStyle: "short" }).format(
     new Date(value),
   );
 }

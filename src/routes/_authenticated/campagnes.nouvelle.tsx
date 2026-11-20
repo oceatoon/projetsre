@@ -1,3 +1,5 @@
+import { T, useTranslation } from "@/components/language-provider";
+import { translate } from "@/lib/i18n";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
@@ -32,6 +34,7 @@ export const Route = createFileRoute("/_authenticated/campagnes/nouvelle")({
 const today = () => new Date().toISOString().slice(0, 10);
 
 function NewCampaign() {
+  useTranslation();
   const { projet } = Route.useSearch();
   const navigate = useNavigate();
   const loadProjects = useServerFn(listMyProjectsForCampaign);
@@ -59,7 +62,7 @@ function NewCampaign() {
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     if (!projectId) {
-      toast.error("Choisissez un projet.");
+      toast.error(translate("Choisissez un projet."));
       return;
     }
     setBusy(true);
@@ -79,10 +82,10 @@ function NewCampaign() {
           is_public: isPublic,
         },
       });
-      toast.success("Campagne créée avec son calendrier de messages.");
+      toast.success(translate("Campagne créée avec son calendrier de messages."));
       navigate({ to: "/campagnes/$id", params: { id } });
     } catch (err) {
-      toast.error((err as Error).message);
+      toast.error(translate((err as Error).message));
     } finally {
       setBusy(false);
     }
@@ -92,24 +95,22 @@ function NewCampaign() {
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-12">
-      <h1 className="font-display text-4xl">Lancer une campagne</h1>
-      <p className="mt-2 text-muted-foreground">
-        Choisissez un modèle : il arrive avec un calendrier de messages que vous pourrez rédiger avec l'assistant.
-      </p>
+      <h1 className="font-display text-4xl"><T>{"Lancer une campagne"}</T></h1>
+      <p className="mt-2 text-muted-foreground"><T>{" Choisissez un modèle : il arrive avec un calendrier de messages que vous pourrez rédiger avec l'assistant. "}</T></p>
 
-      {projectsQ.isLoading ? (
-        <p className="mt-8 text-sm text-muted-foreground">Chargement…</p>
+      <T>{projectsQ.isLoading ? (
+        <p className="mt-8 text-sm text-muted-foreground"><T>{"Chargement…"}</T></p>
       ) : !projects.length ? (
         <div className="mt-8 rounded-xl border border-border bg-card p-6">
-          <p>Il faut porter une fiche projet pour lancer une campagne.</p>
+          <p><T>{"Il faut porter une fiche projet pour lancer une campagne."}</T></p>
           <Button asChild className="mt-4">
-            <Link to="/deposer">Déposer un projet</Link>
+            <Link to="/deposer"><T>{"Déposer un projet"}</T></Link>
           </Button>
         </div>
       ) : (
         <form onSubmit={submit} className="mt-8 grid gap-6">
           <div className="grid gap-2">
-            <Label htmlFor="projet">Projet</Label>
+            <Label htmlFor="projet"><T>{"Projet"}</T></Label>
             <select
               id="projet"
               value={projectId}
@@ -118,14 +119,14 @@ function NewCampaign() {
             >
               {projects.map((p) => (
                 <option key={p.id} value={p.id}>
-                  {p.name}
+                  <T>{p.name}</T>
                 </option>
               ))}
             </select>
           </div>
 
           <fieldset className="grid gap-3 sm:grid-cols-2">
-            <legend className="mb-2 text-sm font-medium">Type de campagne</legend>
+            <legend className="mb-2 text-sm font-medium"><T>{"Type de campagne"}</T></legend>
             {CAMPAIGN_KINDS.map((k) => (
               <button
                 type="button"
@@ -136,48 +137,47 @@ function NewCampaign() {
                   kind === k.value ? "border-primary bg-primary/10" : "border-border bg-card hover:border-foreground/40"
                 }`}
               >
-                <p className="font-medium">{k.label}</p>
-                <p className="text-sm text-muted-foreground">{k.short}</p>
+                <p className="font-medium"><T>{k.label}</T></p>
+                <p className="text-sm text-muted-foreground"><T>{k.short}</T></p>
                 <p className="mt-2 text-xs text-muted-foreground">
-                  {TEMPLATES[k.value]?.length ?? 0} messages prévus
-                </p>
+                  <T>{TEMPLATES[k.value]?.length ?? 0}</T><T>{" messages prévus "}</T></p>
               </button>
             ))}
           </fieldset>
 
           <div className="grid gap-2">
-            <Label htmlFor="titre">Titre</Label>
-            <Input id="titre" required minLength={3} maxLength={160} value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Ex. 20 bénévoles pour la saison des plantations" />
+            <Label htmlFor="titre"><T>{"Titre"}</T></Label>
+            <Input id="titre" required minLength={3} maxLength={160} value={title} onChange={(e) => setTitle(e.target.value)} placeholder={translate("Ex. 20 bénévoles pour la saison des plantations")} />
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="objectif">Objectif et raison</Label>
-            <Textarea id="objectif" maxLength={1500} value={goal} onChange={(e) => setGoal(e.target.value)} placeholder="Ce que vous voulez obtenir et ce que ça change pour le projet" />
+            <Label htmlFor="objectif"><T>{"Objectif et raison"}</T></Label>
+            <Textarea id="objectif" maxLength={1500} value={goal} onChange={(e) => setGoal(e.target.value)} placeholder={translate("Ce que vous voulez obtenir et ce que ça change pour le projet")} />
           </div>
 
           <div className="grid gap-4 sm:grid-cols-3">
             <div className="grid gap-2">
               <Label htmlFor="cible">
-                {kind === "financement" ? "Montant visé (€)" : kind === "benevoles" ? "Bénévoles visés" : kind === "lancement" ? "Testeurs visés" : "Nouveaux abonnés visés"}
+                <T>{kind === "financement" ? "Montant visé (€)" : kind === "benevoles" ? "Bénévoles visés" : kind === "lancement" ? "Testeurs visés" : "Nouveaux abonnés visés"}</T>
               </Label>
               <Input id="cible" type="number" min={0} value={target} onChange={(e) => setTarget(e.target.value)} />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="debut">Début</Label>
+              <Label htmlFor="debut"><T>{"Début"}</T></Label>
               <Input id="debut" type="date" required value={startsOn} onChange={(e) => setStartsOn(e.target.value)} />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="fin">Fin</Label>
+              <Label htmlFor="fin"><T>{"Fin"}</T></Label>
               <Input id="fin" type="date" value={endsOn} onChange={(e) => setEndsOn(e.target.value)} />
             </div>
           </div>
 
           {kind === "communication" && (
             <div className="grid gap-2">
-              <Label htmlFor="rythme">Rythme</Label>
+              <Label htmlFor="rythme"><T>{"Rythme"}</T></Label>
               <select id="rythme" value={cadence} onChange={(e) => setCadence(e.target.value)} className="h-10 rounded-md border border-input bg-background px-3">
                 {CADENCES.map((c) => (
                   <option key={c.value} value={c.value}>
-                    {c.label}
+                    <T>{c.label}</T>
                   </option>
                 ))}
               </select>
@@ -186,19 +186,17 @@ function NewCampaign() {
 
           <label className="flex items-center justify-between gap-4 rounded-xl border border-border bg-card p-4">
             <span>
-              <span className="font-medium">Campagne publique</span>
-              <span className="block text-sm text-muted-foreground">
-                Visible sur la fiche du projet avec ses résultats. Sinon, vous seul la voyez.
-              </span>
+              <span className="font-medium"><T>{"Campagne publique"}</T></span>
+              <span className="block text-sm text-muted-foreground"><T>{" Visible sur la fiche du projet avec ses résultats. Sinon, vous seul la voyez. "}</T></span>
             </span>
-            <Switch checked={isPublic} onCheckedChange={setIsPublic} aria-label="Campagne publique" />
+            <Switch checked={isPublic} onCheckedChange={setIsPublic} aria-label={translate("Campagne publique")} />
           </label>
 
           <Button type="submit" disabled={busy} size="lg">
-            {busy ? "Création…" : "Créer la campagne"}
+            <T>{busy ? "Création…" : "Créer la campagne"}</T>
           </Button>
         </form>
-      )}
+      )}</T>
     </div>
   );
 }

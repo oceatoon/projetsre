@@ -1,3 +1,4 @@
+import { T, useTranslation } from "@/components/language-provider";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
@@ -92,6 +93,7 @@ const PERSONAS = [
 ] as const;
 
 function CitizensPage() {
+  useTranslation();
   const { data: projects } = useSuspenseQuery(projectsQuery);
   const [personaId, setPersonaId] = useState<(typeof PERSONAS)[number]["id"]>("curieux");
   const persona = PERSONAS.find((item) => item.id === personaId) ?? PERSONAS[0];
@@ -103,27 +105,20 @@ function CitizensPage() {
     <div>
       <section className="border-b border-border bg-accent/45">
         <div className="mx-auto max-w-6xl px-4 py-14 md:py-20">
-          <Badge variant="secondary">Votre place dans les projets réunionnais</Badge>
-          <h1 className="mt-5 max-w-4xl font-display text-5xl leading-[0.98] md:text-7xl">
-            Il y a mille façons d'être utile.
-          </h1>
-          <p className="mt-6 max-w-2xl text-lg leading-8 text-muted-foreground md:text-xl">
-            Pas besoin d'être expert ni disponible tous les jours. Choisissez ce qui vous ressemble :
-            nous vous montrons les projets et les actions où votre contribution compte vraiment.
-          </p>
+          <Badge variant="secondary"><T>{"Votre place dans les projets réunionnais"}</T></Badge>
+          <h1 className="mt-5 max-w-4xl font-display text-5xl leading-[0.98] md:text-7xl"><T>{" Il y a mille façons d'être utile. "}</T></h1>
+          <p className="mt-6 max-w-2xl text-lg leading-8 text-muted-foreground md:text-xl"><T>{" Pas besoin d'être expert ni disponible tous les jours. Choisissez ce qui vous ressemble : nous vous montrons les projets et les actions où votre contribution compte vraiment. "}</T></p>
           <Button asChild size="lg" className="mt-7">
-            <Link to="/trouver">Trouver mon projet en 2 minutes <ArrowRight /></Link>
+            <Link to="/trouver"><T>{"Trouver mon projet en 2 minutes "}</T><ArrowRight /></Link>
           </Button>
         </div>
       </section>
 
       <section className="mx-auto max-w-6xl px-4 py-14 md:py-20">
         <div className="max-w-2xl">
-          <p className="text-sm font-semibold text-primary">1 — Choisissez votre façon d'agir</p>
-          <h2 className="mt-2 font-display text-4xl md:text-5xl">Quel citoyen êtes-vous aujourd'hui ?</h2>
-          <p className="mt-3 text-muted-foreground">
-            Ce choix n'est pas une étiquette. Il sert simplement à vous proposer un bon premier pas.
-          </p>
+          <p className="text-sm font-semibold text-primary"><T>{"1 — Choisissez votre façon d'agir"}</T></p>
+          <h2 className="mt-2 font-display text-4xl md:text-5xl"><T>{"Quel citoyen êtes-vous aujourd'hui ?"}</T></h2>
+          <p className="mt-3 text-muted-foreground"><T>{" Ce choix n'est pas une étiquette. Il sert simplement à vous proposer un bon premier pas. "}</T></p>
         </div>
 
         <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4" role="list">
@@ -146,13 +141,13 @@ function CitizensPage() {
                   <span className={`grid size-11 place-items-center rounded-md ${selected ? "bg-primary text-primary-foreground" : "bg-secondary text-secondary-foreground"}`}>
                     <item.icon className="size-5" />
                   </span>
-                  {selected ? <Check className="size-5 text-primary" aria-hidden="true" /> : null}
+                  <T>{selected ? <Check className="size-5 text-primary" aria-hidden="true" /> : null}</T>
                 </div>
-                <p className="mt-5 text-xs font-semibold text-muted-foreground">{item.subtitle}</p>
-                <h3 className="mt-1 font-display text-2xl">{item.title}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{item.description}</p>
+                <p className="mt-5 text-xs font-semibold text-muted-foreground"><T>{item.subtitle}</T></p>
+                <h3 className="mt-1 font-display text-2xl"><T>{item.title}</T></h3>
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground"><T>{item.description}</T></p>
                 <span className="mt-5 flex items-center gap-1.5 text-xs font-semibold text-foreground">
-                  <Clock3 className="size-3.5" /> {item.commitment}
+                  <Clock3 className="size-3.5" /> <T>{item.commitment}</T>
                 </span>
               </button>
             );
@@ -164,23 +159,22 @@ function CitizensPage() {
         <div className="mx-auto max-w-6xl px-4 py-14 md:py-20">
           <div className="grid gap-10 lg:grid-cols-[0.8fr_2fr]">
             <div>
-              <p className="text-sm font-semibold text-primary">2 — Passez à une action concrète</p>
+              <p className="text-sm font-semibold text-primary"><T>{"2 — Passez à une action concrète"}</T></p>
               <persona.icon className="mt-6 size-8 text-primary" />
-              <h2 className="mt-4 font-display text-4xl">{persona.title}</h2>
-              <p className="mt-3 text-muted-foreground">{persona.prompt}</p>
+              <h2 className="mt-4 font-display text-4xl"><T>{persona.title}</T></h2>
+              <p className="mt-3 text-muted-foreground"><T>{persona.prompt}</T></p>
               <ul className="mt-6 space-y-3">
                 {persona.actions.map((action) => (
                   <li key={action} className="flex gap-3 text-sm">
                     <span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-accent text-accent-foreground">
                       <Check className="size-3" />
                     </span>
-                    {action}
+                    <T>{action}</T>
                   </li>
                 ))}
               </ul>
               <Button asChild variant="outline" className="mt-7">
-                <Link to="/projets">
-                  Voir tous les projets <Search />
+                <Link to="/projets"><T>{" Voir tous les projets "}</T><Search />
                 </Link>
               </Button>
             </div>
@@ -195,8 +189,8 @@ function CitizensPage() {
       </section>
 
       <section className="mx-auto max-w-6xl px-4 py-14 md:py-20">
-        <p className="text-sm font-semibold text-primary">3 — Voyez votre contribution grandir</p>
-        <h2 className="mt-2 max-w-2xl font-display text-4xl md:text-5xl">Un petit geste peut ouvrir la suite</h2>
+        <p className="text-sm font-semibold text-primary"><T>{"3 — Voyez votre contribution grandir"}</T></p>
+        <h2 className="mt-2 max-w-2xl font-display text-4xl md:text-5xl"><T>{"Un petit geste peut ouvrir la suite"}</T></h2>
         <div className="mt-9 grid gap-0 md:grid-cols-4">
           {[
             { icon: Heart, title: "Je découvre", text: "Je trouve une initiative qui me parle." },
@@ -206,22 +200,22 @@ function CitizensPage() {
           ].map((step, index) => (
             <div key={step.title} className="relative border-l-2 border-primary/35 py-2 pl-6 md:border-t-2 md:border-l-0 md:px-5 md:pt-7">
               <span className="absolute top-2 -left-3 grid size-6 place-items-center rounded-full bg-primary text-xs font-semibold text-primary-foreground md:-top-3 md:left-5">
-                {index + 1}
+                <T>{index + 1}</T>
               </span>
               <step.icon className="size-5 text-primary" />
-              <h3 className="mt-3 font-display text-2xl">{step.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{step.text}</p>
+              <h3 className="mt-3 font-display text-2xl"><T>{step.title}</T></h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground"><T>{step.text}</T></p>
             </div>
           ))}
         </div>
 
         <div className="mt-14 flex flex-col items-start justify-between gap-6 border-t border-border pt-8 sm:flex-row sm:items-center">
           <div>
-            <div className="flex items-center gap-2 text-primary"><Sparkles className="size-5" /><span className="text-sm font-semibold">Votre première action suffit pour commencer</span></div>
-            <p className="mt-2 max-w-xl text-muted-foreground">Chaque fiche indique précisément ce dont le projet a besoin aujourd'hui.</p>
+            <div className="flex items-center gap-2 text-primary"><Sparkles className="size-5" /><span className="text-sm font-semibold"><T>{"Votre première action suffit pour commencer"}</T></span></div>
+            <p className="mt-2 max-w-xl text-muted-foreground"><T>{"Chaque fiche indique précisément ce dont le projet a besoin aujourd'hui."}</T></p>
           </div>
           <Button asChild size="lg" className="shrink-0">
-            <Link to="/projets">Trouver mon projet <ArrowRight /></Link>
+            <Link to="/projets"><T>{"Trouver mon projet "}</T><ArrowRight /></Link>
           </Button>
         </div>
       </section>

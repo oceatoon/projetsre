@@ -1,3 +1,4 @@
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
@@ -150,6 +151,7 @@ export const addCooperationStep = createServerFn({ method: "POST" })
   });
 
 export const setCooperationStepStatus = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) =>
     z
       .object({
@@ -158,12 +160,13 @@ export const setCooperationStepStatus = createServerFn({ method: "POST" })
       })
       .parse(input),
   )
-  .handler(async ({ data: input }) => {
-    const { publicClient } = await import("./supabase-public.server");
-    const { error } = await publicClient()
+  .handler(async ({ data: input, context }) => {
+    const { data: rows, error } = await context.supabase
       .from("cooperation_steps")
       .update({ status: input.status })
-      .eq("id", input.id);
+      .eq("id", input.id)
+      .select("id");
     if (error) throw new Error(error.message);
+    if (!rows?.length) throw new Error("Seuls les porteurs des deux projets peuvent modifier cette étape.");
     return { ok: true };
   });

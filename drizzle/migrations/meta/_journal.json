@@ -15,6 +15,13 @@
       "when": 1794984947562,
       "tag": "0001_reciprocity_and_charters",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1795598406179,
+      "tag": "0002_scope_public_reads",
+      "breakpoints": true
     }
   ]
 }

@@ -1147,6 +1147,10 @@ export type Database = {
       campaign_public_stats: { Args: { _campaign_id: string }; Returns: Json }
       campaign_visible: { Args: { _campaign_id: string }; Returns: boolean }
       cooperation_side: { Args: { _cooperation_id: string }; Returns: string }
+      cooperation_visible: {
+        Args: { _cooperation_id: string }
+        Returns: boolean
+      }
       follower_count: { Args: { _project_id: string }; Returns: number }
       has_role: {
         Args: {
@@ -1156,6 +1160,7 @@ export type Database = {
         Returns: boolean
       }
       is_project_owner: { Args: { _project_id: string }; Returns: boolean }
+      project_visible: { Args: { _project_id: string }; Returns: boolean }
     }
     Enums: {
       app_role: "citoyen" | "porteur" | "institution" | "admin"

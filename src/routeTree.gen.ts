@@ -24,6 +24,8 @@ import { Route as TrouverRouteImport } from './routes/trouver'
 import { Route as AuthenticatedMoiRouteImport } from './routes/_authenticated/moi'
 import { Route as AppelsIndexRouteImport } from './routes/appels.index'
 import { Route as AppelsSlugRouteImport } from './routes/appels.$slug'
+import { Route as PartenairesIndexRouteImport } from './routes/partenaires.index'
+import { Route as PartenairesSlugRouteImport } from './routes/partenaires.$slug'
 import { Route as ProfilHandleRouteImport } from './routes/profil.$handle'
 import { Route as ProjetsIndexRouteImport } from './routes/projets.index'
 import { Route as ProjetsSlugRouteImport } from './routes/projets.$slug'
@@ -105,6 +107,16 @@ const AppelsSlugRoute = AppelsSlugRouteImport.update({
   path: '/appels/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PartenairesIndexRoute = PartenairesIndexRouteImport.update({
+  id: '/partenaires/',
+  path: '/partenaires/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PartenairesSlugRoute = PartenairesSlugRouteImport.update({
+  id: '/partenaires/$slug',
+  path: '/partenaires/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProfilHandleRoute = ProfilHandleRouteImport.update({
   id: '/profil/$handle',
   path: '/profil/$handle',
@@ -152,9 +164,11 @@ export interface FileRoutesByFullPath {
   '/trouver': typeof TrouverRoute
   '/moi': typeof AuthenticatedMoiRoute
   '/appels/$slug': typeof AppelsSlugRoute
+  '/partenaires/$slug': typeof PartenairesSlugRoute
   '/profil/$handle': typeof ProfilHandleRoute
   '/projets/$slug': typeof ProjetsSlugRoute
   '/appels/': typeof AppelsIndexRoute
+  '/partenaires/': typeof PartenairesIndexRoute
   '/projets/': typeof ProjetsIndexRoute
   '/campagnes/$id': typeof AuthenticatedCampagnesIdRoute
   '/campagnes/nouvelle': typeof AuthenticatedCampagnesNouvelleRoute
@@ -174,9 +188,11 @@ export interface FileRoutesByTo {
   '/trouver': typeof TrouverRoute
   '/moi': typeof AuthenticatedMoiRoute
   '/appels/$slug': typeof AppelsSlugRoute
+  '/partenaires/$slug': typeof PartenairesSlugRoute
   '/profil/$handle': typeof ProfilHandleRoute
   '/projets/$slug': typeof ProjetsSlugRoute
   '/appels': typeof AppelsIndexRoute
+  '/partenaires': typeof PartenairesIndexRoute
   '/projets': typeof ProjetsIndexRoute
   '/campagnes/$id': typeof AuthenticatedCampagnesIdRoute
   '/campagnes/nouvelle': typeof AuthenticatedCampagnesNouvelleRoute
@@ -198,9 +214,11 @@ export interface FileRoutesById {
   '/trouver': typeof TrouverRoute
   '/_authenticated/moi': typeof AuthenticatedMoiRoute
   '/appels/$slug': typeof AppelsSlugRoute
+  '/partenaires/$slug': typeof PartenairesSlugRoute
   '/profil/$handle': typeof ProfilHandleRoute
   '/projets/$slug': typeof ProjetsSlugRoute
   '/appels/': typeof AppelsIndexRoute
+  '/partenaires/': typeof PartenairesIndexRoute
   '/projets/': typeof ProjetsIndexRoute
   '/_authenticated/campagnes/$id': typeof AuthenticatedCampagnesIdRoute
   '/_authenticated/campagnes/nouvelle': typeof AuthenticatedCampagnesNouvelleRoute
@@ -222,9 +240,11 @@ export interface FileRouteTypes {
     | '/trouver'
     | '/moi'
     | '/appels/$slug'
+    | '/partenaires/$slug'
     | '/profil/$handle'
     | '/projets/$slug'
     | '/appels/'
+    | '/partenaires/'
     | '/projets/'
     | '/campagnes/$id'
     | '/campagnes/nouvelle'
@@ -244,9 +264,11 @@ export interface FileRouteTypes {
     | '/trouver'
     | '/moi'
     | '/appels/$slug'
+    | '/partenaires/$slug'
     | '/profil/$handle'
     | '/projets/$slug'
     | '/appels'
+    | '/partenaires'
     | '/projets'
     | '/campagnes/$id'
     | '/campagnes/nouvelle'
@@ -267,9 +289,11 @@ export interface FileRouteTypes {
     | '/trouver'
     | '/_authenticated/moi'
     | '/appels/$slug'
+    | '/partenaires/$slug'
     | '/profil/$handle'
     | '/projets/$slug'
     | '/appels/'
+    | '/partenaires/'
     | '/projets/'
     | '/_authenticated/campagnes/$id'
     | '/_authenticated/campagnes/nouvelle'
@@ -290,9 +314,11 @@ export interface RootRouteChildren {
   TerritoireRoute: typeof TerritoireRoute
   TrouverRoute: typeof TrouverRoute
   AppelsSlugRoute: typeof AppelsSlugRoute
+  PartenairesSlugRoute: typeof PartenairesSlugRoute
   ProfilHandleRoute: typeof ProfilHandleRoute
   ProjetsSlugRoute: typeof ProjetsSlugRoute
   AppelsIndexRoute: typeof AppelsIndexRoute
+  PartenairesIndexRoute: typeof PartenairesIndexRoute
   ProjetsIndexRoute: typeof ProjetsIndexRoute
   CooperationsSlugASlugBRoute: typeof CooperationsSlugASlugBRoute
 }
@@ -404,6 +430,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppelsSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/partenaires/': {
+      id: '/partenaires/'
+      path: '/partenaires'
+      fullPath: '/partenaires/'
+      preLoaderRoute: typeof PartenairesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/partenaires/$slug': {
+      id: '/partenaires/$slug'
+      path: '/partenaires/$slug'
+      fullPath: '/partenaires/$slug'
+      preLoaderRoute: typeof PartenairesSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/profil/$handle': {
       id: '/profil/$handle'
       path: '/profil/$handle'
@@ -478,9 +518,11 @@ const rootRouteChildren: RootRouteChildren = {
   TerritoireRoute: TerritoireRoute,
   TrouverRoute: TrouverRoute,
   AppelsSlugRoute: AppelsSlugRoute,
+  PartenairesSlugRoute: PartenairesSlugRoute,
   ProfilHandleRoute: ProfilHandleRoute,
   ProjetsSlugRoute: ProjetsSlugRoute,
   AppelsIndexRoute: AppelsIndexRoute,
+  PartenairesIndexRoute: PartenairesIndexRoute,
   ProjetsIndexRoute: ProjetsIndexRoute,
   CooperationsSlugASlugBRoute: CooperationsSlugASlugBRoute,
 }

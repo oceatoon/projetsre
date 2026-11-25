@@ -1,4 +1,5 @@
 import { queryOptions } from "@tanstack/react-query";
+import { listFunderLinks as listFunderLinksFn } from "./data.functions";
 
 import { getCall, getProject, listApplications, listCalls, listProjects } from "./data.functions";
 import { getCooperation } from "./coop.functions";
@@ -42,3 +43,8 @@ export const cooperationQuery = (slugA: string, slugB: string) =>
     queryKey: ["cooperation", slugA, slugB],
     queryFn: () => getCooperation({ data: { slugA, slugB } }),
   });
+
+export const funderLinksQuery = queryOptions({
+  queryKey: ["funder-links"],
+  queryFn: () => listFunderLinksFn(),
+});

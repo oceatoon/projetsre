@@ -25,6 +25,7 @@ const COMPRENDRE_LINKS = [
   { to: "/tao", label: "Le Tao : les principes universels" },
   { to: "/porteurs", label: "Pour les porteurs" },
   { to: "/institutions", label: "Pour les institutions" },
+  { to: "/partenaires", label: "Portails partenaires" },
   { to: "/territoire", label: "Pour le territoire" },
   { to: "/citoyens", label: "Pour les citoyens" },
 ] as const;

@@ -317,3 +317,14 @@ export const createCall = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return { slug };
   });
+
+export const listFunderLinks = createServerFn({ method: "GET" }).handler(async () => {
+  const { publicClient } = await import("./supabase-public.server");
+  const { data, error } = await publicClient()
+    .from("funders")
+    .select("name, amount, project:projects(slug)");
+  if (error) throw new Error(error.message);
+  return ((data ?? []) as unknown as { name: string; amount: number; project: { slug: string } | null }[])
+    .filter((row) => row.project)
+    .map((row) => ({ name: row.name, amount: Number(row.amount), slug: row.project!.slug }));
+});

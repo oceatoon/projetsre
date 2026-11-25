@@ -35,7 +35,7 @@ export const Route = createFileRoute("/partenaires/$slug")({
       ],
     };
   },
-  errorComponent: ({ error }) => <div role="alert" className="p-10">{error.message}</div>,
+  errorComponent: ({ error }) => <div role="alert" className="p-10">{error instanceof Error ? error.message : String(error)}</div>,
   notFoundComponent: () => (
     <div className="p-10"><T>Portail introuvable.</T> <Link to="/partenaires" className="underline"><T>Voir les partenaires</T></Link></div>
   ),

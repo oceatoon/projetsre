@@ -13,3 +13,4 @@
 - Collaboration posture (project_reciprocity) and cooperation charters (cooperation_charters) live in their own tables; scoring rules are in src/lib/reciprocity.ts so UI and tests share one definition.
 - Localize presentation text through the shared language context and static catalogs; preserve original records, identifiers and scoring inputs so changing language never changes project data or evidence.
 - Partner portals are a branded filter over shared projects (config in src/lib/partners.ts), never separate copies of project data, so one fiche serves every cofunder.
+- Agenda: project events live in events (visibility public/private, owner-managed); partner events in partner_events, managed by partner_members (admin-assigned); src/lib/agenda.ts merges both so global, partner and project agendas share one filter.

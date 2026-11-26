@@ -517,28 +517,37 @@ export type Database = {
       }
       events: {
         Row: {
+          author_id: string | null
           created_at: string
+          description: string
           id: string
           location: string
           project_id: string
           starts_at: string
           title: string
+          visibility: string
         }
         Insert: {
+          author_id?: string | null
           created_at?: string
+          description?: string
           id?: string
           location?: string
           project_id: string
           starts_at: string
           title: string
+          visibility?: string
         }
         Update: {
+          author_id?: string | null
           created_at?: string
+          description?: string
           id?: string
           location?: string
           project_id?: string
           starts_at?: string
           title?: string
+          visibility?: string
         }
         Relationships: [
           {
@@ -777,6 +786,63 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      partner_events: {
+        Row: {
+          author_id: string | null
+          created_at: string
+          description: string
+          id: string
+          location: string
+          partner_slug: string
+          starts_at: string
+          title: string
+          visibility: string
+        }
+        Insert: {
+          author_id?: string | null
+          created_at?: string
+          description?: string
+          id?: string
+          location?: string
+          partner_slug: string
+          starts_at: string
+          title: string
+          visibility?: string
+        }
+        Update: {
+          author_id?: string | null
+          created_at?: string
+          description?: string
+          id?: string
+          location?: string
+          partner_slug?: string
+          starts_at?: string
+          title?: string
+          visibility?: string
+        }
+        Relationships: []
+      }
+      partner_members: {
+        Row: {
+          created_at: string
+          id: string
+          partner_slug: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          partner_slug: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          partner_slug?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       profiles: {
         Row: {
@@ -1159,6 +1225,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_partner_member: { Args: { _slug: string }; Returns: boolean }
       is_project_owner: { Args: { _project_id: string }; Returns: boolean }
       project_visible: { Args: { _project_id: string }; Returns: boolean }
     }

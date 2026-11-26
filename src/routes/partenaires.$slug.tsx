@@ -7,7 +7,9 @@ import { ProjectImage } from "@/components/project-image";
 import { Badge } from "@/components/ui/badge";
 import { euro, themeLabel } from "@/lib/domain";
 import { getPartner, matchesPartner, partnerProjectSlugs } from "@/lib/partners";
-import { applicationsQuery, callsQuery, funderLinksQuery, projectsQuery } from "@/lib/queries";
+import { agendaQuery, applicationsQuery, callsQuery, funderLinksQuery, projectsQuery } from "@/lib/queries";
+import { AgendaList, applyFilters, useAgendaFilters, useCanManage, useInvalidateAgenda, usePrivateAgenda } from "@/components/agenda-view";
+import { EventForm } from "@/components/event-form";
 
 export const Route = createFileRoute("/partenaires/$slug")({
   loader: async ({ params, context }) => {
@@ -18,6 +20,7 @@ export const Route = createFileRoute("/partenaires/$slug")({
       context.queryClient.ensureQueryData(funderLinksQuery),
       context.queryClient.ensureQueryData(applicationsQuery),
       context.queryClient.ensureQueryData(callsQuery),
+      context.queryClient.ensureQueryData(agendaQuery),
     ]);
     return { name: partner.name, tagline: partner.tagline };
   },
@@ -116,6 +119,8 @@ function PartnerPortal() {
           </div>
         )}
 
+        <PartnerAgenda slug={partner.slug} />
+
         {myCalls.length > 0 && (
           <>
             <h2 className="mt-14 font-serif text-3xl"><T>Nos appels à projets</T></h2>
@@ -137,5 +142,24 @@ function PartnerPortal() {
         </p>
       </main>
     </div>
+  );
+}
+
+function PartnerAgenda({ slug }: { slug: string }) {
+  const { data } = useSuspenseQuery(agendaQuery);
+  const priv = usePrivateAgenda().data ?? [];
+  const f = useAgendaFilters(slug);
+  const canManage = useCanManage({ partnerSlug: slug });
+  const refresh = useInvalidateAgenda();
+  return (
+    <section className="mt-14">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h2 className="font-serif text-3xl"><T>Notre agenda</T></h2>
+        <Link to="/agenda" className="text-sm text-primary underline"><T>Agenda global</T></Link>
+      </div>
+      <p className="mt-2 text-sm text-muted-foreground"><T>Nos événements et ceux des projets que nous accompagnons.</T></p>
+      {canManage && <EventForm target={{ kind: "partenaire", partnerSlug: slug }} onCreated={refresh} />}
+      <AgendaList items={applyFilters([...data, ...priv], f)} />
+    </section>
   );
 }

@@ -17,6 +17,7 @@ import { LanguageSelector } from "./language-selector";
 const LINKS = [
   { to: "/projets", label: "Projets" },
   { to: "/appels", label: "Appels à projets" },
+  { to: "/agenda", label: "Agenda" },
   { to: "/suivi", label: "Suivi d'activité" },
 ] as const;
 

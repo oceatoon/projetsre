@@ -48,3 +48,9 @@ export const funderLinksQuery = queryOptions({
   queryKey: ["funder-links"],
   queryFn: () => listFunderLinksFn(),
 });
+
+import { listAgenda } from "./agenda.functions";
+export const agendaQuery = queryOptions({
+  queryKey: ["agenda"],
+  queryFn: () => listAgenda(),
+});

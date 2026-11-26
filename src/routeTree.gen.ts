@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AgendaRouteImport } from './routes/agenda'
 import { Route as CitoyensRouteImport } from './routes/citoyens'
 import { Route as ConnexionRouteImport } from './routes/connexion'
 import { Route as DeposerRouteImport } from './routes/deposer'
@@ -40,6 +41,11 @@ const IndexRoute = IndexRouteImport.update({
 } as any)
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
   id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AgendaRoute = AgendaRouteImport.update({
+  id: '/agenda',
+  path: '/agenda',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CitoyensRoute = CitoyensRouteImport.update({
@@ -152,6 +158,7 @@ const CooperationsSlugASlugBRoute = CooperationsSlugASlugBRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/agenda': typeof AgendaRoute
   '/citoyens': typeof CitoyensRoute
   '/connexion': typeof ConnexionRoute
   '/deposer': typeof DeposerRoute
@@ -176,6 +183,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/agenda': typeof AgendaRoute
   '/citoyens': typeof CitoyensRoute
   '/connexion': typeof ConnexionRoute
   '/deposer': typeof DeposerRoute
@@ -202,6 +210,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/agenda': typeof AgendaRoute
   '/citoyens': typeof CitoyensRoute
   '/connexion': typeof ConnexionRoute
   '/deposer': typeof DeposerRoute
@@ -228,6 +237,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/agenda'
     | '/citoyens'
     | '/connexion'
     | '/deposer'
@@ -252,6 +262,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/agenda'
     | '/citoyens'
     | '/connexion'
     | '/deposer'
@@ -277,6 +288,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/_authenticated'
+    | '/agenda'
     | '/citoyens'
     | '/connexion'
     | '/deposer'
@@ -303,6 +315,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AgendaRoute: typeof AgendaRoute
   CitoyensRoute: typeof CitoyensRoute
   ConnexionRoute: typeof ConnexionRoute
   DeposerRoute: typeof DeposerRoute
@@ -337,6 +350,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/agenda': {
+      id: '/agenda'
+      path: '/agenda'
+      fullPath: '/agenda'
+      preLoaderRoute: typeof AgendaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/citoyens': {
@@ -507,6 +527,7 @@ const AuthenticatedRouteRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AgendaRoute: AgendaRoute,
   CitoyensRoute: CitoyensRoute,
   ConnexionRoute: ConnexionRoute,
   DeposerRoute: DeposerRoute,

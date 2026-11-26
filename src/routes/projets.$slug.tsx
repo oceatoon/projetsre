@@ -42,6 +42,10 @@ import {
 } from "@/lib/domain";
 import { callsQuery, projectQuery, projectsQuery } from "@/lib/queries";
 import { Synergies } from "@/components/synergies";
+import { AgendaList, useCanManage, usePrivateAgenda } from "@/components/agenda-view";
+import { EventForm } from "@/components/event-form";
+import { filterAgenda } from "@/lib/agenda";
+import { useQueryClient } from "@tanstack/react-query";
 import { ProjectCampaigns } from "@/components/project-campaigns";
 import { ProjectImpact, impactQuery } from "@/components/project-impact";
 import { ProjectReciprocity, reciprocityQuery } from "@/components/project-reciprocity";
@@ -368,22 +372,7 @@ function ProjectPage() {
               </ul>
             </Section>
             <Section title={translate("Agenda")}>
-              <ul className="mt-4 space-y-3">
-                {detail.events.map((event) => (
-                  <li key={event.id} className="flex gap-3 rounded-lg border border-border bg-card p-4">
-                    <CalendarDays className="mt-0.5 size-4 text-primary" />
-                    <div>
-                      <p className="font-medium"><T>{event.title}</T></p>
-                      <p className="text-xs text-muted-foreground">
-                        <T>{frDateTime(event.starts_at)}</T> · <T>{event.location}</T>
-                      </p>
-                    </div>
-                  </li>
-                ))}
-                <T>{detail.events.length === 0 ? (
-                  <p className="text-sm text-muted-foreground"><T>{"Aucun rendez-vous programmé."}</T></p>
-                ) : null}</T>
-              </ul>
+              <ProjectAgenda projectId={project.id} slug={slug} />
             </Section>
           </TabsContent>
 
@@ -663,5 +652,32 @@ function CallMatcher({ slug }: { slug: string }) {
         ))}
       </ul>
     </section>
+  );
+}
+
+function ProjectAgenda({ projectId, slug }: { projectId: string; slug: string }) {
+  const { data: detail } = useSuspenseQuery(projectQuery(slug));
+  const priv = usePrivateAgenda().data ?? [];
+  const canManage = useCanManage({ projectId });
+  const qc = useQueryClient();
+  const name = detail?.project.name ?? "";
+  const items = filterAgenda([
+    ...(detail?.events ?? []).map((e: any) => ({
+      id: e.id, source: "projet" as const, title: e.title, description: e.description ?? "", location: e.location,
+      starts_at: e.starts_at, visibility: "public" as const, context_slug: slug, context_name: name, partner_slugs: [],
+    })),
+    ...priv.filter((e) => e.context_slug === slug),
+  ], {});
+  return (
+    <>
+      {canManage && (
+        <EventForm target={{ kind: "projet", projectId }} onCreated={() => {
+          qc.invalidateQueries({ queryKey: ["project", slug] });
+          qc.invalidateQueries({ queryKey: ["agenda"] });
+          qc.invalidateQueries({ queryKey: ["agenda-private"] });
+        }} />
+      )}
+      <AgendaList items={items} empty="Aucun rendez-vous programmé." />
+    </>
   );
 }

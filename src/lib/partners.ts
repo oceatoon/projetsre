@@ -13,6 +13,8 @@ export interface Partner {
   matchNames: string[];
   /** Optional theme-based affiliation (e.g. incubator portfolio). */
   themes: string[];
+  /** Key thematic tags describing the partner's focus (display only). */
+  tags: string[];
 }
 
 export const PARTNERS: Partner[] = [
@@ -27,6 +29,7 @@ export const PARTNERS: Partner[] = [
     website: "https://www.technopole-reunion.com",
     matchNames: ["Technopole"],
     themes: ["numerique"],
+    tags: ["Innovation","Numérique","Incubation","Recherche","Start-up"],
   },
   {
     slug: "ademe",
@@ -39,6 +42,7 @@ export const PARTNERS: Partner[] = [
     website: "https://la-reunion.ademe.fr",
     matchNames: ["ADEME"],
     themes: ["environnement"],
+    tags: ["Transition énergétique","Économie circulaire","Déchets","Climat","Mobilité durable"],
   },
   {
     slug: "region-reunion",
@@ -51,6 +55,7 @@ export const PARTNERS: Partner[] = [
     website: "https://regionreunion.com",
     matchNames: ["Région Réunion", "FEADER"],
     themes: [],
+    tags: ["Fonds européens","Formation","Économie","Agriculture","Aménagement"],
   },
   {
     slug: "departement",
@@ -63,6 +68,7 @@ export const PARTNERS: Partner[] = [
     website: "https://www.departement974.fr",
     matchNames: ["Département de La Réunion"],
     themes: [],
+    tags: ["Solidarité","Insertion","Jeunesse","Ruralité","Inclusion"],
   },
 ];
 

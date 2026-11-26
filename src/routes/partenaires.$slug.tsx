@@ -75,6 +75,11 @@ function PartnerPortal() {
           </div>
           <h1 className="mt-8 max-w-3xl font-serif text-4xl sm:text-5xl"><T>{partner.tagline}</T></h1>
           <p className="mt-4 max-w-2xl text-muted-foreground"><T>{partner.intro}</T></p>
+          <ul className="mt-5 flex flex-wrap gap-2">
+            {partner.tags.map((t) => (
+              <li key={t} className="rounded-full border border-primary/40 bg-primary/10 px-3 py-1 text-xs font-semibold text-primary"><T>{t}</T></li>
+            ))}
+          </ul>
           <dl className="mt-8 grid max-w-xl grid-cols-3 gap-4">
             {[
               [String(mine.length), "projets"],

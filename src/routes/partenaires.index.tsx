@@ -32,6 +32,11 @@ function PartnersIndex() {
             <span>
               <span className="block font-semibold">{p.name}</span>
               <span className="block text-sm text-muted-foreground"><T>{p.tagline}</T></span>
+              <span className="mt-2 flex flex-wrap gap-1.5">
+                {p.tags.map((t) => (
+                  <span key={t} className="rounded-full bg-muted px-2 py-0.5 text-[11px] font-medium text-muted-foreground"><T>{t}</T></span>
+                ))}
+              </span>
             </span>
           </Link>
         ))}

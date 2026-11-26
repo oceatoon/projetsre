@@ -70,7 +70,7 @@ function PartnerPortal() {
       <section className="border-b" style={{ background: `color-mix(in oklch, ${partner.accent} 12%, var(--background))` }}>
         <div className="mx-auto max-w-6xl px-4 py-14">
           <div className="flex items-center gap-4">
-            <span className="grid size-16 place-items-center rounded-xl bg-primary text-xl font-bold text-primary-foreground">{partner.short}</span>
+            <img src={partner.logo} alt={`Logo ${partner.name}`} className="h-16 w-28 shrink-0 rounded-xl border bg-card object-contain p-2" />
             <div>
               <p className="text-sm font-semibold">{partner.name} <span className="text-muted-foreground">× projets.re</span></p>
               <a href={partner.website} target="_blank" rel="noreferrer" className="text-xs text-muted-foreground underline">{partner.website.replace("https://", "")}</a>

@@ -1,3 +1,8 @@
+import ademeLogo from "@/assets/partners/ademe.svg.asset.json";
+import departementLogo from "@/assets/partners/departement.png.asset.json";
+import regionLogo from "@/assets/partners/region-reunion.png.asset.json";
+import technopoleLogo from "@/assets/partners/technopole.png.asset.json";
+
 /** Partner portals: a branded lens over the shared projects.re commons. */
 export interface Partner {
   slug: string;
@@ -15,11 +20,14 @@ export interface Partner {
   themes: string[];
   /** Key thematic tags describing the partner's focus (display only). */
   tags: string[];
+  /** Official logo URL (CDN). */
+  logo: string;
 }
 
 export const PARTNERS: Partner[] = [
   {
     slug: "technopole",
+    logo: technopoleLogo.url,
     name: "Technopole de La Réunion",
     short: "TR",
     tagline: "L'innovation réunionnaise, de l'idée au marché",
@@ -33,6 +41,7 @@ export const PARTNERS: Partner[] = [
   },
   {
     slug: "ademe",
+    logo: ademeLogo.url,
     name: "ADEME La Réunion",
     short: "AD",
     tagline: "La transition écologique portée par les acteurs de l'île",
@@ -46,6 +55,7 @@ export const PARTNERS: Partner[] = [
   },
   {
     slug: "region-reunion",
+    logo: regionLogo.url,
     name: "Région Réunion",
     short: "RR",
     tagline: "Les projets que la Région fait grandir",
@@ -59,6 +69,7 @@ export const PARTNERS: Partner[] = [
   },
   {
     slug: "departement",
+    logo: departementLogo.url,
     name: "Département de La Réunion",
     short: "DR",
     tagline: "Solidarités et proximité sur tout le territoire",

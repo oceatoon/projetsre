@@ -27,8 +27,7 @@ function PartnersIndex() {
         {PARTNERS.map((p) => (
           <Link key={p.slug} to="/partenaires/$slug" params={{ slug: p.slug }}
             className="group flex items-center gap-4 rounded-xl border bg-card p-5 transition hover:shadow-md">
-            <span className="grid size-14 shrink-0 place-items-center rounded-lg font-bold text-lg"
-              style={{ background: p.accent, color: p.accentForeground }}>{p.short}</span>
+            <img src={p.logo} alt={`Logo ${p.name}`} className="h-14 w-24 shrink-0 rounded-lg border bg-card object-contain p-2" style={{ borderColor: p.accent }} />
             <span>
               <span className="block font-semibold">{p.name}</span>
               <span className="block text-sm text-muted-foreground"><T>{p.tagline}</T></span>
